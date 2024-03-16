@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+      <ul id="menu">
+        <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+        <li>Liens</li>
+
+      </ul>
+
+      <div class="print">
+        <a href="/inkscape01.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Découpe laser</p>
+      </div>
+
+      <div class="main full">
+        <h3>Préparer un fichier à découper ou à graver avec Inkscape</h3>
+        <p class="circuitb large_full">Inkscape est un logiciel libre de dessin vectoriel utilisant le format SVG, un format d'image vectorielle open source. Grâce aux outils qu'il propose, on peut s'en servir pour créer des visuels destinés à la découpe ou la gravure laser.</p>
+
+        <p class="large_full">Quand on ouvre Inkscape, on a devant soi un document vierge. La première chose à faire est de mettre le document, par défaut au format A4, au format du dessin que vous souhaitez faire. Pour cela, allez dans <span class="code">Fichier</span> > <span class="code">Propriétés du document</span>, et là, dans la boîte de dialogue, vous pouvez changer les dimensions de la page. Pour que le zoom corresponde bien à votre page, cliquez sur <span class="code">Affichage</span> > <span class="code">Zoom</span> > <span class="code">Page</span></p>
+        <img class="tuto" src="{{ url_for('static', filename='ink0000.png') }}" alt="">
+
+        <p class="large_full">La barre d'outils à gauche de l'écran contient des outils permettant de dessiner des formes&nbsp;: <span class="code">Ellipse</span> <img class="icone" src="images/draw-ellipse.svg" alt="">, <span class="code">Rectangle</span> ou encore <span class="code">Polygone</span>. Chaque fois que vous créez une forme, vous pouvez modifier ses paramètres dans la barre d'outils du haut de la fenêtre pour obtenir des formes sur mesure. Il faut bien comprendre qu'en découpe/gravure laser, on ne fait que brûler le matériau&nbsp;; d'autre part il n'y a pas d'aplats, le laser ne pouvant dessiner que des traits de la largeur de son faisceau. Il faut donc bien avoir à l'esprit que le dessin doit être travaillé en contours car c'est tout ce que la machine sera capable de reproduire.</p>
+        <img class="tuto" src="{{ url_for('static', filename='ink000.png') }}" alt="">
+
+        <p class="large_full">Pour afficher le document uniquement en contours, et ainsi visualiser précisément ce que la machine laser reproduira, allez dans le menu <span class="code">Affichage</span> > <span class="code">Mode d'affichage</span> > <span class="code">Contours</span>.
+          Pour le dessin, il y a aussi un outil <span class="code">Stylo</span> qui permet de dessiner une forme vectorielle en plaçant des points dans le document. Si vous tirez les poignées au moment où vous placez le point, cela crée des courbes.</p>
+        <img class="tuto" src="{{ url_for('static', filename='ink00.png') }}" alt="">
+
+        <p class="large_full">L'outil <span class="code">Texte</span> permet de taper un texte au clavier dans le document. Quand il est sélectionné, les propriétés du texte apparaissent dans la barre d'outil supérieure. On peut changer le corps du texte, la police utilisée, l'interlignage, etc. Vous remarquez alors que, bien que votre affichage soit en mode <span class="code">Contours</span>, vous voyez le texte à&nbsp;l'écran avec un fond noir. C'est parce que le texte que vous venez de taper n'est pas vectorisé. Pour ce faire, sélectionnez le texte et cliquez sur <span class="code">Chemin</span> > <span class="code">Objet en chemin</span>, puis sur <span class="code">Objet</span> > <span class="code">Dégrouper</span>. Chaque lettre est alors vectorisée et sélectionnable individuellement.</p>
+        <img class="tuto" src="{{ url_for('static', filename='ink01.png') }}" alt="">
+
+        <p class="large_full">Il existe une extension particulièrement appropriée pour graver du texte au laser, <span class="code">Texte Hershey</span>. Les fontes Hershey sont une famille de typographies vectorielles, dessinées par le squelette plutôt que par le contour (on n'a donc pas besoin de se préoccuper de les vectoriser). Pour utiliser l'extension, créez un bloc de texte, sélectionnez-le puis allez dans <span class="code">Extensions</span> > <span class="code">Texte</span> > <span class="code">Texte Hershey</span>. Dans la boîte de dialogue qui s'affiche, vous pouvez modifier le texte et choisir quelle typographie de la famille utiliser.</p>
+        <img class="tuto" src="{{ url_for('static', filename='ink02.png') }}" alt="">
+
+        <p class="large_full">Une fois votre dessin prêt, assurez-vous que tout est bien transformé en chemin et que rien ne dépasse du format (sauf si vous souhaitez avoir un fond perdu). Le format sous lequel exporter le fichier dépend du logiciel qui communique avec le contrôleur de la découpeuse laser. Si celui-ci accepte le format SVG, sauvegardez tout simplement le document. Pour exporter le fichier au format DXF, format standard pour les tables traçantes, cliquez sur <span class="code">Fichier</span> > <span class="code">Enregistrer sous</span>, puis sélectionnez le format <span class="code">Table traçante ou coupante (Autocad DXF R14)</span>.</p>
+        <img class="tuto" src="{{ url_for('static', filename='ink03.png') }}" alt="">
+
+
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

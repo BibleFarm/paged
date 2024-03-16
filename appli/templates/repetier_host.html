@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+      <ul id="menu">
+        <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+        <li>Liens</li>
+
+      </ul>
+
+      <div class="print">
+        <a href="/repetier_host.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Impression 3D</p>
+      </div>
+
+      <div class="main full">
+        <h3>Préparer l'impression 3D avec Repetier Host</h3>
+        <p class="circuitb large_full">Repetier Host est un slicer open source avec lequel on peut préparer l'impression 3D d'un objet.</p>
+
+        <p class="large_full">Sélectionnez tout d'abord le profil de l'imprimante 3D que vous souhaitez utiliser en cliquant sur <span class="code">Réglages imprimante</span> en haut à gauche. Pour importer un objet 3D, cliquez sur l'icône «&nbsp;+&nbsp;» entourée d'un cercle ou sur <span class="code">Charger</span> en haut à gauche.</p>
+        <img class="tuto" src="{{ url_for('static', filename='rh02.png') }}" alt="">
+
+        <p class="large_full">C'est également dans cet onglet que se font les réglages concernant la température de l'extrudeur ainsi que celle du lit. Dans Repetier Host, on ne définit pas le matériau qui va servir à l'impression, mais les temprétaures d'impression. Renseignez-vous donc sur les températures de l'extrudeur et du plateau propres à chaque matériau (en général indiquées sur la boîte du filament).</p>
+        <img class="tuto" src="{{ url_for('static', filename='rh07.png') }}" alt="">
+
+        <p class="large_full">Dans l'onglet <span class="code">Placement d'objets</span> du menu de gauche on trouve des outils permettant de redimensionner, de pivoter ou encore de prévisualiser le tranchage de l'objet.</p>
+        <img class="tuto" src="{{ url_for('static', filename='rh01.png') }}" alt="">
+        <img class="tuto" src="{{ url_for('static', filename='rh03.png') }}" alt="">
+        <img class="tuto" src="{{ url_for('static', filename='rh04.png') }}" alt="">
+
+        <p class="large_full">Pour trancher l'objet, il faut se rendre dans l'onglet <span class="code">Trancheur</span>. Vous pouvez sélectionner différents trancheurs dans le menu déroulant, mais <span class="code">Slic3r</span> est un très bon trancheur et fonctionne très bien dans Repetier Host. Pour lancer le tranchage, cliquez sur le bouton <span class="code">Trancher avec Slic3r</span>.</p>
+        <img class="tuto" src="{{ url_for('static', filename='rh05.png') }}" alt="">
+
+        <p class="large_full">Une fois le tranchage fait on se retrouve dans l'onglet <span class="code">Pré visualiser impression</span>, où on peut voir les couches de l'impression à venir. C'est ici qu'on peut enregistrer le fichier GCODE sur un périphérique.</p>
+        <img class="tuto" src="{{ url_for('static', filename='rh06.png') }}" alt="">
+
+
+
+
+
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

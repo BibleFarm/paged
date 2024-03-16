@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+      <ul id="menu">
+        <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+        <li>Liens</li>
+
+      </ul>
+
+      <div class="print">
+        <a href="/freecad01.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Impression 3D</p>
+      </div>
+
+      <div class="main full">
+        <h3>Modéliser un cube avec Freecad</h3>
+        <p class="circuitb large_full">Freecad est un logiciel de modélisation 3D paramétrique avec lequel on peut concevoir des modèles destinés à l'impression 3D ou à une découpe à la CNC.</p>
+
+        <p class="large_full">Pour modéliser un objet en 3D, il faut utiliser l'outil <span class="code">Part design</span> de Freecad. L'ensemble des outils de Freecad se trouve dans le menu déroulant dans la barre d'outils du haut de la fenêtre. Une fois dans l'outil <span class="code">Part design</span>, cliquez sur l'icône <span class="code">Sketcher</span> pour démarrer une esquisse. Il vous sera alors demandé de choisir le plan sur lequel vous voulez placer votre esquisse.</p>
+        <img class="tuto" src="{{ url_for('static', filename='fc01.png') }}" alt="">
+        <img class="tuto" src="{{ url_for('static', filename='fc02.png') }}" alt="">
+
+        <p class="large_full">Pour dessiner un carré dans votre esquisse, sélectionnez l'outil <span class="code">Rectangle</span> dans la barre des outils de dessin. Cliquez une première fois sur le plan et tirez les poignées pour obtenir une forme de carré.</p>
+        <img class="tuto" src="{{ url_for('static', filename='fc03.png') }}" alt="">
+
+        <p class="large_full">Afin de s'assurer que le carré aura des proportions parfaites, on utilise les conraintes que propose Freecad. Avec les contraintes <span class="code">Set horizontal length</span> et <span class="code">Set vertical length</span> on peut définir précisément la longueur des côtés.</p>
+        <img class="tuto" src="{{ url_for('static', filename='fc05.png') }}" alt="">
+        <img class="tuto" src="{{ url_for('static', filename='fc06.png') }}" alt="">
+
+        <p class="large_full">Une fois que le carré fait la bonne dimension, cliquez sur le bouton <span class="code">Close</span> dans l'onglet <span class="code">Tasks</span> de la barre d'outils latérale pour terminer l'esquisse. Si vous revenez à l'onglet <span class="code">Model</span>, vous pouvez voir dans l'arborescence de votre projet un objet de type <span class="code">Body</span> qui contient l'esquisse que vous venez de créer. Pour mettre en volume l'esquisse en deux dimensions, cliquez sur l'outil <span class="code">Create Pad</span> qui va procéder à l'extrusion de la forme. Vous pouvez y déterminer de combien de millimètres vous souhaitez que votre objet soit extrudé.</p>
+        <img class="tuto" src="{{ url_for('static', filename='fc07.png') }}" alt="">
+        <img class="tuto" src="{{ url_for('static', filename='fc08.png') }}" alt="">
+
+        <p class="large_full">Quand vous terminez l'extrusion, vous pouvez visualiser votre objet en 3D, et noter que l'esquisse est devenue un <span class="code">Pad</span> dans l'arborescence du projet.</p>
+        <img class="tuto" src="{{ url_for('static', filename='fc09.png') }}" alt="">
+
+        <p class="large_full">Pour exporter l'objet 3D, sélectionner l'objet <span class="code">Pad</span> et cliquez sur <span class="code">File</span> > <span class="code">Export</span>, ce qui ouvrira une boîte de dialogue où vous pouvez choisir à quel format exporter l'objet. Pour une impression 3D il faut exporter au format STL ou OBJ.</p>
+        <img class="tuto" src="{{ url_for('static', filename='fc10.png') }}" alt="">
+
+
+
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

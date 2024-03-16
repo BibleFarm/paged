@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+    <ul id="menu">
+      <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+      <li>Liens</li>
+    </ul>
+
+      <div class="print">
+        <a href="/arduino_piezo_buzzer.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Arduino</p>
+      </div>
+
+      <div class="main">
+        <div id="onglets">
+          <div id="onglet_circuit" onclick="circuitTop()">Circuit</div>
+          <div id="onglet_code" onclick="codeTop()">Code Arduino</div>
+        </div>
+        <h3>Piezo buzzer</h3>
+        <p class="circuitb">Un piezo buzzer, ou speaker est un composant produisant un son différent en fonction de la fréquence du signal électrique qu'on lui envoie. Branché à un Arduino, c'est un composant auquel on peut faire jouer des sons, voire des notes. Dans ce circuit nous allons faire varier le son émis par le piezo à l'aide d'un potentiomètre.</p>
+        <div id="schemas">
+          <img id="img_ard05" class="scheme" src="{{ url_for('static', filename='piezo.svg') }}" alt="">
+        </div>
+
+        <ol>
+          <li>Le circuit est facile à monter&nbsp;: reliez les broches externes du potentiomètre au 5V et au GROUND et sa broche du milieu à la broche A0 de l'Arduino.</li>
+          <li>Connectez un câble du piezo à la broche digitale 8 de l'Arduino et l'autre au GND.</li>
+        </ol>
+
+        <div id="block_code">
+          <p>Code Arduino</p>
+          <pre class="code_full">
+
+  <span class="type">int</span> potValue;
+  <span class="type">int</span> sensorLow = 1023;
+  <span class="type">int</span> sensorHigh = 0;
+
+  <span class="type">void</span> <span class="fonction">setup()</span> {
+    <span class="type">Serial</span>.<span class="fonction">begin(9600)</span>;
+  }
+
+  <span class="type">void</span> <span class="fonction">loop()</span> {
+    potValue = <span class="fonction">analogRead</span>(A0);
+    <span class="type">Serial</span>.<span class="fonction">println</span>(potValue);
+    <span class="type">int</span> pitch = <span class="fonction">map</span>(potValue,
+    sensorLow, sensorHigh, 50, 4000);
+    <span class="fonction">tone</span>(8, pitch, 20);
+  }
+
+        </pre>
+      </div>
+
+      <h4>Le code</h4>
+      <pre>
+
+  <span class="type">int</span> potValue;
+  <span class="type">int</span> sensorLow = 1023;
+  <span class="type">int</span> sensorHigh = 0;
+      </pre>
+      <p>On commence par déclarer la variable <span class="code">potValue</span> qui stockera, comme son nom l'indique, la valeur envoyée par le potentiomètre. Comme nous aurons besoin de transposer cette valeur analogique comprise entre 0 et 1024 vers les fréquences que peut produire le piezo buzzer, nous créons deux variables pour stocker les deux extrêmes du potentiomètre.</p>
+      <pre>
+
+  <span class="type">void</span> setup() {
+    <span class="type">Serial</span>.<span class="fonction">begin(9600)</span>;
+  }
+      </pre>
+      <p>Dans le <span class="code">setup()</span> nous initialisons simplement un moniteur série.</p>
+      <pre>
+
+  <span class="type">void</span> loop() {
+    potValue = <span class="fonction">analogRead(A0)</span>;
+    <span class="type">Serial</span>.<span class="fonction">println(potValue)</span>;
+    <span class="type">int</span> pitch = <span class="fonction">map</span>(potValue,
+    sensorLow, sensorHigh, 50, 4000)</span>;
+    <span class="fonction">tone(8, pitch, 20)</span>;
+  }
+      </pre>
+      <p>Dans la <span class="code">loop()</span> nous lisons perpétuellement la valeur du potentiomètre à travers la variable <span class="code">potValue</span> et l'affichons dans le moniteur série. Ensuite, nous utilisons la fonction <span class="code">map()</span> pour transposer une valeur d'un ordre de grandeur à un autre, en l'occurrence la valeur analogique de <span class="code">potValue</span>, initialement comprise entre les valeurs de <span class="code">sensorLow</span> et de <span class="code">sensorHigh</span>, vers des valeurs comprises entre 50 et 4000 (Hz, ce sont les fréquences de vibrations sonores). Enfin pour faire sonner le piezo nous utilisons la fonction <span class="code">tone()</span>, dont le premier argument est la broche de sortie, le second la fréquence du son (ici stockée dans la variable <span class="code">pitch</span>), et le troisième (optionnel) la durée du son.</p>
+      <p>Faîtes tourner le script et tournez la molette du potentiomètre. Vous observerez que la fréquence du son est proportionnellement accordée à la position du curseur du potentiomètre.</p>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+      <ul id="menu">
+        <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+        <li>Liens</li>
+
+      </ul>
+
+      <div class="print">
+        <a href="/freecad04.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Impression 3D</p>
+      </div>
+
+      <div class="main full">
+        <h3>Modéliser un solide sur un autre solide dans Freecad</h3>
+        <p class="circuitb large_full">Freecad est un logiciel très complet permettant de modéliser des objets complexes. Nous allons voir comment appliquer des arrondis et des chamfreins sur des arêtes et comment modéliser une forme sur une face préalablement modélisée.</p>
+
+        <p class="large_full">On commence par modéliser un pavé, en dessinant un rectangle dans l'outil <span class="code">Sketcher</span> depuis <span class="code">Part design</span>. Afin de s'assurer que l'objet est bien centré, on utilise la contrainte <span class="code">Set distance between two points</span> qui permet de placer les quatre points du rectangle à distance égale de l'origine du repère. Puis on ferme l'esquisse et on extrude le pavé avec l'outil <span class="code">Create pad</span></p>
+        <img class="tuto" src="{{ url_for('static', filename='fc26.png') }}" alt="">
+        <img class="tuto" src="{{ url_for('static', filename='fc27.png') }}" alt="">
+
+        <p class="large_full">Si l'on veut créer une nouvelle forme sur l'une des faces du pavé, il faut sélectionner la face en question, puis cliquer sur <span class="code">Create new sketch</span>. On se retrouve alors à nouveau dans l'outil <span class="code">Sketcher</span>, mais avec la face du solide préalablement sélectionnée comme arrière-plan. On peut alors y dessiner la ou les formes souhaitées et utiliser toutes les propriétés de l'outil <span class="code">Sketcher</span> telles que les contraintes.</p>
+        <img class="tuto" src="{{ url_for('static', filename='fc35.png') }}" alt="">
+        <img class="tuto" src="{{ url_for('static', filename='fc36.png') }}" alt="">
+
+        <p class="large_full">Une fois la nouvelle esquisse terminée, on peut l'extruder et ainsi obtenir des solides placés sur le solide de base. Il est possible de dessiner de nouvelles esquisses sur n'importe quelle face d'un objet 3D.</p>
+        <img class="tuto" src="{{ url_for('static', filename='fc37.png') }}" alt="">
+
+        <p class="large_full">Il est possible de dessiner de nouvelles esquisses sur n'importe quelle face d'un objet 3D et ainsi d'obtenir un objet complexe.</p>
+        <img class="tuto" src="{{ url_for('static', filename='fc38.png') }}" alt="">
+        <img class="tuto" src="{{ url_for('static', filename='fc39.png') }}" alt="">
+
+
+
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

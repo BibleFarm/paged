@@ -1,0 +1,644 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+      <ul id="menu">
+        <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+        <li>Liens</li>
+
+      </ul>
+
+      <div class="print">
+        <a href="/rpi_app_moteurs.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Raspberry Pi</p>
+      </div>
+
+      <div class="main">
+        <h3>Application web de contrôle de composants</h3>
+                <p class="circuitb">Un Raspberry Pi étant un petit ordinateur (et pas simplement un micro-contrôleur), il peut exécuter plusieurs tâches à la fois. On peut par exemple faire tourner dessus des applications complètes. Nous allons ici réaliser une petite appli web en Python avec laquelle nous contrôlerons deux moteurs, une LED et un piezo buzzer depuis une page web.</p>
+        <div id="schemas"><img id="img_rpi12" class="scheme" src="{{ url_for('static', filename='rpi_flask_moteurs.svg') }}" alt=""></div>
+        <div id="onglets">
+          <div id="onglet_circuit" onclick="circuitTop()">Circuit</div>
+          <div id="onglet_code" onclick="codeTop()">app.py</div>
+          <div id="onglet_code2" onclick="code2Top()">servo.py</div>
+          <div id="onglet_html" onclick="htmlTop()">index.html</div>
+          <div id="onglet_css" onclick="cssTop()">style.css</div>
+          <div id="onglet_js" onclick="jsTop()">script.js</div>
+        </div>
+
+        <ol>
+          <li>Tout d'abord il faut alimenter la breadboard d'un côté avec le 5V du Raspberry Pi, de l'autre avec une pile de 9V.</li>
+          <li>Placez le CI de façon à ce que son encoche pointe vers le haut. Sa première broche à droite va dans le 5V. À gauche, la première broche est reliée à la broche 22 (en mode BOARD) du Raspberry, la deuxième à la 18 et la septième à la 16. <br/>Le moteur à courant continu se connecte d'un côté à la troisième broche gauche du CI, de l'autre à la sixième broche gauche. La huitième broche à gauche va dans le 9V. Des deux côtés du circuit intégré, les quatrième et cinquième broches sont à connecter au GROUND. Enfin on relie ensemble les GROUND des deux côtés de la breadboard.</li>
+          <li>Branchez ensuite le servo moteur au 5V, au GROUND et à la broche 12 du Raspberry, en mode BOARD.</li>
+          <li>Le piezo buzzer lui doit être connecté à la broche 13 et au GROUND.</li>
+          <li>Quant à la LED, sa cathode doit être reliée à la broche 15 du Raspberry Pi et son anode doit rejoindre le GROUND à travers une résistance de 220Ω.</li>
+        </ol>
+
+
+
+        <div id="block_code">
+          <p>app.py</p>
+          <pre class="code_full">
+
+  <span class="type">from</span> flask <span class="type">import</span> Flask, render_template, jsonify
+  <span class="type">from</span> servo <span class="type">import</span> *
+  <span class="type">import</span> <span class="fonction">RPi.GPIO</span> <span class="type">as</span> GPIO
+  <span class="type">import</span> random
+  <span class="type">from</span> time <span class="type">import</span> sleep
+
+  GPIO.<span class="fonction">setmode</span>(GPIO.BOARD)
+  GPIO.<span class="fonction">setup</span>(12, GPIO.OUT)
+  GPIO.<span class="fonction">setup</span>(15, GPIO.OUT)
+  GPIO.<span class="fonction">setup</span>(11, GPIO.IN)
+  GPIO.<span class="fonction">setup</span>(13, GPIO.OUT)
+  GPIO.<span class="fonction">setup</span>(16, GPIO.OUT)
+  GPIO.<span class="fonction">setup</span>(18, GPIO.OUT)
+  GPIO.<span class="fonction">setup</span>(22, GPIO.OUT)
+  pwm = GPIO.<span class="fonction">PWM</span>(12, 50)
+  pwm.<span class="fonction">start</span>(0)
+
+  app = <span class="fonction">Flask</span>(__name__)
+
+  last_valid_value = value
+  led_state = 0
+  piezo_state = 0
+  motor_dir = ""
+
+  <span class="type">@app</span>.<span class="fonction">route</span>('/')
+  <span class="type">def</span> <span class="fonction">index</span>():
+      <span class="type">return</span> <span class="fonction">render_template</span>('index.html',\
+      value=value)
+
+  <span class="type">@app</span>.<span class="fonction">route</span>('/led_on/')
+  <span class="type">def</span> <span class="fonction">led_on</span>():
+      <span class="type">global</span> led_state
+      led_state += 1
+      GPIO.<span class="fonction">output</span>(15, led_state)
+      <span class="type">return</span> <span class="fonction">jsonify</span>(led_state)
+
+  <span class="type">@app</span>.<span class="fonction">route</span>('/led_off/')
+  <span class="type">def</span> <span class="fonction">led_off</span>():
+      <span class="type">global</span> led_state
+      led_state -= 1
+      GPIO.<span class="fonction">output</span>(15, led_state)
+      <span class="type">return</span> <span class="fonction">jsonify</span>(led_state)
+
+  <span class="type">@app</span>.<span class="fonction">route</span>('/motor_o/')
+  <span class="type">def</span> <span class="fonction">motor_o</span>():
+      <span class="type">global</span> motor_dir
+      motor_dir = "onwards"
+      GPIO.<span class="fonction">output</span>(16, GPIO.HIGH)
+      GPIO.<span class="fonction">output</span>(18, GPIO.LOW)
+      GPIO.<span class="fonction">output</span>(22, GPIO.HIGH)
+      <span class="fonction">sleep</span>(2)
+      GPIO.<span class="fonction">output</span>(22, GPIO.LOW)
+      <span class="type">return</span> <span class="fonction">jsonify</span>(motor_dir)
+
+  <span class="type">@app</span>.<span class="fonction">route</span>('/motor_b/')
+  <span class="type">def</span> <span class="fonction">motor_b</span>():
+      <span class="type">global</span> motor_dir
+      motor_dir = "backwards"
+      GPIO.<span class="fonction">output</span>(16, GPIO.LOW)
+      GPIO.<span class="fonction">output</span>(18, GPIO.HIGH)
+      GPIO.<span class="fonction">output</span>(22, GPIO.HIGH)
+      <span class="fonction">sleep</span>(2)
+      GPIO.<span class="fonction">output</span>(22, GPIO.LOW)
+      <span class="type">return</span> <span class="fonction">jsonify</span>(motor_dir)
+
+  <span class="type">@app</span>.<span class="fonction">route</span>('/down/')
+  <span class="type">def</span> <span class="fonction">down</span>():
+      <span class="type">global</span> last_valid_value
+      last_valid_value -= 5
+      <span class="type">while</span> last_valid_value < 0:
+          last_valid_value += 180
+      <span class="fonction">setAngle</span>(last_valid_value)
+      <span class="type">return</span> <span class="fonction">jsonify</span>(last_valid_value)
+
+  <span class="type">@app</span>.<span class="fonction">route</span>('/up/')
+  <span class="type">def</span> <span class="fonction">up</span>():
+      <span class="type">global</span> last_valid_value
+      last_valid_value += 5
+      last_valid_value %= 180
+      <span class="fonction">setAngle</span>(last_valid_value)
+      <span class="type">return</span> <span class="fonction">jsonify</span>(last_valid_value)
+
+  <span class="type">@app</span>.<span class="fonction">route</span>('/piezo/')
+  <span class="type">def</span> <span class="fonction">piezo</span>():
+      GPIO.<span class="fonction">output</span>(13, piezo_state)
+      <span class="fonction">sleep</span>(1)
+      <span class="type">return</span> <span class="fonction">jsonify</span>(piezo_state)
+
+  <span class="type">@app</span>.<span class="fonction">route</span>('/get_value/')
+  <span class="type">def</span> <span class="fonction">get_value()</span>:
+      <span class="type">return</span> <span class="fonction">jsonify</span>(last_valid_value)
+
+  <span class="type">if</span> __name__ == '__main__':
+      app.<span class="fonction">run</span>(debug=<span class="type">True</span>, host='0.0.0.0')
+
+        </pre>
+      </div>
+
+      <h4>LE CODE</h4>
+      <h5>app.py</h5>
+      <pre>
+
+  <span class="type">from</span> flask <span class="type">import</span> Flask, render_template, jsonify
+  <span class="type">from</span> servo <span class="type">import</span> *
+  <span class="type">import</span> <span class="fonction">RPi.GPIO</span> <span class="type">as</span> GPIO
+  <span class="type">import</span> random
+  <span class="type">from</span> time <span class="type">import</span> sleep
+      </pre>
+      <p>Commençons par le script app.py, qui comme son nom l'indique assure le bon fonctionnement de l'application. Développer une appli sous Flask requiert un script qui répond aux critères de fonctionnement de de module Python. Comme dans tout script Python, on doit importer le smodules dont on va avoir besoin. On remarque que le premier module importé est <span class="code">flask</span>, en l'occurence ses fonctions <span class="code">Flask</span>, <span class="code">render_template</span> et <span class="code">jsonify</span>. Ensuite on importe le module <span class="code">servo</span> qui est en fait un autre script de l'appli, qui nous sert à faire bouger le servo moteur. Puis <span class="code">RPi.GPIO</span> pour interagir avec les broches GPIO du Raspberry Pi, et <span class="code">random</span> et <span class="code">time</span></p>
+
+      <pre>
+
+  GPIO.<span class="fonction">setmode</span>(GPIO.BOARD)
+  GPIO.<span class="fonction">setup</span>(12, GPIO.OUT)
+  GPIO.<span class="fonction">setup</span>(15, GPIO.OUT)
+  GPIO.<span class="fonction">setup</span>(11, GPIO.IN)
+  GPIO.<span class="fonction">setup</span>(13, GPIO.OUT)
+  GPIO.<span class="fonction">setup</span>(16, GPIO.OUT)
+  GPIO.<span class="fonction">setup</span>(18, GPIO.OUT)
+  GPIO.<span class="fonction">setup</span>(22, GPIO.OUT)
+  pwm = GPIO.<span class="fonction">PWM</span>(12, 50)
+  pwm.<span class="fonction">start</span>(0)
+
+  app = <span class="fonction">Flask</span>(__name__)
+
+  last_valid_value = value
+  led_state = 0
+  piezo_state = 0
+  motor_dir = ""
+      </pre>
+      <p>Comme dans tout script Python impliquant des broches GPIO du Raspberry Pi, on déclare chacune d'elles en précisant son numéro (ici en mode <span class="code">GPIO.BOARD</span>) et son mode. À noter que la broche 12, celle à laquelle est connectée le servo moteur est déclarée une seconde fois en mode <span class="code">PWM</span> et stockée dans la variable <span class="code">pwm</span> car nous avons besoin de ce mode qui fait varier la fréquence du courant pour faire bouger le moteur.<br/> Ensuite, on déclare l'objet <span class="code">Flask</span> dans la variable <span class="code">app</span>, ce qui nous permettra de faire tourner l'application. On déclare ensuite toutes les variables qui vont nous servir à comparer l'état des composants&nbsp;: <span class="code">last_valid_value</span> pour l'angle du servo, <span class="code">led_state</span> pour la LED, <span class="code">piezo_state</span> pour le piezo buzzer et <span class="code">motor_dir</span> pour stocker la direction du moteur à courant continu.</p>
+
+      <pre>
+
+  <span class="type">@app</span>.<span class="fonction">route</span>('/')
+  <span class="type">def</span> <span class="fonction">index</span>():
+      <span class="type">return</span> <span class="fonction">render_template</span>('index.html',\
+      value=value)
+
+  <span class="type">@app</span>.<span class="fonction">route</span>('/led_on/')
+  <span class="type">def</span> <span class="fonction">led_on</span>():
+      <span class="type">global</span> led_state
+      led_state += 1
+      GPIO.<span class="fonction">output</span>(15, led_state)
+      <span class="type">return</span> <span class="fonction">jsonify</span>(led_state)
+
+  <span class="type">@app</span>.<span class="fonction">route</span>('/led_off/')
+  <span class="type">def</span> <span class="fonction">led_off</span>():
+      <span class="type">global</span> led_state
+      led_state -= 1
+      GPIO.<span class="fonction">output</span>(15, led_state)
+      <span class="type">return</span> <span class="fonction">jsonify</span>(led_state)
+
+  <span class="type">@app</span>.<span class="fonction">route</span>('/motor_o/')
+  <span class="type">def</span> <span class="fonction">motor_o</span>():
+      <span class="type">global</span> motor_dir
+      motor_dir = "onwards"
+      GPIO.<span class="fonction">output</span>(16, GPIO.HIGH)
+      GPIO.<span class="fonction">output</span>(18, GPIO.LOW)
+      GPIO.<span class="fonction">output</span>(22, GPIO.HIGH)
+      <span class="fonction">sleep</span>(2)
+      GPIO.<span class="fonction">output</span>(22, GPIO.LOW)
+      <span class="type">return</span> <span class="fonction">jsonify</span>(motor_dir)
+
+  <span class="type">@app</span>.<span class="fonction">route</span>('/motor_b/')
+  <span class="type">def</span> <span class="fonction">motor_b</span>():
+      <span class="type">global</span> motor_dir
+      motor_dir = "backwards"
+      GPIO.<span class="fonction">output</span>(16, GPIO.LOW)
+      GPIO.<span class="fonction">output</span>(18, GPIO.HIGH)
+      GPIO.<span class="fonction">output</span>(22, GPIO.HIGH)
+      <span class="fonction">sleep</span>(2)
+      GPIO.<span class="fonction">output</span>(22, GPIO.LOW)
+      <span class="type">return</span> <span class="fonction">jsonify</span>(motor_dir)
+
+  <span class="type">@app</span>.<span class="fonction">route</span>('/down/')
+  <span class="type">def</span> <span class="fonction">down</span>():
+      <span class="type">global</span> last_valid_value
+      last_valid_value -= 5
+      <span class="type">while</span> last_valid_value < 0:
+          last_valid_value += 180
+      <span class="fonction">setAngle</span>(last_valid_value)
+      <span class="type">return</span> <span class="fonction">jsonify</span>(last_valid_value)
+
+  <span class="type">@app</span>.<span class="fonction">route</span>('/up/')
+  <span class="type">def</span> <span class="fonction">up</span>():
+      <span class="type">global</span> last_valid_value
+      last_valid_value += 5
+      last_valid_value %= 180
+      <span class="fonction">setAngle</span>(last_valid_value)
+      <span class="type">return</span> <span class="fonction">jsonify</span>(last_valid_value)
+
+  <span class="type">@app</span>.<span class="fonction">route</span>('/piezo/')
+  <span class="type">def</span> <span class="fonction">piezo</span>():
+      GPIO.<span class="fonction">output</span>(13, piezo_state)
+      <span class="fonction">sleep</span>(1)
+      <span class="type">return</span> <span class="fonction">jsonify</span>(piezo_state)
+
+  <span class="type">@app</span>.<span class="fonction">route</span>('/get_value/')
+  <span class="type">def</span> <span class="fonction">get_value()</span>:
+      <span class="type">return</span> <span class="fonction">jsonify</span>(last_valid_value)
+
+  <span class="type">if</span> __name__ == '__main__':
+      app.<span class="fonction">run</span>(debug=<span class="type">True</span>, host='0.0.0.0')
+      </pre>
+      <p>Le reste du script gère les routes de l'application, c'est-à-dire les URL utilisées dans l'app. Pour chacune il faut créer une fonction qui va retourner (<span class="code">return</span>) quelque chose&nbsp;: un template HTML (la fonction <span class="code">index()</span> renvoie le template de la page d'accueil avec <span class="code">return render_template('index.html', value=value)</span>) ou une valeur (les fonctions <span class="code">led_on()</span>, <span class="code">led_off()</span>, <span class="code">motor_o()</span>, <span class="code">motor_b()</span>, <span class="code">down()</span>, <span class="code">up()</span>, <span class="code">piezo()</span> et <span class="code">get_value()</span> renvoient toutes des valeurs qui correspondent au changement d'état du composant qu'elles contrôlent). <br/>Cette appli n'est composée que d'une seule page HTML mais pourtant elle fait appel à bien plus de routes. C'est parce que nous nous servons de requêtes HTTP pour recueillir les ordres d'agir sur les composants&nbsp;; or les requêtes HTTP prennent des paramètres qui sont des URL, de cette façon l'appli saura reconnaître le paramètre passé à la requête HTTP qu'elle reçoit, et déclencher la route en conséquence. Par exemple lorsque la route <span class="code">/&nbsp;piezo</span> est active, la ligne de code <span class="code">GPIO.output(13, piezo_state)</span> est exécutée et le piezo se met à sonner.</p>
+
+      <div id="block_code2">
+        <p>servo.py</p>
+        <pre class="code_full">
+
+  <span class="type">import</span> <span class="fonction">RPi.GPIO</span> <span class="type">as</span> GPIO
+  <span class="type">from</span> time <span class="type">import</span> sleep
+
+  GPIO.<span class="fonction">setmode</span>(GPIO.BOARD)
+  GPIO.<span class="fonction">setup</span>(12, GPIO.OUT)
+
+  pwm = GPIO.<span class="fonction">PWM</span>(12, 50)
+  pwm.<span class="fonction">start</span>(0)
+
+  <span class="type">def</span> <span class="fonction">setAngle</span>(angle):
+      GPIO.<span class="fonction">output</span>(12, <span class="type">True</span>)
+      pwm.<span class="fonction">ChangeDutyCycle</span>(angle / 18 + 2)
+      <span class="fonction">sleep</span>(1)
+      GPIO.<span class="fonction">output</span>(12, <span class="type">False</span>)
+      pwm.<span class="fonction">ChangeDutyCycle</span>(0)
+
+  pwm.<span class="fonction">stop</span>()
+  GPIO.<span class="fonction">cleanup</span>()
+
+      </pre>
+    </div>
+
+    <h5>servo.py</h5>
+    <pre>
+
+  <span class="type">import</span> <span class="fonction">RPi.GPIO</span> <span class="type">as</span> GPIO
+  <span class="type">from</span> time <span class="type">import</span> sleep
+
+  GPIO.<span class="fonction">setmode</span>(GPIO.BOARD)
+  GPIO.<span class="fonction">setup</span>(12, GPIO.OUT)
+
+  pwm = GPIO.<span class="fonction">PWM</span>(12, 50)
+  pwm.<span class="fonction">start</span>(0)
+
+  <span class="type">def</span> <span class="fonction">setAngle</span>(angle):
+    GPIO.<span class="fonction">output</span>(12, <span class="type">True</span>)
+    pwm.<span class="fonction">ChangeDutyCycle</span>(angle / 18 + 2)
+    <span class="fonction">sleep</span>(1)
+    GPIO.<span class="fonction">output</span>(12, <span class="type">False</span>)
+    pwm.<span class="fonction">ChangeDutyCycle</span>(0)
+
+  pwm.<span class="fonction">stop</span>()
+  GPIO.<span class="fonction">cleanup</span>()
+
+  </pre>
+  <p>Ce script gère les mouvements du servo moteur en convertissant un angle compris entre 0 et 180 en une fréquence comprise entre 2 et 12 (correspondant au duty cycle du mode PWM). La fonction <span class="code">setAngle()</span> envoie du courant dans la broche du servo puis module sa fréquence en fonction de l'angle choisi pour faire se positionner le moteur selon cet angle (<span class="code">pwm.ChangeDutyCycle(angle / 18 + 2)</span>), puis l'envoi de courant dans la broche est stoppé et le mode PWM également. Ce script est appelé en tant que module dans <span class="code">app.py</span> afin d'éviter d'avoir à y faire le calcul de l'angle.</p>
+
+    <div id="block_html">
+      <p>index.html</p>
+      <pre class="code_full">
+
+  &lt;!doctype html&gt;
+    &lt;html&gt;
+      &lt;head&gt;
+        &#123;% block head %}
+        &lt;link <span class="typep">rel</span>="stylesheet"
+        <span class="typep">href</span>="&#123;{ url_for('static',
+        filename='style.css') }}"&gt;
+        &lt;meta <span class="typep">charset</span>="utf-8"&gt;
+        &lt;meta <span class="typep">name</span>="viewport"
+        <span class="typep">content</span>="width=device-width,
+        initial-scale=1.0"&gt;
+        &lt;title&gt;&#123;% block title %}
+        &#123;% endblock %}&lt;/title&gt;
+        &#123;% endblock %}
+      &lt;/head&gt;
+
+      &lt;body&gt;
+        &lt;div <span class="typep">id</span>="main"&gt;
+        &#123;% block main %}
+          &lt;div <span class="typep">id</span>="sv"&gt;
+            &lt;p <span class="typep">id</span>="servo"&gt;L'angle du servo
+            est actuellement de :
+            &lt;span <span class="typep">id</span>="servo_value"&gt;&#123;{value}}&lt;/span&gt;
+            &lt;/p&gt;
+            &lt;div <span class="typep">id</span>="buttons"&gt;
+                &lt;button <span class="typep">type</span>="button" <span class="typep">name</span>="button"
+              <span class="fonctionp">onclick</span>="up()"&gt;SERVO UP&lt;/button&gt;
+                &lt;button <span class="typep">type</span>="button" <span class="typep">name</span>="button"
+              <span class="fonctionp">onclick</span>="down()"&gt;SERVO DOWN&lt;/button&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+          &lt;div <span class="typep">id</span>="led"&gt;
+            &lt;p <span class="typep">id</span>="txt_led"&gt;La DEL est éteinte&lt;/p&gt;
+            &lt;button <span class="typep">type</span>="button" <span class="typep">name</span>="button"
+            <span class="fonctionp">onclick</span>="led_on()"&gt;LED &lt;br/&gt;ON&lt;/button&gt;
+            &lt;button <span class="typep">type</span>="button" <span class="typep">name</span>="button"
+            <span class="fonctionp">onclick</span>="led_off()"&gt;LED OFF&lt;/button&gt;
+          &lt;/div&gt;
+          &lt;div <span class="typep">id</span>="piezo"&gt;
+            &lt;button <span class="typep">type</span>="button" <span class="typep">name</span>="button"
+            <span class="fonctionp">onclick</span>="piezo()"&gt;PIEZO PLAY&lt;/button&gt;
+          &lt;/div&gt;
+          &lt;div <span class="typep">id</span>="moteur"&gt;
+            &lt;button <span class="typep">type</span>="button" <span class="typep">name</span>="button"
+              <span class="fonctionp">onclick</span>="motor_o()"&gt;DC MOTOR ONWARDS
+            &lt;/button&gt;
+            &lt;button <span class="typep">type</span>="button" <span class="typep">name</span>="button"
+              <span class="fonctionp">onclick</span>="motor_b()"&gt;DC MOTOR BACKWARDS
+            &lt;/button&gt;
+          &lt;/div&gt;
+        &#123;% endblock %}
+        &lt;/div&gt;
+
+        &lt;script <span class="typep">type</span>="text/javascript"
+        <span class="typep">src</span>="&#123;{url_for<('static', filename='script.js')}}"&gt;
+        &lt;/script&gt;
+      &lt;/body&gt;
+    &lt;/html&gt;
+
+
+    </pre>
+  </div>
+
+  <h5>index.html</h5>
+  <pre class="processing" style="break-inside: auto !important;">
+
+  &#123;% block main %}
+    &lt;div <span class="typep">id</span>="sv"&gt;
+      &lt;p <span class="typep">id</span>="servo"&gt;L'angle du servo
+      est actuellement de :
+      &lt;span <span class="typep">id</span>="servo_value"&gt;&#123;{value}}&lt;/span&gt;
+      &lt;/p&gt;
+      &lt;div <span class="typep">id</span>="buttons"&gt;
+        &lt;button <span class="typep">type</span>="button" <span class="typep">name</span>="button"
+        <span class="fonctionp">onclick</span>="up()"&gt;SERVO UP&lt;/button&gt;
+        &gt;button <span class="typep">type</span>="button" <span class="typep">name</span>="button"
+        <span class="fonctionp">onclick</span>="down()"&gt;SERVO DOWN&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div <span class="typep">id</span>="led"&gt;
+      &lt;p <span class="typep">id</span>="txt_led"&gt;La DEL est éteinte&lt;/p&gt;
+      &lt;button <span class="typep">type</span>="button" <span class="typep">name</span>="button"
+      <span class="fonctionp">onclick</span>="led_on()"&gt;LED &lt;br/&gt;ON&lt;/button&gt;
+      &lt;button <span class="typep">type</span>="button" <span class="typep">name</span>="button"
+      <span class="fonctionp">onclick</span>="led_off()"&gt;LED OFF&lt;/button&gt;
+    &lt;/div&gt;
+
+    &lt;div <span class="typep">id</span>="piezo"&gt;
+      &lt;button <span class="typep">type</span>="button" <span class="typep">name</span>="button"
+      <span class="fonctionp">onclick</span>="piezo()"&gt;PIEZO PLAY&lt;/button&gt;
+    &lt;/div&gt;
+
+    &lt;div <span class="typep">id</span>="moteur"&gt;
+      &lt;button <span class="typep">type</span>="button" <span class="typep">name</span>="button"
+        <span class="fonctionp">onclick</span>="motor_o()"&gt;DC MOTOR ONWARDS
+      &lt;/button&gt;
+      &lt;button <span class="typep">type</span>="button" <span class="typep">name</span>="button"
+        <span class="fonctionp">onclick</span>="motor_b()"&gt;DC MOTOR BACKWARDS
+      &lt;/button&gt;
+    &lt;/div&gt;
+  &#123;% endblock %}
+  </pre>
+  <p>Le template HTML contient tous les éléments (boutons, champs de texte) via lesquels nous allons contrôler les composants. Chacun est identifié par un <span class="proc">id</span>, ce qui nous permettra de les sélectionner individuellement en Javascript. On notera ce <span class="proc">&lt;span id="servo_value"&gt;&#123;{value}}&lt;/span&gt;</span>, où <span class="proc">&#123;{value}}</span> est une variable Python passé au template directement depuis <span class="code">app.py</span>&nbsp;; en effet cette valeur est mise à jour chaque fois que la route <span class="code">/get_value</span> est active, elle est sauvée dans <span class="code">last_valid_value</span> et passée comme argument à la fonction <span class="code">render_template</span>. <br/>Par ailleurs on ramarque que les éléments portent des événements <span class="proc">onclick=""</span>. Ceux-ci nous permettront de déclencher des fonctions en Javascript quand chacun des éléments est cliqué.</p>
+
+  <div id="block_css">
+    <p>style.css</p>
+    <pre class="code_full">
+
+  <span class="typep">body</span> {
+    color: orange;
+    font-family: 'MetaAccanthis';
+    font-size: 4vw;
+    padding: 0vw;
+    line-height: 120%;
+    margin: 0vw;
+  }
+
+  <span class="typep">a</span> {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  <span class="typep">p</span> {
+    padding: 1vw;
+    margin: 0;
+  }
+
+  <span class="typep">button</span> {
+    color: white;
+    font-family: 'MetaAccanthis';
+    font-size: 3vw;
+    background-color: mediumseagreen;
+    border: none;
+    padding: 0.5vw;
+    width: 25vw;
+    text-align: center;
+  }
+
+  <span class="typep">button</span><span class="fonctionp">:hover</span> {
+    background-color: orange;
+    cursor: pointer;
+  }
+
+  #main {
+    display: grid;
+    grid-template-columns: <span class="fonctionp">repeat</span>(4,25vw[col-start]);
+    grid-template-rows: <span class="fonctionp">repeat</span>(4,25vh[col-start]);
+  }
+
+  #menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    height: auto;
+  }
+
+  #sv {
+    grid-column: 1 / span 2;
+    grid-row: 1 / span 2;
+    border: 3px solid orange;
+  }
+
+  #buttons, #led, #piezo, #moteur {
+    display: flex;
+    flex-direction: row;
+  }
+
+  #buttons > * {
+    height: 26.4vh;
+  }
+
+  #led {
+    grid-column: 3 / span 2;
+    grid-row: 1 / span 2;
+    border: 3px solid orange;
+    border-left: 0px solid white;
+  }
+
+  #piezo {
+    grid-column: 1 / span 2;
+    grid-row: 3 / span 2;
+  }
+
+  #moteur {
+    grid-column: 3 / span 2;
+    grid-row: 3 / span 2;
+    border: 3px solid orange;
+    border-top: 0px solid white;
+  }
+
+  #moteur > * {
+    width: 25vw !important;
+  }
+
+  <span class="typep">@font-face</span> {
+    font-family: 'MetaAccanthis';
+    src:
+    <span class="fonctionp">url</span>(font/metaaccanthis_regular-webfont.eot),
+    <span class="fonctionp">url</span>(font/metaaccanthis_regular-webfont.svg),
+    <span class="fonctionp">url</span>(font/metaaccanthis_regular-webfont.ttf),
+    <span class="fonctionp">url</span>(font/metaaccanthis_regular-webfont.woff),
+    <span class="fonctionp">url</span>(font/metaaccanthis_regular-webfont.woff2);
+  }
+  </pre>
+</div>
+
+  <h5>style.css</h5>
+  <pre class="processing">
+
+  <span class="typep">@font-face</span> {
+    font-family: 'MetaAccanthis';
+    src:
+    <span class="fonctionp">url</span>(font/metaaccanthis_regular-webfont.eot),
+    <span class="fonctionp">url</span>(font/metaaccanthis_regular-webfont.svg),
+    <span class="fonctionp">url</span>(font/metaaccanthis_regular-webfont.ttf),
+    <span class="fonctionp">url</span>(font/metaaccanthis_regular-webfont.woff),
+    <span class="fonctionp">url</span>(font/metaaccanthis_regular-webfont.woff2);
+  }
+  </pre>
+  <p>Le fichier CSS modifie l'apparence des éléments HTML. L'attribut <span class="proc">@font-face</span> permet d'utiliser une police de caractères personnalisée. N'hésitez pas à modifier ce fichier pour créer vos propres styles.</p>
+
+<div id="block_js">
+  <p>script.js</p>
+  <pre class="code_full">
+
+  texte_led = <span class="typep">document</span>.<span class="fonctionp">getElementById</span>("txt_led");
+
+  <span class="typep">function</span> <span class="fonctionp">led_on</span>() {
+    <span class="fonctionp">fetch</span>("http://cityfab2.local:5000/led_on/");
+    texte_led.innerHTML = "La DEL est allumée";
+  }
+
+  <span class="typep">function</span> <span class="fonctionp">led_off</span>() {
+    <span class="fonctionp">fetch</span>("http://cityfab2.local:5000/led_off/");
+    texte_led.innerHTML = "La DEL est éteinte";
+  }
+
+  <span class="typep">function</span> <span class="fonctionp">motor_o</span>() {
+    <span class="fonctionp">fetch</span>("http://cityfab2.local:5000/motor_o/");
+  }
+
+  <span class="typep">function</span> <span class="fonctionp">motor_b</span>() {
+    <span class="fonctionp">fetch</span>("http://cityfab2.local:5000/motor_b/");
+  }
+
+  <span class="typep">function</span> <span class="fonctionp">piezo</span>() {
+    <span class="fonctionp">fetch</span>("http://cityfab2.local:5000/piezo/");
+  }
+
+  <span class="typep">function</span> <span class="fonctionp">up</span>() {
+    <span class="fonctionp">fetch</span>("http://cityfab2.local:5000/up/");
+  }
+
+  <span class="typep">function</span> <span class="fonctionp">down</span>() {
+    <span class="fonctionp">fetch</span>("http://cityfab2.local:5000/down/");
+  }
+
+  <span class="typep">function</span> <span class="fonctionp">display_value</span>() {
+    <span class="fonctionp">fetch</span>('http://cityfab2.local:5000/get_value/')
+    .then((resp) => resp.<span class="fonctionp">json</span>())
+    .then(<span class="fonctionp">function</span>(data) {
+      <span class="typep">document</span>.<span class="fonctionp">getElementById</span>('servo_value')\
+      .innerHTML = JSON.<span class="fonctionp">stringify</span>(data);
+    })
+  }
+  window.<span class="fonctionp">setInterval</span>( display_value, 200 );
+
+
+        </pre>
+        </div>
+
+        <h5>script.js</h5>
+        <pre class="processing">
+
+  <span class="typep">function</span> <span class="fonctionp">led_on</span>() {
+    <span class="fonctionp">fetch</span>("http://cityfab2.local:5000/led_on/");
+    texte_led.innerHTML = "La DEL est allumée";
+  }
+
+  <span class="typep">function</span> <span class="fonctionp">led_off</span>() {
+    <span class="fonctionp">fetch</span>("http://cityfab2.local:5000/led_off/");
+    texte_led.innerHTML = "La DEL est éteinte";
+  }
+
+  <span class="typep">function</span> <span class="fonctionp">motor_o</span>() {
+    <span class="fonctionp">fetch</span>("http://cityfab2.local:5000/motor_o/");
+  }
+
+  <span class="typep">function</span> <span class="fonctionp">motor_b</span>() {
+    <span class="fonctionp">fetch</span>("http://cityfab2.local:5000/motor_b/");
+  }
+
+  <span class="typep">function</span> <span class="fonctionp">piezo</span>() {
+    <span class="fonctionp">fetch</span>("http://cityfab2.local:5000/piezo/");
+  }
+
+  <span class="typep">function</span> <span class="fonctionp">up</span>() {
+    <span class="fonctionp">fetch</span>("http://cityfab2.local:5000/up/");
+  }
+
+  <span class="typep">function</span> <span class="fonctionp">down</span>() {
+    <span class="fonctionp">fetch</span>("http://cityfab2.local:5000/down/");
+  }
+        </pre>
+        <p>Le fichier Javascript de notre application contient les fonctions qui se déclenchent quand l'un des boutons est cliqué sur la page HTML. On retrouve d'ailleurs dans le nom des fonctions Javascript les noms des fonctions Python dans <span class="code">app.py</span> (cela n'est pas obligatoire mais facilite grandement la compréhesion du code). Ce que font ces fonctions, c'est d'envoyer des requêtes HTTP à la racine du serveur à l'aide de la fonction <span class="proc">fetch</span>. Celle-ci prend comme argument l'adresse du serveur où doit être adressée la requête. Par exemple la fonction <span class="proc">fetch("http://cityfab2.local:5000/up/");</span> envoie une requête à l'URL <span class="proc">http://cityfab2.local:5000/up/;</span>, ce qui correspond à la route <span class="code">/up</span> définie dans <span class="code">app.py</span>, et ainsi déclenche du côté serveur la fonction liée à cette route.</p>
+
+        <pre class="processing">
+
+  <span class="typep">function</span> <span class="fonctionp">display_value</span>() {
+    <span class="fonctionp">fetch</span>('http://cityfab2.local:5000/get_value/')
+    .then((resp) => resp.<span class="fonctionp">json</span>())
+    .then(<span class="fonctionp">function</span>(data) {
+      <span class="typep">document</span>.<span class="fonctionp">getElementById</span>('servo_value')\
+      .innerHTML = JSON.<span class="fonctionp">stringify</span>(data);
+    })
+  }
+  window.<span class="fonctionp">setInterval</span>( display_value, 200 );
+        </pre>
+        <p>La fonction <span class="proc">display_value</span> est un peu plus complexe. Elle demande au serveur de lui envoyer la valeur de l'angle actuel du servo (stockée dans <span class="code">last_valid_value</span> dans <span class="code">app.py</span>). Puis elle récupère directement la réponse du serveur à cette requête HTTP et la passe à l'élément dont l'<span class="proc">id</span> est <span class="proc">servo_value</span>. Puis on fait en sorte que cette fonction s'exécute toutes les 200 milli-secondes avec <span class="proc">window.setInterval(display_value, 200);</span>, une fonction qui fait s'exécuter une autre fonction à un intervalle donné. De cette façon on s'assure que cet élément HTML affiche toujours la valeur de l'angle du servo à jour.</p>
+
+        <img class="capt" src="{{ url_for('static', filename='mot01.png') }}" alt="">
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

@@ -1,0 +1,157 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+    <ul id="menu">
+      <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+      <li>Liens</li>
+
+    </ul>
+
+      <div class="print">
+        <a href="/arduino_flora_neopixel.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Arduino</p>
+      </div>
+
+      <div class="main">
+        <div id="onglets">
+          <div id="onglet_circuit" onclick="circuitTop()">Circuit</div>
+          <div id="onglet_code" onclick="codeTop()">Code Arduino</div>
+        </div>
+        <h3 id="ard06">Adafruit Flora + NeoPixel</h3>
+        <p class="circuitb">Si la carte Adafruit Flora est équipée d'un NeoPixel intégré, on peut lui assembler une bande de NeoPixels (ou un ruban LED) que l'on peut faire s'éclairer selon différents schémas.</p>
+        <div id="schemas"><img id="img_ard24" class="scheme" src="{{ url_for('static', filename='flora_neopixel.svg') }}" alt=""></div>
+
+
+        <ol>
+          <li>Il faut faire attention à bien monter la bande NeoPixel dans le bon sens&nbsp;: à partir de la pin 3.3V du Flora, formez une ligne avec toutes les bornes «&nbsp;+&nbsp;» des NeoPixels, de même avec toutes les bornes «&nbsp;-&nbsp;» en partant de la pin GND. Enfin il faut connecter en ligne toutes les bornes marquées d'une flèche (faîtes attention à ce que tous les NeoPixels aillent dans le même sens&nbsp;: toutes vers le haut ou toutes vers le bas) à la pin 10 du Flora.</li>
+        </ol>
+
+      <div id="block_code">
+        <p>Code Arduino</p>
+        <pre class="code_full">
+
+  <span class="type">#include</span> &lt;Adafruit_NeoPixel.h&gt;
+
+  <span class="type">#define</span> PIN 10
+
+  <span class="type">Adafruit_NeoPixel</span> strip =
+  <span class="type">Adafruit_NeoPixel</span>(8, PIN,
+  NEO_GRB + NEO_KHZ800);
+
+  <span class="type">void</span> <span class="fonction">setup()</span> {
+    strip.<span class="fonction">begin()</span>;
+    strip.<span class="fonction">show()</span>;
+  }
+
+  <span class="type">void</span> <span class="fonction">loop()</span> {
+    <span class="fonction">rainbow</span>(20);
+  }
+
+  <span class="type">void</span> <span class="fonction">rainbow</span>(<span class="type">uint8_t</span> wait) {
+    <span class="type">uint16_t</span> i, j;
+
+    <span class="type">for</span>(j=0; j&lt;256; j++) {
+      <span class="type">for</span>(i=0; i&lt;strip.<span class="fonction">numPixels()</span>; i++) {
+        strip.<span class="fonction">setPixelColor</span>(i,
+        Wheel((i+j) & 255));
+      }
+      strip.<span class="fonction">show()</span>;
+      <span class="fonction">delay</span>(wait);
+    }
+  }
+
+  <span class="type">uint32_t</span> Wheel(<span class="type">byte</span> WheelPos) {
+    WheelPos = 255 - WheelPos;
+    <span class="type">if</span>(WheelPos < 85) {
+      <span class="type">return</span> strip.<span class="fonction">Color</span>(255 - WheelPos * 3,
+      0, WheelPos * 3);
+    }
+    <span class="type">if</span>(WheelPos < 170) {
+      WheelPos -= 85;
+      <span class="type">return</span> strip.<span class="fonction">Color</span>(0, WheelPos * 3,
+      255 - WheelPos * 3);
+    }
+    WheelPos -= 170;
+    <span class="type">return</span> strip.<span class="fonction">Color</span>(WheelPos * 3,
+    255 - WheelPos * 3, 0);
+  }
+
+      </pre>
+    </div>
+
+    <h4>LE CODE</h4>
+    <pre>
+
+  <span class="type">#include</span> &lt;Adafruit_NeoPixel.h&gt;
+
+  <span class="type">#define</span> PIN 10
+
+  <span class="type">Adafruit_NeoPixel</span> strip =
+  <span class="type">Adafruit_NeoPixel</span>(8, PIN,
+  NEO_GRB + NEO_KHZ800);
+
+  <span class="type">void</span> <span class="fonction">setup()</span> {
+    strip.<span class="fonction">begin()</span>;
+    strip.<span class="fonction">show()</span>;
+  }
+    </pre>
+    <p>On importe la librairie <span class="code">Adafruit_NeoPixel</span> et initialise la bande de NeoPixels sur la pin 10. On déclare ici 8 NeopIxels dans l'objet <span class="code">Adafruit_NeoPixel</span> car c'est le nombre que nous utilisons pour ce projet, mais vous pourriez modifier le projet pour avoir un nombre plus important de NeoPixels. Ensuite dans le <span class="code">setup()</span> on démarre la bande.</p>
+    <pre>
+
+  <span class="type">void</span> <span class="fonction">loop()</span> {
+    <span class="fonction">rainbow</span>(20);
+  }
+    </pre>
+    <p>Dans la <span class="code">loop()</span> on fait tourner en boucle une fonction <span class="code">rainbow()</span> qui, comme son nom l'indique, fera s'éclairer nos NeoPixels selon le spectre des couleurs complet.</p>
+    <pre>
+
+  <span class="type">void</span> <span class="fonction">rainbow</span>(<span class="type">uint8_t</span> wait) {
+    <span class="type">uint16_t</span> i, j;
+
+    <span class="type">for</span>(j=0; j&lt;256; j++) {
+      <span class="type">for</span>(i=0; i&lt;strip.<span class="fonction">numPixels()</span>; i++) {
+        strip.<span class="fonction">setPixelColor</span>(i,
+        Wheel((i+j) & 255));
+      }
+      strip.<span class="fonction">show()</span>;
+      <span class="fonction">delay</span>(wait);
+    }
+  }
+
+  <span class="type">uint32_t</span> Wheel(<span class="type">byte</span> WheelPos) {
+    WheelPos = 255 - WheelPos;
+    <span class="type">if</span>(WheelPos < 85) {
+      <span class="type">return</span> strip.<span class="fonction">Color</span>(255 - WheelPos * 3,
+      0, WheelPos * 3);
+    }
+    <span class="type">if</span>(WheelPos < 170) {
+      WheelPos -= 85;
+      <span class="type">return</span> strip.<span class="fonction">Color</span>(0, WheelPos * 3,
+      255 - WheelPos * 3);
+    }
+    WheelPos -= 170;
+    <span class="type">return</span> strip.<span class="fonction">Color</span>(WheelPos * 3,
+    255 - WheelPos * 3, 0);
+  }
+    </pre>
+    <p>Voici la fonction <span class="code">rainbow()</span> à laquelle nous faisons appel dans la <span class="code">loop()</span>. Cette fonction prend pour paramètre le temps pendant lequel nous voulons que le cycle de couleurs soit réalisé. Ce que fait la fonction, c'est envoyer les valeurs des couleurs aux NeoPixels dans le temps donné. <br/>La fonction <span class="code">rainbow()</span> fait elle-même appel à la fonction <span class="code">Wheel()</span> qui calcule les valeurs des couleurs en bytes que doivent prendre les NeoPixels pour parcourir l'ensemble du spectre coloré.</p>
+
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

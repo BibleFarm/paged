@@ -1,0 +1,144 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+    <ul id="menu">
+      <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+      <li>Liens</li>
+
+    </ul>
+
+      <div class="print">
+        <a href="/arduino_flora_temperature.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Arduino</p>
+      </div>
+
+      <div class="main">
+        <div id="onglets">
+          <div id="onglet_circuit" onclick="circuitTop()">Circuit</div>
+          <div id="onglet_code" onclick="codeTop()">Code Arduino</div>
+        </div>
+        <h3>Adafruit Flora + capteur de température</h3>
+        <p class="circuitb">Certaines cartes programmables avec l'IDE Arduino sont pensées pour réaliser des projets mobiles&nbsp;: taille réduite, alimentation portable, modules adaptés... Nous allons utiliser la carte Flora fabriquée par Adafruit, qui est une carte conçue pour pouvoir être cousue et utilisée avec du fil conducteur et prendre part à des projets de textile connecté.</p>
+        <div id="schemas"><img id="img_ard23" class="scheme" src="{{ url_for('static', filename='flora_temp.svg') }}" alt=""></div>
+
+        <p class="circuit">La carte Flora possède un NeoPixel(LED RVB programmable) intégré, nous allons lui brancher un capteur de température et changer la couleur du NeoPixel en fonction de la température captée. Avant de commencer à travailler avec le Flora, nous devons ajouter une configuration dans l'IDE Arduino car il ne fait pas partie des cartes nativement intégrées. Pour cela il faut aller dans Fichier > Préférences et ajouter dans le champ "URL de gestionnaire de cartes supplémentaires" l'URL suivante&nbsp;: https://adafruit.github.io/arduino-board-index/package_adafruit_index.json</p>
+        <p class="circuit">Pour le montage, on peut utiliser des pinces crocodile le temps du prototypage puis coudre avec le fil conducteur quand le projet est validé.</p>
+        <ol>
+          <li> Il faut connecter la patte gauche du capteur au 3.3V, celle du milieu à la pin 10 du Flora, et celle de droite sur le GND.</li>
+        </ol>
+      <div id="block_code">
+        <p>Code Arduino</p>
+        <pre class="code_full">
+
+  <span class="type">#include</span> &lt;Adafruit_NeoPixel.h&gt;
+
+  <span class="type">#define</span> PIN 8
+
+  <span class="type">Adafruit_NeoPixel</span> strip =
+  <span class="type">Adafruit_NeoPixel</span>(1, PIN,
+  NEO_GRB + NEO_KHZ800);
+
+  <span class="type">int</span> temp = A10;
+  <span class="type">int</span> val;
+
+  <span class="type">uint32_t</span> color_full = 255;
+  <span class="type">uint32_t</span> color_empty = 0;
+
+  <span class="type">void</span> <span class="fonction">setup()</span> {
+    strip.<span class="fonction">begin()</span>;
+    strip.<span class="fonction">show()</span>;
+    <span class="type">Serial</span>.<span class="fonction">begin</span>(9600);
+  }
+
+  <span class="type">void</span> <span class="fonction">loop()</span> {
+    val = <span class="fonction">analogRead</span>(temp)/4.5;
+    <span class="type">Serial</span>.<span class="fonction">println</span>(val);
+    <span class="fonction">delay</span>(500);
+
+    <span class="type">if</span>(val < 17) {
+      strip.<span class="fonction">setPixelColor</span>(0, color_empty,
+      color_empty, color_full);
+      strip.<span class="fonction">show()</span>;
+    } <span class="type">else if</span>(val > 16 && val < 26) {
+      strip.<span class="fonction">setPixelColor</span>(0, color_empty,
+      color_full, color_empty);
+      strip.<span class="fonction">show()</span>;
+    } <span class="type">else</span> {
+      strip.<span class="fonction">setPixelColor</span>(0, color_full,
+      color_empty, color_empty);
+      strip.<span class="fonction">show()</span>;
+  }
+
+      </pre>
+    </div>
+
+    <h4>LE CODE</h4>
+    <pre>
+
+  <span class="type">#include</span> &lt;Adafruit_NeoPixel.h&gt;
+
+  <span class="type">#define</span> PIN 8
+
+  <span class="type">Adafruit_NeoPixel</span> strip =
+  <span class="type">Adafruit_NeoPixel</span>(1, PIN,
+  NEO_GRB + NEO_KHZ800);
+
+  <span class="type">int</span> temp = A10;
+  <span class="type">int</span> val;
+
+  <span class="type">uint32_t</span> color_full = 255;
+  <span class="type">uint32_t</span> color_empty = 0;
+    </pre>
+    <p>Pour pouvoir utiliser le NeoPixel intégré du Flora on doit importer la librairie <span class="code">Adafruit_NeoPixel</span>. Grâce à celle-ci on peut déclarer un objet <span class="code">Adafruit_NeoPixel(1, PIN, NEO_GRB + NEO_KHZ800)</span>. Le premier argument est le nombre de NeoPixels dans la chaîne (car on peut en contrôler plusieurs à la chaîne), ici nous n'en utiliserons qu'un seul. Le deuxième argument est la pin à laquelle est connecté le NeoPixel, ici contenu dans la constante <span class="code">#define PIN 8</span>. Le troisième argument gère la communication avec le NeoPixel. Ensuite on déclare la pin du capteur de température. Vous remarquerez que sur le Flora la pin 10 est simplement notée #10 (les pins analogiques et digitales ne sont pas précisées), car les pins peuvent fonctionner soit en analogique soit en digital, cela dépend de leur déclaration. Ici comme on déclare A10, la pin sera analogique pour ce projet. Les variables <span class="code">color_full</span> et <span class="code">color_empty</span> sont des valeurs numériques en bytes dont nous nous servirons pour déterminer les couleurs du NeoPixel.</p>
+    <pre>
+
+  <span class="type">void</span> <span class="fonction">setup()</span> {
+    strip.<span class="fonction">begin()</span>;
+    strip.<span class="fonction">show()</span>;
+    <span class="type">Serial</span>.<span class="fonction">begin</span>(9600);
+  }
+    </pre>
+    <p>Dans le <span class="code">setup()</span> on démarre l'objet <span class="code">Adafruit_NeoPixel</span> à l'aide de la fonction <span class="code">strip.begin()</span>.</p>
+    <pre>
+
+  <span class="type">void</span> <span class="fonction">loop()</span> {
+    val = <span class="fonction">analogRead</span>(temp)/4.5;
+    <span class="type">Serial</span>.<span class="fonction">println</span>(val);
+    <span class="fonction">delay</span>(500);
+
+    <span class="type">if</span>(val < 17) {
+      strip.<span class="fonction">setPixelColor</span>(0, color_empty,
+      color_empty, color_full);
+      strip.<span class="fonction">show()</span>;
+    } <span class="type">else if</span>(val > 16 && val < 26) {
+      strip.<span class="fonction">setPixelColor</span>(0, color_empty,
+      color_full, color_empty);
+      strip.<span class="fonction">show()</span>;
+    } <span class="type">else</span> {
+      strip.<span class="fonction">setPixelColor</span>(0, color_full,
+      color_empty, color_empty);
+      strip.<span class="fonction">show()</span>;
+  }
+    </pre>
+    <p>Dans la <span class="code">loop()</span> on lit la température et on la divise par 4.5 pour obtenir une température proche de la réalité. À partir de cette température stockée dans <span class="code">val</span>, on crée des conditions&nbsp;: si la température est inférieure à 17 (degrés Celsius), le NeoPixel s'éclaire d'une couleur&nbsp;; si la température est comprise entre 17 et 24 il s'éclaire d'une autre couleur, sinon il s'éclaire encore d'une autre couleur. Nous déterminons les couleurs à l'aide de la fonction <span class="code">strip.setPixelColor()</span>. La premier argument est le NeoPixel visé, ici le 0 car nous n'en avons qu'un, les trois autres sont respectivement les valeurs en bytes de rouge, vert et bleu qui vont se combiner pour définir la couleur du NeoPixel en RGB.</p>
+    <p>Téléversez le script sur la carte et essayez d'exposer le capteur de température à des courants d'air froids et chauds pour voir la couleur du NeoPixel changer.</p>
+
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

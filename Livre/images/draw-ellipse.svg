@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24.039093" xmlns:dc="http://purl.org/dc/elements/1.1/">
+<metadata>
+<rdf:RDF>
+<cc:Work rdf:about="">
+<dc:format>image/svg+xml</dc:format>
+<dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+</cc:Work>
+</rdf:RDF>
+</metadata>
+<defs>
+<linearGradient id="b" y2="167.5526" xlink:href="#e" gradientUnits="userSpaceOnUse" x2="123.9767" y1="149.3739" x1="113.7436"/>
+<linearGradient id="e">
+<stop stop-color="#5a5a5a" offset="0"/>
+<stop offset="1"/>
+</linearGradient>
+<linearGradient id="a">
+<stop stop-color="#fff" offset="0"/>
+<stop stop-color="#ffacb5" offset="1"/>
+</linearGradient>
+<linearGradient id="c" y2="180.112" xlink:href="#a" gradientUnits="userSpaceOnUse" x2="137.9319" y1="156.459" x1="115.927"/>
+<linearGradient id="d" y2="172.6258" xlink:href="#a" gradientUnits="userSpaceOnUse" x2="129.2304" y1="154.3315" x1="113.1702"/>
+</defs>
+<g transform="translate(-450,-145)">
+<rect style="color:#000000" height="24" width="24" y="145.0391" x="450" stroke-width="1.0000001" fill="none"/>
+<circle stroke-linejoin="round" style="color:#000000" stroke-width="1.2546769" stroke-linecap="round" transform="matrix(.795464 0 0 .798577 364.999 27.71345)" stroke="url(#b)" cy="162" cx="122" stroke-miterlimit="0" r="12" fill="none"/>
+<circle stroke-linejoin="round" style="color:#000000" stroke-width="1.4141293" fill-rule="evenodd" stroke-linecap="round" transform="matrix(.707159 0 0 .70714 375.7721 42.48712)" stroke="url(#c)" cy="162" cx="122" stroke-miterlimit="0" r="12" fill="url(#d)"/>
+<rect style="color:#000000" height="24" width="24" y="145" x="450" stroke-width="1.0000001" fill="none"/>
+<circle stroke-linejoin="round" style="color:#000000" stroke-width="1.2546769" stroke-linecap="round" transform="matrix(.795464 0 0 .798577 364.999 27.67435)" stroke="url(#b)" cy="162" cx="122" stroke-miterlimit="0" r="12" fill="none"/>
+</g>
+</svg>

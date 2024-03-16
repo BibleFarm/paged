@@ -1,0 +1,505 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+      <ul id="menu">
+        <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+        <li>Liens</li>
+
+      </ul>
+
+      <div class="print">
+        <a href="/rpi_tweets_book.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Raspberry Pi</p>
+      </div>
+
+      <div class="main">
+        <div id="onglets">
+          <div id="onglet_code" onclick="codeTop()">streamer.py</div>
+          <div id="onglet_code2" onclick="code2Top()">app.py</div>
+          <div id="onglet_html" onclick="htmlTop()">index.html</div>
+          <div id="onglet_css" onclick="cssTop()">style.css</div>
+        </div>
+        <h3>Application bot Twitter web-to-print n°2</h3>
+        <p class="circuitb">Ce projet est une application web grâce à laquelle on visualisera sur une page HTML des tweets comportant un certain hashtag streamés en temps réel. On pourra générer un PDF de ces tweets mis en page automatiquement dans le navigateur à tout moment.</p>
+
+
+        <div id="block_code">
+          <p>streamer.py</p>
+          <pre class="code_full">
+
+  <span class="type">import</span> tweepy <span class="type">as</span> tp
+  <span class="type">import</span> json
+
+  consumer_key = '****'
+  consumer_secret = '****'
+  access_token = '****'
+  access_secret = '****'
+
+  auth = tp.<span class="fonction">OAuthHandler</span>(consumer_key,
+  consumer_secret)
+  auth.<span class="fonction">set_access_token</span>(access_token,
+  access_secret)
+  api = tp.<span class="fonction">API</span>(auth)
+
+  data = []
+
+  <span class="type">class</span> <span class="fonction">MyStreamListener</span>(tp.StreamListener):
+      <span class="type">def</span> <span class="fonction">on_data</span>(self, tweet):
+          tweet_data = json.<span class="fonction">loads</span>(tweet)
+          data.<span class="fonction">append</span>(tweet_data)
+
+  myStreamListener = <span class="fonction">MyStreamListener</span>()
+  myStream = tp.<span class="fonction">Stream</span>(auth = api.auth,
+  listener=myStreamListener)
+
+  myStream.<span class="fonction">filter</span>(track=['python'], is_async=<span class="type">True</span>)
+
+
+        </pre>
+      </div>
+
+      <h5>streamer.py</h5>
+      <pre>
+
+  <span class="type">import</span> tweepy <span class="type">as</span> tp
+  <span class="type">import</span> json
+
+  consumer_key = '****'
+  consumer_secret = '****'
+  access_token = '****'
+  access_secret = '****'
+
+  auth = tp.<span class="fonction">OAuthHandler</span>(consumer_key,
+  consumer_secret)
+  auth.<span class="fonction">set_access_token</span>(access_token,
+  access_secret)
+  api = tp.<span class="fonction">API</span>(auth)
+      </pre>
+      <p>Il faut commencer ce projet par le script <span class="code">streamer.py</span> car c'est lui qui va nous permettre de lancer le stream Twitter qu'on affichera sur la page web. On utilisera <span class="code">tweepy</span> pour se connecter à notre API. Ce script commence donc par s'y connecter à l'aide des clés secrètes que vous mettrez dans <span class="code">consumer_key</span>, <span class="code">consumer_secret</span>, <span class="code">access_token</span> et <span class="code">access_secret</span>. Suite à cela on crée l'objet <span class="code">tp.API()</span> dans la variable <span class="code">api</span>.</p>
+
+      <pre>
+
+  data = []
+
+  <span class="type">class</span> <span class="fonction">MyStreamListener</span>(tp.StreamListener):
+      <span class="type">def</span> <span class="fonction">on_data</span>(self, tweet):
+          tweet_data = json.<span class="fonction">loads</span>(tweet)
+          data.<span class="fonction">append</span>(tweet_data)
+
+  myStreamListener = <span class="fonction">MyStreamListener</span>()
+  myStream = tp.<span class="fonction">Stream</span>(auth = api.auth,
+  listener=myStreamListener)
+
+  myStream.<span class="fonction">filter</span>(track=['python'], is_async=<span class="type">True</span>)
+      </pre>
+      <p>On crée le tableau dans lequel on va stocker les tweets à afficher (<span class="code">data = []</span>). Ensuite on étend la classe <span class="code">StreamListener</span> de <span class="code">tweepy</span> pour initialiser notre propre streamer, <span class="code">MyStreamListener()</span>. La class <span class="code">StreamListener</span> possède une méthode <span class="code">on_data()</span> qui nous permet d'écrire du code quand le stream repère des tweets comportant le hashtag recherché. On va transformer chaque tweet, initialement au format JSON en chaîne de caractères à la ligne <span class="code">tweet_data = json.loads(tweet)</span> et on ajoute les tweets convertis au bon format dans le tableau <span class="code">data</span> avec <span class="code">data.append(tweet_data)</span>.<br/> Ensuite on crée une instance de <span class="code">MyStreamListener()</span> dans la variable <span class="code">myStreamListener</span>, on lance le stream avec la fonction <span class="code">tp.Stream()</span> et on demande à ce stream de rechercher le hashtag #python avec la fonction <span class="code">myStream.<span class="fonction">filter</span>(track=['python'], is_async=True)</span>. Il est important que le deuxième argument de cette fonction soit égal à <span class="code">True</span> afin que le stream puisse fonctionner de façon asynchrone, en arrière-plan. Si ce n'est pas le cas, l'appilcation ne peut fonctionner correctement étant donné que le stream bloquerait le terminal tant qu'il est en action et qu'il faudrait le stopper pour lancer l'appli (donc on ne verrait pas les tweets en temps réel).
+
+
+
+      <div id="block_code2">
+        <p>app.py</p>
+        <pre class="code_full">
+
+  <span class="type">from</span> flask <span class="type">import</span> *
+  <span class="type">from</span> flask_weasyprint <span class="type">import</span> HTML, render_pdf
+  <span class="type">from</span> time <span class="type">import</span> sleep
+  <span class="type">from</span> streamer <span class="type">import</span> *
+
+  app = <span class="fonction">Flask</span>(__name__)
+  app.jinja_options['extensions']\
+  .<span class="fonction">append</span>('jinja2.ext.do')
+
+  @app.<span class="fonction">route</span>("/")
+  <span class="type">def</span> <span class="fonction">index</span>():
+      <span class="type">return</span> <span class="fonction">render_template</span>('index.html',\
+      len = <span class="fonction">len</span>(data), value = data)
+
+  @app.<span class="fonction">route</span>('/print')
+      <span class="type">def</span> <span class="fonction">print</span>():
+      html = <span class="fonction">render_template</span>('index.html',\
+      len = <span class="fonction">len</span>(data), value = data)
+      <span class="type">return</span> <span class="fonction">render_pdf</span>(<span class="fonction">HTML</span>(string=html))
+
+  <span class="type">if</span> __name__ == '__main__':
+      app.<span class="fonction">run</span>(debug=<span class="type">True</span>, host='0.0.0.0')
+
+
+      </pre>
+    </div>
+
+    <h5>app.py</h5>
+    <pre>
+
+  <span class="type">from</span> flask <span class="type">import</span> *
+  <span class="type">from</span> flask_weasyprint <span class="type">import</span> HTML, render_pdf
+  <span class="type">from</span> time <span class="type">import</span> sleep
+  <span class="type">from</span> streamer <span class="type">import</span> *
+
+  app = <span class="fonction">Flask</span>(__name__)
+  app.jinja_options['extensions']\
+  .<span class="fonction">append</span>('jinja2.ext.do')
+
+  </pre>
+  <p>Ce script gère le fonctionnement de l'application web en elle-même. On importe <span class="code">flask</span> car on développe l'appli sous ce framework Python, <span class="code">streamer</span>, notre autre script Python pour pouvoir récupérer les tweets enrégistrés dans le tableau <span class="code">data</span>, et <span class="code">flask_weasyprint</span>, le module qui nous permettra de générer automatiquement un PDF depuis la page web. On crée l'objet <span class="code">Flask</span>, puis on ajoute une extension à Jinja (<span class="code">app.jinja_options['extensions'] .append('jinja2.ext.do')</span>) car nous allons devoir utiliser une fonction complexe dans le template HTML.</p>
+
+  <pre>
+
+  @app.<span class="fonction">route</span>("/")
+  <span class="type">def</span> <span class="fonction">index</span>():
+      <span class="type">return</span> <span class="fonction">render_template</span>('index.html',\
+      len = <span class="fonction">len</span>(data), value = data)
+
+  @app.<span class="fonction">route</span>('/print')
+      <span class="type">def</span> <span class="fonction">print</span>():
+      html = <span class="fonction">render_template</span>('index.html',\
+      len = <span class="fonction">len</span>(data), value = data)
+      <span class="type">return</span> <span class="fonction">render_pdf</span>(<span class="fonction">HTML</span>(string=html))
+
+  <span class="type">if</span> __name__ == '__main__':
+      app.<span class="fonction">run</span>(debug=<span class="type">True</span>, host='0.0.0.0')
+  </pre>
+  <p>On termine ce script par la définition des routes de l'application. La page web qui affiche les tweets sera placée à la racine de l'application&nbsp;; c'est la page d'accueil. On passe au template HTML les tweets streamés en parallèle à la ligne <span class="code">return render_template('index.html', len = len(data), value=data)</span>. On crée une deuxième route, <span class="code">@app.route('/print.pdf')</span>, qui va générer la mise en page des tweets en un document PDF. Dans la fonction <span class="code">print()</span>, en plus de faire un <span class="code">render_template()</span> du template HTML (on appelle le même template que pour la route principale), la ligne <span class="code">return render_pdf(HTML(string=html))</span> va mettre en page le contenu de la page d'après les indications de media paginé données dans <span class="code">style.css</span>.</p>
+
+    <div id="block_html">
+      <p>index.html</p>
+      <pre class="code_full">
+
+  &lt;!doctype html>
+  &lt;html>
+    &lt;head>
+    &#123;% block head %}
+      &lt;link <span class="typep">rel</span>="stylesheet"
+      <span class="typep">href</span>="&#123;{ url_for('static',
+      filename='style.css') }}">
+      &lt;meta <span class="typep">charset</span>="utf-8">
+      &lt;meta <span class="typep">name</span>="viewport"
+      <span class="typep">content</span>="width=initial-scale=1.0">
+      &lt;meta <span class="typep">http-equiv</span>="refresh" <span class="typep">content</span>="5" >
+      &lt;title>&#123;% block title %}
+      &#123;% endblock %}&lt;/title>
+    &#123;% endblock %}
+    &lt;/head>
+
+    &lt;body>
+      &lt;div <span class="typep">id</span>="main">
+      &#123;%for i in value%}
+        &lt;p>&lt;span <span class="typep">class</span>="nom" <span class="typep">id</span>="&#123;{i.id}}">
+        &#123;{i.user.screen_name}}&lt;/span>
+        &lt;span <span class="typep">class</span>="message">&#123;{i.text}}&lt;/span>
+        &lt;/p>
+        &#123;%if i.media_url%}
+          &lt;img <span class="typep">src</span>="&#123;{i.media_url}}" alt="">
+        &#123;%endif%}
+        &lt;div <span class="typep">class</span>="tweet_dev">
+          &lt;p <span class="typep">class</span>="retweet">
+            Retweets: &#123;{i.retweet_count}}
+          &lt;/p>
+          &lt;p <span class="typep">class</span>="reply">
+            Replies: &#123;{i.reply_count}}
+          &lt;/p>
+          &lt;p <span class="typep">class</span>="fav">
+            Favorited: &#123;{i.favorite_count}}
+          &lt;/p>
+        &lt;/div>
+      &#123;%endfor%}
+        &lt;div <span class="typep">class</span>="index">
+          &lt;p>INDEX&lt;/p>
+          &#123;% set prev = [] %}
+          &#123;% for j in value|sort(attribute=\
+          "user.screen_name") %}
+            &lt;p <span class="typep">class</span>="ref">
+            &#123;% if j.user.screen_name not in prev %}
+              &lt;a <span class="typep">class</span>="name" <span class="typep">href</span>="#&#123;{j.id}}">&lt;/a>
+            &#123;% endif %}
+              &lt;a <span class="typep">class</span>="num" <span class="typep">href</span>="#&#123;{j.id}}">&lt;/a>
+            &lt;/p>
+            &#123;% do prev.append(j.user.screen_name) %}
+          &#123;%endfor%}
+        &lt;/div>
+      &lt;/div>
+
+      &lt;script <span class="typep">type</span>="text/javascript">
+        window.scrollTo(0,document.body.scrollHeight);
+      &lt;/script>
+    &lt;/body>
+  &lt;/html>
+
+
+    </pre>
+  </div>
+
+  <h5>index.html</h5>
+  <pre class="processing">
+
+  &#123;%for i in value%}
+    &lt;p>
+      &lt;span <span class="typep">class</span>="nom" <span class="typep">id</span>="&#123;{i.id}}">
+      &#123;{i.user.screen_name}}
+      &lt;/span>
+      &lt;span <span class="typep">class</span>="message">&#123;{i.text}}&lt;/span>
+    &lt;/p>
+    &#123;%if i.media_url%}
+      &lt;img <span class="typep">src</span>="&#123;{i.media_url}}" alt="">
+    &#123;%endif%}
+    &lt;div <span class="typep">class</span>="tweet_dev">
+      &lt;p <span class="typep">class</span>="retweet">
+        Retweets: &#123;{i.retweet_count}}
+      &lt;/p>
+      &lt;p <span class="typep">class</span>="reply">
+        Replies: &#123;{i.reply_count}}
+      &lt;/p>
+      &lt;p <span class="typep">class</span>="fav">
+        Favorited: &#123;{i.favorite_count}}
+      &lt;/p>
+    &lt;/div>
+  &#123;%endfor%}
+  </pre>
+  <p>La première partie notable du template est la boucle <span class="proc">&#123;%for i in value%}</span>. On utilise cette boucle pour appliquer le même traitement à chacun des tweets streamés. On va placer le nom d'utilisateur (<span class="proc">&#123;{i.id}}">&#123;{i.user.screen_name}}</span>) et le message du tweet (<span class="proc">&#123;{i.text}}</span>) dans une balise <span class="proc">&lt;p&gt;</span> dont l'<span class="proc">id</span> vaut pour chaque tweet l'identifiant unique donné à chaque tweet par Twitter (<span class="proc">&#123;{i.id}}</span>). Si le tweet comporte une image (<span class="proc">&#123;%if i.media_url%}</span>), on place celle-ci dans une balise <span class="proc">&lt;img&gt;</span>.<br/>
+  Ensuite on met dans un autre <span class="proc">&lt;div&gt;</span> les compteurs de retweets, réponses et favoris de chaque tweet, en plaçant chacune de ces valeurs dans une balise <span class="proc">&lt;p&gt;</span>. Ainsi on obtient la mise en forme automatique des tweets streamés dans la page web.</p>
+
+  <pre class="processing">
+
+  &lt;div <span class="typep">class</span>="index">
+    &lt;p>INDEX&lt;/p>
+    &#123;% set prev = [] %}
+    &#123;% for j in value|sort(attribute=\
+    "user.screen_name") %}
+      &lt;p <span class="typep">class</span>="ref">
+      &#123;% if j.user.screen_name not in prev %}
+        &lt;a <span class="typep">class</span>="name" <span class="typep">href</span>="#&#123;{j.id}}">&lt;/a>
+      &#123;% endif %}
+        &lt;a <span class="typep">class</span>="num" <span class="typep">href</span>="#&#123;{j.id}}">&lt;/a>
+      &lt;/p>
+      &#123;% do prev.append(j.user.screen_name) %}
+    &#123;%endfor%}
+  &lt;/div>
+  </pre>
+
+  <p>Cette partie du template est utile pour la version imprimée de la page web (en effet on a défini dans le CSS que ce bloc n'est visible que lorsqu'on veut imprimer la page)&nbsp;: il s'agit d'un index des tweets classé par nom d'utilisateur. Afin d'éviter les doublons dans les entrées, on crée un tableau vide <span class="proc">prev</span> dans lequel on ajoutera le nom d'utilisateur à l'index que s'il ne fait pas déjà partie de la liste. On classe ensuite l'ensemble des tweets par ordre alphabétique des noms d'utilisateurs avec <span class="proc">&#123;% for j in value|sort(attribute="user.screen_name") %}</span>, et pour chaque tweet, si le nom de l'utilisateur ne figure pas déjà dans la liste (<span class="proc">&#123;% if j.user.screen_name not in prev %}</span>), alors on affiche le nom de l'utilisateur dans une balise <span class="proc">&lt;a&gt;</span>, et dans tous les cas on affiche la référence de la page (<span class="proc">&lt;a class="num" href="#&#123;{j.id}}">&lt;/a></span>), et on ajoute le nom d'utilisateur à la liste avec <span class="proc">&#123;% do prev.append(j.user.screen_name) %}</span>.</p>
+
+  <div id="block_css">
+    <p>style.css</p>
+    <pre class="code_full">
+
+  <span class="typep">body</span> {
+    margin: 0;
+    padding: 0;
+    font-family: 'VG5000';
+  }
+
+  #main {
+    font-size: 3vw;
+  }
+
+  <span class="typep">p</span> {
+    padding: 2vw;
+    margin: 0;
+    border-top: 2px solid black;
+    border-bottom: 0px solid white;
+  }
+
+  <span class="typep">span</span>.nom {
+    margin-right: 10vw;
+    margin-left: 2vw;
+    color: red;
+    string-set: heading <span class="fonctionp">content</span>();
+  }
+
+  .index {
+    display: none;
+  }
+
+  .tweet_dev {
+    display: flex;
+    flex-direction: row;
+    border-top: 2px solid black;
+    justify-content: flex-start;
+    margin-left: 60vw;
+    width: 40vw;
+    font-size: 2vw;
+  }
+
+  .tweet_dev > <span class="typep">p</span> {
+    border: 0px solid white;
+  }
+
+
+  <span class="typep">@font-face</span> {
+    font-family: 'VG5000';
+    src: <span class="fonctionp">url</span>(fonts/VG5000-Regular_web.eot),
+         <span class="fonctionp">url</span>(fonts/VG5000-Regular_web.ttf),
+         <span class="fonctionp">url</span>(fonts/VG5000-Regular_web.woff),
+         <span class="fonctionp">url</span>(fonts/VG5000-Regular_web.woff2);
+  }
+
+  <span class="typep">@media</span> print {
+    <span class="typep">@page</span> {
+      size: 100mm 140mm !important;
+      padding: 0mm;
+      margin: 10mm;
+      <span class="typep">@top-left</span> {
+        content: <span class="fonctionp">string</span>(heading);
+        display: inline-block !important;
+        color: red;
+        font-family: 'VG5000';
+        font-size: 12pt;
+        text-align: left;
+        vertical-align: bottom;
+        width: 90mm;
+        height: 18mm;
+      }
+    }
+    <span class="typep">@page</span> <span class="fonctionp">:right</span> {
+      margin-left: 8mm;
+      <span class="typep">@bottom-right</span> {
+        content: <span class="fonctionp">counter</span>(page);
+        font-family: 'VG5000';
+        font-size: 10pt;
+        text-align: right;
+        vertical-align: top;
+        width: 8mm;
+        margin-left: 3mm;
+        height: 5mm;
+      }
+    }
+
+    <span class="typep">@page</span> <span class="fonctionp">:left</span> {
+      margin-left: 8mm;
+      <span class="typep">@bottom-left</span> {
+        content: <span class="fonctionp">counter</span>(page);
+        font-family: 'VG5000';
+        font-size: 10pt;
+        text-align: left;
+        vertical-align: top;
+        width: 5mm;
+        height: 5mm;
+      }
+    }
+
+    <span class="typep">@page</span> index {
+      <span class="typep">@top-left</span> {
+        content: none; }
+      <span class="typep">@bottom-left</span> {
+        content: none; }
+      <span class="typep">@bottom-right</span> {
+        content: none; }
+      }
+
+    .index {
+      display: inherit;
+      columns: 2 !important;
+    }
+
+    <span class="typep">span</span>.nom {
+      color: white !important;
+      display: block;
+    }
+
+    <span class="typep">p</span>.ref {
+      page: index;
+      margin-left: 0mm;
+      font-size: 8pt;
+    }
+
+    <span class="typep">p</span> {
+      font-size: 16pt !important;
+      margin-left: 15mm;
+      border-top: 0px solid white;
+    }
+
+    <span class="typep">a</span> {
+      font-size: 11pt;
+      text-decoration: none;
+      color: black;
+    }
+
+    <span class="typep">a</span>.name<span class="fonctionp">::before</span> {
+      content: <span class="fonctionp">target-text</span>(<span class="fonctionp">attr</span>(href));
+    }
+
+    <span class="typep">a</span>.num<span class="fonctionp">::after</span> {
+      content: <span class="fonctionp">target-counter</span>(<span class="fonctionp">attr</span>(href), page);
+    }
+
+    <span class="typep">a</span>.name {
+      margin-right: 10mm;
+    }
+
+    <span class="typep">a</span>.num {
+      margin-left: 15mm;
+      margin-top: 0;
+      margin-bottom: 2mm;
+    }
+
+    .tweet_dev {
+      page-break-after: always;
+      flex-direction: column;
+      justify-content: flex-start;
+      border-top: 0px solid white;
+      width: 30mm;
+      height: 50mm;
+      margin-top: -6mm;
+    }
+
+    .tweet_dev > <span class="typep">p</span> {
+      margin: 0;
+      margin-left: 10mm;
+      padding-top: 10mm;
+      font-size: 12pt !important;
+      width: 30mm;
+    }
+
+    .tweet_dev > <span class="typep">p</span><span class="fonctionp">:not</span>(<span class="fonctionp">:last-of-type</span>){
+      border-bottom: 1px solid black;
+    }
+  }
+
+  </pre>
+</div>
+
+  <h5>style.css</h5>
+  <pre class="processing">
+
+  <span class="typep">@media</span> print {
+    <span class="typep">@page</span> {
+      size: 100mm 140mm !important;
+      padding: 0mm;
+      margin: 10mm;
+      <span class="typep">@top-left</span> {
+        content: <span class="fonctionp">string</span>(heading);
+        display: inline-block !important;
+        color: red;
+        font-family: 'VG5000';
+        font-size: 12pt;
+        text-align: left;
+        vertical-align: bottom;
+        width: 90mm;
+        height: 18mm;
+      }
+    }
+  </pre>
+  <p>Le fichier CSS modifie l'apparence des éléments HTML. Tout ce qui est contenu dans le media query <span class="proc">@media print</span> gère le document paginé. Par exemple <span class="proc">@page</span> permet de déterminer le format des pages ainsi que les marges du document.</p>
+  <p>Les fichiers <span class="code">app.py</span> et <span class="code">streamer.py</span> doivent être placés à la racine du dossier de l'application, <span class="code">index.html</span> doit se trouver dans un dossier nommé «&nbsp;templates&nbsp;» et <span class="code">style.css</span> dans un dossier nommé «&nbsp;static&nbsp;».</p>
+  <p>Pour lancer l'application entrez dans un terminal (une fois Flask et éventuellement les autres modules Python installés sur votre ordinateur) la commande&nbsp;: <span class="code">python3 app.py</span>, puis ouvrez un navigateur à l'adresse <span class="code">nom_du_raspberry_pi.local:5000</span>.</p>
+
+        <img class="capt" src="{{ url_for('static', filename='tb03.png') }}" alt="">
+        <img class="capt" src="{{ url_for('static', filename='tb05.png') }}" alt="">
+        <img class="capt" src="{{ url_for('static', filename='tb06.png') }}" alt="">
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

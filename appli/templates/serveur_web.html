@@ -1,0 +1,390 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+    <ul id="menu">
+      <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+      <li>Liens</li>
+    </ul>
+
+      <div class="print">
+        <a href="/arduino_serveur_web.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Arduino</p>
+      </div>
+
+      <div class="main">
+        <div id="onglets">
+          <div id="onglet_circuit" onclick="circuitTop()">Circuit</div>
+          <div id="onglet_code" onclick="codeTop()">Code Arduino</div>
+        </div>
+        <h3>Contrôler un servo et une LED depuis une page web</h3>
+        <p class="circuitb">Une carte Arduino peut héberger un serveur web pour peu qu'elle possède une carte Wifi. Sur une Arduino Uno on peut ajouter un shield Wifi pour lui ajouter cette fonctionnalité, ou bien utlisier une type de carte Arduino qui possède une carte Wifi intégrée, comme l'ESP8266 que nous allons utiliser dans ce projet.</p>
+        <div id="schemas">
+          <img id="img_ard21" class="scheme" src="{{ url_for('static', filename='server_controle1.svg') }}" alt="">
+        </div>
+
+        <p class="circuit">Avant de commencer le script, on doit ajouter la carte ESP8266 à la configuration de l'IDE Arduino car celle-ci ne fait pas pas partie des cartes nativement implémentées. Pour cela, allez dans Fichier > Préférences. Dans le champ URL de gestionnaire de cartes supplémentaires ajoutez&nbsp;: http://arduino.esp8266.com/stable/<br/>
+          package_esp8266com_index.json.</p>
+          <ol>
+            <li>Le montage consiste simplement d'abord à brancher une LED à la pin 12 de l'ESP8266 et au GND à travers une résistance de 220 Ω.</li>
+            <li>Ensuite connectez un servo moteur au 5V, au GND et à la pin 2.</li>
+          </ol>
+
+      <div id="block_code" id="firmata">
+        <p>Code Arduino</p>
+        <pre class="code_full">
+
+  <span class="type">#include</span> &lt;Servo.h&gt;
+
+  <span class="type">#include</span> &lt;ESP8266WiFi.h&gt;
+  <span class="type">#include</span> &lt;ESP8266WebServer.h&gt;
+
+  <span class="type">int</span> led1 = 12;
+  <span class="type">Servo</span> myServo;
+  <span class="type">String</span> val;
+
+  <span class="type">const char*</span> ssid = "****";
+  <span class="type">const char*</span> password = "****";
+
+  <span class="type">ESP8266WebServer</span> server (80);
+
+  <span class="type">char</span> htmlResponse[3000];
+
+  <span class="type">void</span> <span class="fonction">handleRoot()</span> {
+    <span class="fonction">snprintf</span>( htmlResponse, 3000,
+    "&lt;!DOCTYPE html&gt;\
+    &lt;html lang=\"en\"&gt;\
+    &lt;head&gt;\
+    &lt;meta charset=\"utf-8\"&gt;\
+    &lt;meta name=\"viewport\"\
+    content=\"width=device-width,\
+    initial-scale=1\"&gt;\
+    &lt;/head&gt;\
+    &lt;body&gt;\
+    &lt;style&gt;\
+      body{font-family:Monospace;\
+        color:white;background-color:navy;}\
+      h1{font-size: 5vw;}\
+      button{font-family:Monospace;\
+        color:white;background-color:navy;\
+        border:2px solid white;\
+        font-size: 3vw; margin: 2vw;}\
+      button:hover{color: navy;\
+        background-color: white;}\
+      input{font-family:Monospace;\
+        color:white;background-color:navy;\
+        border:2px solid white;\
+        font-size: 3vw; margin: 2vw;\
+        width:30vw;height:20vh}\
+    &lt;/style&gt;\
+    &lt;div style='width:45vw;height:100vh;\
+      display:inline-block;\
+      border-right:2px solid white;\
+      margin-left: 2vw;'>\
+      &lt;h1&gt;Contrôle de la LED&lt;/h1&gt;\
+      &lt;button type='button' name='ledon'\
+      id='ledon' size=2&gt; Led ON\
+      &lt;button type='button' name='ledoff'\
+      id='ledoff' size=2&gt; Led OFF\
+    &lt;/div&gt;\
+    &lt;div class='block' style='left: 50vw;\
+    display:inline-block;top:0vh;\
+    height:100vh;position:absolute;'&gt;\
+      &lt;h1&gt;Contrôle du moteur&lt;/h1&gt;\
+      &lt;input type='text' name='servo'\
+      id='servo' size=2 autofocus&gt;\
+      &lt;div&gt; &lt;br&gt;\
+        &lt;button id=\"save_button\"&gt;\
+        Envoyer&lt;/button&gt;\
+      &lt;/div&gt;\
+    &lt;/div&gt;\
+    &lt;script src=\"https://ajax
+    .googleapis.com/ajax/libs/jquery/\
+    1.11.3/jquery.min.js\"&gt;
+    &lt;/script&gt;\
+    &lt;script&gt;\
+      var ledon;\
+      var ledoff;\
+      var servo;\
+      $('#save_button').click(function(e){\
+        e.preventDefault();\
+        servo = $('#servo').val();\
+        $.get('/save?servo=' + servo,\
+        function(data){\
+          console.log(data);\
+        });\
+      });\
+      $('#ledon').click(function(){\
+        ledon = 'ledon';\
+        $.get('/save?ledon=' + ledon,\
+        function(data){\
+          console.log(data);\
+        });\
+      });\
+      $('#ledoff').click(function(){\
+        ledoff = 'ledoff';\
+        $.get('/save?ledoff=' + ledoff,\
+        function(data){\
+          console.log(data);\
+        });\
+      });\
+    &lt;/script&gt;\
+    &lt;/body&gt;\
+    &lt;/html&gt;");
+
+    server.<span class="fonction">send</span>( 200, "text/html",
+    htmlResponse );
+  }
+
+  <span class="type">void</span> <span class="fonction">handleSave()</span> {
+    <span class="type">if</span>(server.<span class="fonction">arg</span>("ledon")!= ""){
+      <span class="type">Serial</span>.<span class="fonction">println</span>(server.<span class="fonction">arg</span>("ledon"));
+      <span class="fonction">digitalWrite</span>(led1, HIGH);
+    } <span class="type">else</span> {
+      <span class="fonction">digitalWrite</span>(led1, LOW);
+    }
+
+    <span class="type">if</span>(server.<span class="fonction">arg</span>("ledoff")!= ""){
+      <span class="type">Serial</span>.<span class="fonction">println</span>(server.<span class="fonction">arg</span>("ledoff"));
+      <span class="fonction">digitalWrite</span>(led1, LOW);
+    }
+
+    <span class="type">if</span>(server.<span class="fonction">arg</span>("servo")!= ""){
+      <span class="type">Serial</span>.<span class="fonction">println</span>(server.<span class="fonction">arg</span>("servo"));
+      myServo.<span class="fonction">write</span>(
+      (server.<span class="fonction">arg</span>("servo")).<span class="fonction">toInt()</span>);
+    }
+  }
+
+  <span class="type">void</span> <span class="fonction">setup()</span> {
+    <span class="fonction">pinMode</span>(led1, OUTPUT);
+    myServo.<span class="fonction">attach</span>(2);
+
+    <span class="type">Serial</span>.<span class="fonction">begin</span>(115200);
+    <span class="fonction">delay</span>(10);
+
+    <span class="type">Serial</span>.<span class="fonction">println()</span>;
+    <span class="type">Serial</span>.<span class="fonction">println()</span>;
+    <span class="type">Serial</span>.<span class="fonction">print</span>("Connecting to ");
+    <span class="type">Serial</span>.<span class="fonction">println</span>(ssid);
+
+    <span class="type">WiFi</span>.<span class="fonction">begin</span>(ssid, password);
+
+    <span class="type">while</span>(<span class="type">WiFi</span>.<span class="fonction">status()</span> != WL_CONNECTED) {
+      <span class="fonction">delay</span>(500);
+      <span class="type">Serial</span>.<span class="fonction">print</span>(".");
+    }
+
+    <span class="type">Serial</span>.<span class="fonction">println</span>("");
+    <span class="type">Serial</span>.<span class="fonction">println</span>("WiFi connected");
+    <span class="type">Serial</span>.<span class="fonction">println</span>("IP address: ");
+    <span class="type">Serial</span>.<span class="fonction">println</span>(<span class="type">WiFi</span>.<span class="fonction">localIP()</span>);
+
+    server.<span class="fonction">on</span>( "/", handleRoot );
+    server.<span class="fonction">on</span>("/save", handleSave);
+
+    server.<span class="fonction">begin()</span>;
+    <span class="type">Serial</span>.<span class="fonction">println</span>( "HTTP server started" );
+  }
+
+  <span class="type">void</span> <span class="fonction">loop()</span> {
+    server.<span class="fonction">handleClient()</span>;
+  }
+
+      </pre>
+    </div>
+
+    <h4>LE CODE</h4>
+    <pre>
+
+  <span class="type">#include</span> &lt;Servo.h&gt;
+
+  <span class="type">#include</span> &lt;ESP8266WiFi.h&gt;
+  <span class="type">#include</span> &lt;ESP8266WebServer.h&gt;
+
+  <span class="type">int</span> led1 = 12;
+  <span class="type">Servo</span> myServo;
+  <span class="type">String</span> val;
+
+  <span class="type">const char*</span> ssid = "****";
+  <span class="type">const char*</span> password = "****";
+
+  <span class="type">ESP8266WebServer</span> server (80);
+
+  <span class="type">char</span> htmlResponse[3000];
+    </pre>
+    <p>On aura besoin de trois librairies&nbsp;: <span class="code">Servo</span> pour le moteur, <span class="code">ESP8266WiFi</span> pour gérer la connexion au Wifi et <span class="code">ESP8266WebServer</span> pour faire tourner le serveur local qui hébergera la page web depuis laquelle nous contrôlerons la LED et le moteur. Dans les variables <span class="code">ssid</span> et <span class="code">password</span> remplacez les astérisques par le SSID et le mot de passe de votre réseau Wifi. La ligne <span class="code">ESP8266WebServer server (80);</span> définit le port du serveur local comme étant le 80 (c'est-à-dire localhost). On initialise un objet de type <span class="code">char</span> pour stocker la chaîne de caractères qu'on enverra au serveur.</p>
+    <pre>
+
+  <span class="type">void</span> <span class="fonction">handleRoot()</span> {
+    <span class="fonction">snprintf</span>( htmlResponse, 3000,
+    "&lt;!DOCTYPE html&gt;\
+    &lt;html lang=\"en\"&gt;\
+    &lt;head&gt;\
+    &lt;meta charset=\"utf-8\"&gt;\
+    &lt;meta name=\"viewport\"\
+    content=\"width=device-width,\
+    initial-scale=1\"&gt;\
+    &lt;/head&gt;\
+    &lt;body&gt;\
+    &lt;style&gt;\
+      body{font-family:Monospace;\
+        color:white;background-color:navy;}\
+      h1{font-size: 5vw;}\
+      button{font-family:Monospace;\
+        color:white;background-color:navy;\
+        border:2px solid white;\
+        font-size: 3vw; margin: 2vw;}\
+      button:hover{color: navy;\
+        background-color: white;}\
+      input{font-family:Monospace;\
+        color:white;background-color:navy;\
+        border:2px solid white;\
+        font-size: 3vw; margin: 2vw;\
+        width:30vw;height:20vh}\
+    &lt;/style&gt;\
+    &lt;div style='width:45vw;height:100vh;\
+      display:inline-block;\
+      border-right:2px solid white;\
+      margin-left: 2vw;'>\
+      &lt;h1&gt;Contrôle de la LED&lt;/h1&gt;\
+      &lt;button type='button' name='ledon'\
+      id='ledon' size=2&gt; Led ON\
+      &lt;button type='button' name='ledoff'\
+      id='ledoff' size=2&gt; Led OFF\
+    &lt;/div&gt;\
+    &lt;div class='block' style='left: 50vw;\
+    display:inline-block;top:0vh;\
+    height:100vh;position:absolute;'&gt;\
+      &lt;h1&gt;Contrôle du moteur&lt;/h1&gt;\
+      &lt;input type='text' name='servo'\
+      id='servo' size=2 autofocus&gt;\
+      &lt;div&gt; &lt;br&gt;\
+        &lt;button id=\"save_button\"&gt;\
+        Envoyer&lt;/button&gt;\
+      &lt;/div&gt;\
+    &lt;/div&gt;\
+    &lt;script src=\"https://ajax
+    .googleapis.com/ajax/libs/jquery/\
+    1.11.3/jquery.min.js\"&gt;\
+    &lt;/script&gt;\
+    &lt;script&gt;\
+      var ledon;\
+      var ledoff;\
+      var servo;\
+      $('#save_button').click(function(e){\
+        e.preventDefault();\
+        servo = $('#servo').val();\
+        $.get('/save?servo=' + servo,\
+        function(data){\
+          console.log(data);\
+        });\
+      });\
+      $('#ledon').click(function(){\
+        ledon = 'ledon';\
+        $.get('/save?ledon=' + ledon,\
+        function(data){\
+          console.log(data);\
+        });\
+      });\
+      $('#ledoff').click(function(){\
+        ledoff = 'ledoff';\
+        $.get('/save?ledoff=' + ledoff,\
+        function(data){\
+          console.log(data);\
+        });\
+      });\
+    &lt;/script&gt;\
+    &lt;/body&gt;\
+    &lt;/html&gt;");
+
+    server.<span class="fonction">send</span>( 200, "text/html",
+    htmlResponse );
+  }
+    </pre>
+    <p>La fonction <span class="code">handleRoot()</span> gère la page affichée par le serveur (ce qui est à sa racine, sa root). On lui envoie sous forme de chaîne de caractères le contenu HTML de la page. Dans les balises <span class="code">&lt;script&gt;</span> se trouve le code Javascript qui gère l'envoi des requêtes HTTP qui vont allumer et éteindre la LED et faire bouger le moteur. En cliquant sur les éléments HTML ciblés par le Javascript on déclenchera l'envoi d'un requête HTTP par action.</p>
+    <pre>
+
+  <span class="type">void</span> <span class="fonction">handleSave()</span> {
+    <span class="type">if</span>(server.<span class="fonction">arg</span>("ledon")!= ""){
+      <span class="type">Serial</span>.<span class="fonction">println</span>(server.<span class="fonction">arg</span>("ledon"));
+      <span class="fonction">digitalWrite</span>(led1, HIGH);
+    } <span class="type">else</span> {
+      <span class="fonction">digitalWrite</span>(led1, LOW);
+    }
+
+    <span class="type">if</span>(server.<span class="fonction">arg</span>("ledoff")!= ""){
+      <span class="type">Serial</span>.<span class="fonction">println</span>(server.<span class="fonction">arg</span>("ledoff"));
+      <span class="fonction">digitalWrite</span>(led1, LOW);
+    }
+
+    <span class="type">if</span>(server.<span class="fonction">arg</span>("servo")!= ""){
+      <span class="type">Serial</span>.<span class="fonction">println</span>(server.<span class="fonction">arg</span>("servo"));
+      myServo.<span class="fonction">write</span>(
+      (server.<span class="fonction">arg</span>("servo")).<span class="fonction">toInt()</span>);
+    }
+  }
+    </pre>
+    <p>La fonction <span class="code">handleSave()</span> gère les requêtes HTTP envoyées au serveur. Nous venons de voir que la page envoie toute seule des requêtes HTTP pour interagir avec la LED et le moteur. Pour savoir avec quel composant on souhaite faire interagir le serveur, on a donné à ces requêtes des arguments différents&nbsp;: "ledon" quand on veut allumer la LED, "ledoff" quand on veut l'éteindre et "servo" quand on veut passer un angle au moteur. Dans cette fonction on vérifie donc la valeur de l'argument de la requête HTTP. Si celui-ci est égal à "ledon", on envoie du courant dans la LED, sinon elle reste éteinte. Si l'argument vaut "ledoff" on éteint la LED. Dans le cas où l'argument est "servo", on envoie la valeur convertie en chiffre au servo moteur qui se déplacera alors à l'angle donné.</p>
+    <pre>
+
+  <span class="type">void</span> <span class="fonction">setup()</span> {
+    <span class="fonction">pinMode</span>(led1, OUTPUT);
+    myServo.<span class="fonction">attach</span>(2);
+
+    <span class="type">Serial</span>.<span class="fonction">begin</span>(115200);
+    <span class="fonction">delay</span>(10);
+
+    <span class="type">Serial</span>.<span class="fonction">println()</span>;
+    <span class="type">Serial</span>.<span class="fonction">println()</span>;
+    <span class="type">Serial</span>.<span class="fonction">print</span>("Connecting to ");
+    <span class="type">Serial</span>.<span class="fonction">println</span>(ssid);
+
+    <span class="type">WiFi</span>.<span class="fonction">begin</span>(ssid, password);
+
+    <span class="type">while</span>(<span class="type">WiFi</span>.<span class="fonction">status()</span> != WL_CONNECTED) {
+      <span class="fonction">delay</span>(500);
+      <span class="type">Serial</span>.<span class="fonction">print</span>(".");
+    }
+
+    <span class="type">Serial</span>.<span class="fonction">println</span>("");
+    <span class="type">Serial</span>.<span class="fonction">println</span>("WiFi connected");
+    <span class="type">Serial</span>.<span class="fonction">println</span>("IP address: ");
+    <span class="type">Serial</span>.<span class="fonction">println</span>(<span class="type">WiFi</span>.<span class="fonction">localIP()</span>);
+
+    server.<span class="fonction">on</span>( "/", handleRoot );
+    server.<span class="fonction">on</span>("/save", handleSave);
+
+    server.<span class="fonction">begin()</span>;
+    <span class="type">Serial</span>.<span class="fonction">println</span>( "HTTP server started" );
+  }
+    </pre>
+    <p>La fonction <span class="code">setup()</span> n'intervient que maintenant. Après avoir déclaré nos composants on démarre un moniteur série à 115200 bauds. On fait démarrer la connexion au Wifi avec la fonction <span class="code">WiFi.begin()</span>. Une fois la connexion établie on obtient son adresse IP dans le moniteur série. Le serveur lance alors la fonction <span class="code">handleRoot()</span> qui va charger la page HTML. Il s'apprête également à lancer la fonction <span class="code">handleSave()</span> au cas où les requêtes HTTP contenant les arguments recherchés lui parviennent. Une fois cela fait, le serveur démarre. Pour visualiser la page générée il suffit d'entrer l'adresse IP qui vient de vous être attribuée dans un navigateur. </p>
+    <pre>
+
+  <span class="type">void</span> <span class="fonction">loop()</span> {
+    server.<span class="fonction">handleClient()</span>;
+  }
+    </pre>
+    <p>Dans la fonction <span class="code">loop()</span> on intègre seulement une fonction issue de la librairie <span class="code">ESP8266WebServer</span>, <span class="code">server.handleClient()</span> qui gère les connexions à la page générée par le serveur.</p>
+    <p>Rendez vous sur la page, cliquez sur les deux boutons dans le bloc "Contrôle de la LED" et observez comment réagit votre LED reliée à l'ESP8266. Amusez-vous également à envoyer différentes valeurs d'angle au servo moteur.</p>
+    <img class="capt" src="{{ url_for('static', filename='server1.png') }}" alt="">
+
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

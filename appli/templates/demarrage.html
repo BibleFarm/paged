@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+      <ul id="menu">
+        <li>Ressources pédagogiques</li>
+        <li>Liens</li>
+
+      </ul>
+
+      <div class="print">
+        <a href="/rpi_demarrage.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Raspberry Pi</p>
+        <p></p>
+      </div>
+
+      <div class="main full">
+        <h3>Premier démarrage du Raspberry Pi</h3>
+        <p class="circuitb large_full">Il faut entrer quelques commandes dans le Raspberry Pi fraîchement démarré afin d'assurer son fonctionnement optimal.</p>
+        <h4>LE CODE</h4>
+        <p>Tout d'abord pour vous connecter au Raspberry Pi, entrez dans un terminal la commande suivante. Si vous avez changé le nom de votre Raspberry Pi, changez dans la commande ci-dessous «&nbsp;raspberry&nbsp;» par le nom de votre RPI. Sinon, le nom d'utilisateur par défaut est «&nbsp;pi&nbsp;» et le mot de passe «&nbsp;raspberry&nbsp;». Si le système demande une confirmation avant de faire la connexion, confirmer en entrant «&nbsp;y&nbsp;».</p>
+        <pre class="command">
+
+  <span class="type">ssh</span> pi@raspberrypi.local
+        </pre>
+        <p class="large_full">Si vous souhaitez changer le mot de passe de votre Raspberry Pi, entrez la commande <span class="code">passwd</span> et suivez les instructions.</p>
+        <p class="large_full">La première chose à faire une fois que vous êtes connecté en SSH au Raspberry Pi est de mettre à jour ses logiciels. On commence par mettre à jour la base de données locale de logiciels disponibles&nbsp;:</p>
+        <pre class="command">
+
+  <span class="type">sudo</span> apt-get update
+        </pre>
+        <p class="large_full">Puis on met à jour les logiciels déjà installés sur le Raspberry Pi&nbsp;:</p>
+        <pre class="command">
+
+  <span class="type">sudo</span> apt-get upgrade
+        </pre>
+        <p class="large_full">On peut aussi mettre à jour la version de Raspberry Pi OS&nbsp;:</p>
+        <pre class="command">
+
+  <span class="type">sudo</span> apt-get dist-upgrade
+        </pre>
+
+
+
+
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

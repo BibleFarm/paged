@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+      <ul id="menu">
+        <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+        <li>Liens</li>
+
+      </ul>
+
+      <div class="print">
+        <a href="/freecad09.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>CNC</p>
+      </div>
+
+      <div class="main full">
+        <h3>Exporter un fichier GCODE depuis Inkscape</h3>
+        <p class="circuitb large_full">Inkscape dispose d'une extension permettant d'exporter un dessin au format GCODE en vue de l'usinage d'une pièce sur une fraiseuse à contrôle numérique&nbsp;: GcodeTools. Cette méthode donne un fichier GCODE dans lequel la profondeur d'usinage est uniforme&nbsp;; cela ne convient pas à tous les types de travaux.</p>
+
+        <p class="large_full">Dans Inkscape, commencez par mettre le document au format de votre matériau dans <span class="code">Fichier</span> > <span class="code">Propriétés du document</span>. Puis dessinez les chemins à découper. S'il y a plus d'un chemin sur votre dessin, sélectionnez-les tous et faîtes <span class="code">Chemin</span> > <span class="code">Combiner</span>. Enfin sélectionnez votre chemin combiné et réglez l'épaisseur de son contour à la valeur égale au rayon de la fraise que vous allez utiliser pour l'usinage.</p>
+        <img class="tuto" src="{{ url_for('static', filename='ink05.png') }}" alt="">
+
+        <p class="large_full">Allez dans <span class="code">Extensions</span> > <span class="code">GcodeTools</span> > <span class="code">Points d'orientation</span> et réglez la valeur <span class="code">Profondeur sur l'axe Z</span> selon la profondeur de découpe que vous souhaitez obtenir. Puis cliquez sur <span class="code">Appliquer</span>.</p>
+        <img class="tuto" src="{{ url_for('static', filename='ink06.png') }}" alt="">
+
+        <p class="large_full">À présent deux triplets de points sont apparus en bas de la page. La flèche de celui de gauche doit impérativement pointer le coin inférieur gauche de la page et la flèche de celui de droite le coin inférieur droit de la page. Si ce n'est pas le cas vous pouvez redimensionner proportionnellement le bloc des triplets et adapter la première valeur du triplet de droite à la bonne dimension (la largeur du document).</p>
+        <img class="tuto" src="{{ url_for('static', filename='ink07.png') }}" alt="">
+
+        <p class="large_full">Allez dans <span class="code">Extensions</span> > <span class="code">GcodeTools</span> > <span class="code">Bibliothèque d'outils</span> et choisissez l'outil qui correspond à l'usinage que vous allez faire. Puis cliquez sur <span class="code">Appliquer</span>.</p>
+        <img class="tuto" src="{{ url_for('static', filename='ink08.png') }}" alt="">
+
+        <p class="large_full">Un cadre gris apparaît alors dans le document. Vous pouvez modifier ses valeurs, notamment le diamètre de l'outil, qui doit être celui de votre fraise à l'aide de l'outil <span class="code">Texte</span>.</p>
+
+        <img class="tuto" src="{{ url_for('static', filename='ink09.png') }}" alt="">
+
+        <p class="large_full">Enfin allez dans <span class="code">Extensions</span> > <span class="code">GcodeTools</span> > <span class="code">Chemin vers Gcode</span> pour exporter le fichier. Dans l'onglet <span class="code">Préférences</span> vous pouvez choisir le nom du fichier ainsi que le dossier où il sera sauvegardé. Cliquez sur <span class="code">Appliquer</span> quand les options sont bonnes.</p>
+        <img class="tuto" src="{{ url_for('static', filename='ink10.png') }}" alt="">
+
+
+
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

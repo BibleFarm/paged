@@ -1,0 +1,433 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+      <div id="menuh">
+        <p>RESSOURCES PÉDAGOGIQUES</p>
+        <div class="outil">
+          MODÉLISATION 3D
+          <p>Modéliser un cube avec Freecad</p>
+          <p>Utiliser les contraintes dans Freecad</p>
+          <p>Opérations booléennes dans Freecad</p>
+          <p>Modéliser un solide sur un autre solide avec Freecad</p>
+          <p>Arrondis et chamfreins dans Freecad</p>
+          <p>Faire des trous et des creux dans un solide avec Freecad</p>
+          <p>Utiliser les opérations de répétition de Freecad</p>
+        </div>
+        <div class="outil">
+          IMPRESSION 3D
+          <p>Préparer l'impression dans Cura</p>
+          <p>Préparer l'impression dans Repetier Host</p>
+        </div>
+        <div class="outil">
+          DÉCOUPE LASER
+          <p>Préparer un fichier à découper ou à graver avec Inkscape</p>
+          <p>Vectoriser une image à graver</p>
+          <p>Exporter un fichier DXF depuis Freecad</p>
+        </div>
+        <div class="outil">
+          CNC
+          <p>Exporter un fichier G-CODE depuis Freecad</p>
+          <p>Exporter un fichier G-CODE depuis Inkscape</p>
+          <p>Gérer l'usinage d'un fichier G-CODE dans Mach3</p>
+        </div>
+        <div class="outil">
+          ARDUINO
+          <p>Montage en série</p>
+          <p>Montage en parallèle</p>
+          <p>LED + 2 boutons</p>
+          <p>Potentiomètre + 4 LED</p>
+          <p>Piezo buzzer</p>
+          <p>Thérémine lumineux</p>
+          <p>Clavier sonore</p>
+          <p>Capteur de vibration</p>
+          <p>Potentiomètre + servo moteur</p>
+          <p>Moteur à courant continu</p>
+          <p>Pont en H</p>
+          <p>Écran LCD</p>
+          <p>Mini station météo</p>
+          <p>BMP 280</p>
+          <p>Shield moteur</p>
+          <p>Shields moteur imbriqués</p>
+          <p>Datalogging shield</p>
+          <p>Arduino + Processing : transmission par le port série</p>
+          <p>Message OSC</p>
+          <p>Firmata</p>
+          <p>Serveur web ESP8266</p>
+          <p>Serveur web météo</p>
+          <p>Adafruit Flora + capteur de température</p>
+          <p>Adafruit Flora + NeoPixels</p>
+          <p>Adafruit Flora + module GPS</p>
+        </div>
+        <div class="outil">
+          RASPBERRY PI
+          <p>Installer Raspberry Pi OS (Raspbian)</p>
+          <p>Premier démarrage du Raspberry Pi</p>
+          <p>Configurer la connexion à distance</p>
+          <p>Configurer le partage de dossiers (Samba)</p>
+          <p>Lancer une vidéo à distance</p>
+          <p>Envoyer un mail en ligne de commande</p>
+          <p>Créer un point d'accès wifi</p>
+          <p>Faire clignoter une LED</p>
+          <p>Contrôler un servo moteur</p>
+          <p>Piezo buzzer + bouton</p>
+          <p>Contrôler un moteur à courant continu</p>
+          <p>Application web de contrôle de composants</p>
+          <p>Tweeter en ligne de commande</p>
+          <p>Bot Twitter + LED</p>
+          <p>Bot Twitter : retweet et favori automatique</p>
+          <p>Application bot Twitter web-to-print n°1 (tweets en JSON)</p>
+          <p>Application bot Twitter web-to-print n°2 (stream Twitter)</p>
+        </div>
+
+      </div>
+
+
+
+      <div class="grille">
+        <div class="arduino">
+          <p>
+            <img src="{{ url_for('static', filename='titre06.png') }}" alt="">
+          </p>
+          <p>a</p>
+          <div class="projet" style="background:url({{ url_for('static', filename='fc09.png') }}); background-size: cover; background-position: center;">
+            <a href="/freecad01">
+              <p>Modéliser un cube avec Freecad</p>
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='fc12.png') }}); background-size: cover; background-position: center;">
+            <a href="/freecad02">
+              <p>Utiliser les contraintes dans Freecad</p>
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='fc34.png') }}); background-size: cover; background-position: center;">
+            <a href="/freecad03">
+              <p>Opérations booléennes dans Freecad</p>
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='fc39.png') }}); background-size: cover; background-position: center;">
+            <a href="/freecad04">
+              <p>Modéliser un solide sur un autre solide avec Freecad</p>
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='fc43.png') }}); background-size: cover; background-position: center;">
+            <a href="/freecad06">
+              <p>Arrondis et chamfreins dans Freecad</p>
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='fc48.png') }}); background-size: cover; background-position: center;">
+            <a href="/freecad07">
+              <p>Faire des trous et des creux dans un solide avec Freecad</p>
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='fc57.png') }}); background-size: cover; background-position: center;">
+            <a href="/freecad10">
+              <p>Utiliser les opérations de répétition de Freecad</p>
+            </a>
+          </div>
+        </div>
+        <div class="arduino">
+          <p>
+            <img src="{{ url_for('static', filename='titre01.png') }}" alt="">
+          </p>
+          <p>a</p>
+          <div class="projet" style="background:url({{ url_for('static', filename='cura06.png') }}); background-size: cover; background-position: center;">
+            <a href="/cura">
+              <p>Préparer l'impression 3D dans Cura</p>
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='rh06.png') }}); background-size: cover; background-position: center;">
+            <a href="/repetier_host">
+              <p>Préparer l'impression 3D dans Repetier Host</p>
+            </a>
+          </div>
+        </div>
+        <div class="arduino">
+          <p><img src="{{ url_for('static', filename='titre03.png') }}" alt=""></p>
+          <p>a</p>
+          <div class="projet" style="background:url({{ url_for('static', filename='ink03.png') }}); background-size: cover; background-position: center;">
+            <a href="/inkscape01">
+              <p>Préparer un fichier à découper ou à graver avec Inkscape</p>
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='ink12.png') }}); background-size: cover; background-position: center;">
+            <a href="/inkscape03">
+              <p>Vectoriser une image à graver</p>
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='fc50.png') }}); background-size: cover; background-position: center;">
+            <a href="/freecad08">
+              <p>Exporter un fichier DXF depuis Freecad</p>
+            </a>
+          </div>
+
+        </div>
+        <div class="arduino">
+          <p><img src="{{ url_for('static', filename='titre02.png') }}" alt=""></p>
+          <p>a</p>
+          <div class="projet" style="background:url({{ url_for('static', filename='fc68.png') }}); background-size: cover; background-position: center;">
+            <a href="/freecad09">
+              <p>Exporter un fichier G-CODE depuis Freecad</p>
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='ink09.png') }}); background-size: cover; background-position: center;">
+            <a href="/inkscape02">
+              <p>Exporter un fichier G-CODE depuis Inkscape</p>
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='mach3_08.PNG') }}); background-size: cover; background-position: center;">
+            <a href="/mach3">
+              <p>Gérer l'usinage d'un fichier G-CODE dans Mach3</p>
+            </a>
+          </div>
+        </div>
+        <div class="arduino">
+          <p><img src="{{ url_for('static', filename='titre04.png') }}" alt=""></p>
+          <p>a</p>
+          <div class="projet" style="background:url({{ url_for('static', filename='serie.png') }}); background-size: cover; background-position: center;">
+            <a href="/arduino_serie">
+              <p>Montage en série</p>
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='parallele.png') }}); background-size: cover; background-position: center;">
+            <a href="/arduino_parallele">
+              <p>Montage en parallèle</p>
+            </a>
+          </div>
+          <div class="projet">
+            <a href="/arduino_led2boutons">
+              <p>LED + 2 boutons</p>
+              <img src="{{ url_for('static', filename='led_boutons.svg') }}" alt="">
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='09.jpg') }}); background-size: cover; background-position: center;">
+            <a href="/arduino_potentiometre_4led">
+              <p>Potentiomètre + 4 LED</p>
+            </a>
+          </div>
+          <div class="projet">
+            <a href="/arduino_piezo_buzzer">
+              <p>Piezo buzzer</p>
+              <img style="margin-left:5vw;" src="{{ url_for('static', filename='piezo.svg') }}" alt="">
+            </a>
+          </div>
+          <div class="projet">
+            <a href="/arduino_theremine_lumineux">
+              <p>Thérémine lumineux</p>
+              <img style="margin-left:5vw;" src="{{ url_for('static', filename='theremine_lumiere.svg') }}" alt="">
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='10.jpg') }}); background-size: cover; background-position: center;">
+            <a href="/arduino_clavier_sonore">
+              <p>Clavier sonore</p>
+            </a>
+          </div>
+          <div class="projet">
+            <a href="/arduino_capteur_vibration">
+              <p>Capteur de vibration</p>
+              <img style="margin-left:5vw;" src="{{ url_for('static', filename='vibration_buzzer.svg') }}" alt="">
+            </a>
+          </div>
+          <div class="projet">
+            <a href="/arduino_potentiometre_servo">
+              <p>Potentiomètre + servo moteur</p>
+              <img style="margin-left:5vw;margin-top:-9vh" src="{{ url_for('static', filename='servopot.svg') }}" alt="">
+            </a>
+          </div>
+          <div class="projet">
+            <a href="/arduino_moteur_cc">
+              <p>Moteur à courant continu</p>
+              <img src="{{ url_for('static', filename='moteur_5V.svg') }}" alt="">
+            </a>
+          </div>
+          <div class="projet">
+            <a href="/arduino_pontenh">
+              <p>Pont en H</p>
+              <img style="margin-left:4vw;" src="{{ url_for('static', filename='ponth.svg') }}" alt="">
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='11.jpg') }}); background-size: cover; background-position: center;">
+            <a href="/arduino_ecran_lcd">
+              <p>Écran LCD</p>
+            </a>
+          </div>
+          <div class="projet"  style="background:url({{ url_for('static', filename='01.jpg') }}); background-size: cover; background-position: center;">
+            <a href="/arduino_station_meteo">
+              <p>Mini station météo</p>
+            </a>
+          </div>
+          <div class="projet">
+            <a href="/arduino_bmp280">
+              <p>BMP280</p>
+              <img style="width:17vh;height:28vh;margin-left:6vw;margin-top:-3vh;" src="{{ url_for('static', filename='bmp280.png') }}" alt="">
+            </a>
+          </div>
+          <div class="projet">
+            <a href="/arduino_shield_moteur1">
+              <p>Shield moteur</p>
+              <img style="margin-left:3vw;height:31vh;margin-top:-6.5vh" src="{{ url_for('static', filename='shield1.svg') }}" alt="">
+            </a>
+          </div>
+          <div class="projet">
+            <a href="/arduino_shield_moteur2">
+              <p>Shields moteur imbriqués</p>
+              <img style="margin-left:4vw;height:30vh;margin-top:-7vh" src="{{ url_for('static', filename='shield2.svg') }}" alt="">
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='datalog.jpg') }}); background-size: cover; background-position: center;">
+            <a href="/arduino_datalogging_shield">
+              <p>Datalogging shield</p>
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='Arduino_Logo.png') }}); background-size: cover; background-position: center;">
+            <a href="/arduino_processing1">
+              <p>Transmission par le port série</p>
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='Arduino_Logo.png') }}); background-size: cover; background-position: center;">
+            <a href="/arduino_processing2">
+              <p>Message OSC</p>
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='Arduino_Logo.png') }}); background-size: cover; background-position: center;">
+            <a href="/arduino_firmata">
+              <p>Firmata</p>
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='server1.png') }}); background-size: cover; background-position: center;">
+            <a href="/arduino_serveur_web">
+              <p>Serveur web ESP8266</p>
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='server2.png') }}); background-size: cover; background-position: center;">
+            <a href="/arduino_serveur_meteo">
+              <p>Serveur web météo</p>
+            </a>
+          </div>
+          <div class="projet">
+            <a href="/arduino_flora_temperature">
+              <p>Adafruit Flora + capteur de température</p>
+              <img style="margin-top: -10vh;margin-left: 6.5vw;" src="{{ url_for('static', filename='flora_temp.svg') }}" alt="">
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='07.JPG') }}); background-size: cover; background-position: center;">
+            <a href="/arduino_flora_neopixel">
+              <p>Adafruit Flora + NeoPixels</p>
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='08.JPG') }}); background-size: cover; background-position: center;">
+            <a href="/arduino_flora_gps">
+              <p>Adafruit Flora + module GPS</p>
+            </a>
+          </div>
+        </div>
+        <div class="arduino">
+          <p><img src="{{ url_for('static', filename='titre05.png') }}" alt=""></p>
+          <p>a</p>
+          <div class="projet" style="background:url({{ url_for('static', filename='rpios.png') }}); background-size: cover; background-position: center;">
+            <a href="/rpi_raspbian">
+              <p>Installer Raspberry Pi OS (Raspbian)</p>
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='shell.png') }}); background-size: cover; background-position: center;">
+            <a href="/rpi_demarrage">
+              <p>Premier démarrage du Raspberry Pi</p>
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='shell.png') }}); background-size: cover; background-position: center;">
+            <a href="/rpi_ssh">
+              <p>Configurer la connexion à distance</p>
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='samba.png') }}); background-size: cover; background-position: center;">
+            <a href="/rpi_samba">
+              <p>Configurer le partage de dossiers (Samba)</p>
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='shell.png') }}); background-size: cover; background-position: center;">
+            <a href="/rpi_video">
+              <p>Lancer une vidéo à distance</p>
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='shell.png') }}); background-size: cover; background-position: center;">
+            <a href="/rpi_mail">
+              <p>Envoyer un mail en ligne de commande</p>
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='shell.png') }}); background-size: cover; background-position: center;">
+            <a href="/rpi_wifi">
+              <p>Créer un point d'accès wifi</p>
+            </a>
+          </div>
+          <div class="projet">
+            <a href="/rpi_led">
+              <p>Faire clignoter une LED</p>
+              <img src="{{ url_for('static', filename='rpi_led.svg') }}" alt="">
+            </a>
+          </div>
+          <div class="projet">
+            <a href="/rpi_servo">
+              <p>Contrôler un servo moteur</p>
+              <img style="margin-top: -8.5vh;margin-left: 5.5vw;" src="{{ url_for('static', filename='rpi_servo.svg') }}" alt="">
+            </a>
+          </div>
+          <div class="projet">
+            <a href="/rpi_piezo">
+              <p>Piezo buzzer + bouton</p>
+              <img style="margin-left: 6vw;" src="{{ url_for('static', filename='rpi_piezo_bouton.svg') }}" alt="">
+            </a>
+          </div>
+          <div class="projet">
+            <a href="/rpi_moteurcc">
+              <p>Contrôler un moteur à courant continu</p>
+              <img style="margin-top: -8.5vh;margin-left: 4.5vw;" src="{{ url_for('static', filename='rpi_moteurcc.svg') }}" alt="">
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='mot01.png') }}); background-size: cover; background-position: center;">
+            <a href="/rpi_app_moteurs">
+              <p>Application web de contrôle de composants</p>
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='shell.png') }}); background-size: cover; background-position: center;">
+            <a href="/rpi_tweeter">
+              <p>Tweeter en ligne de commande</p>
+            </a>
+          </div>
+          <div class="projet">
+            <a href="/rpi_bot_led">
+              <p>Bot twitter + LED</p>
+              <img src="{{ url_for('static', filename='rpi_led_tag.svg') }}" alt="">
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='shell.png') }}); background-size: cover; background-position: center;">
+            <a href="/rpi_bot_retweet">
+              <p>Bot Twitter : retweet et favori automatique</p>
+            </a>
+          </div>
+          <div class="projet"  style="background:url({{ url_for('static', filename='tb01.png') }}); background-size: cover; background-position: center;">
+            <a href="/rpi_tweets_json">
+              <p>Application bot Twitter web-to-print n°1 (tweets en JSON)</p>
+            </a>
+          </div>
+          <div class="projet" style="background:url({{ url_for('static', filename='tb05.png') }}); background-size: cover; background-position: center;">
+            <a href="/rpi_tweets_book">
+              <p>Application bot Twitter web-to-print n°2 (stream Twitter)</p>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

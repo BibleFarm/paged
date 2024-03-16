@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+      <ul id="menu">
+        <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+        <li>Liens</li>
+
+      </ul>
+
+      <div class="print">
+        <a href="/rpi_raspbian.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Raspberry Pi</p>
+      </div>
+
+      <div class="main full">
+        <h3>Installer Raspberry Pi OS (Raspbian)</h3>
+
+        <p class="circuitb large_full">Raspberry Pi OS (anciennement Raspbian) est une distribution Linux spécialement conçue pour les Raspberry Pi. Bâtie sous l'architecture Linux, elle nous permettra d'utiliser le Raspberry Pi comme n'importe quel ordinateur de bureau si on le branche à un écran, un clavier et une souris, mais aussi de le contrôler à distance en utilisant la ligne de commande.</p>
+
+        <h4>LE CODE</h4>
+        <p class="large_full">Pour commencer nous devons télécharger la dernière version de Raspberry Pi OS, disponible <a href="https://www.raspberrypi.org/downloads/raspbian/">ici</a>. Une fois décompressé, le fichier téléchargé doit avoir pour extension .img car il s'agit d'un image Linux.</p>
+        <p class="large_full">L'étape suivante est de flasher l'image Linux sur la carte SD. Il existe différentes façons de faire cela</p>
+        <h5>Flasher avec Balena Etcher</h5>
+        <p class="large_full">La première façon de flasher une carte SD est d'utiliser Balena Etcher, à télécharger <a href="https://www.balena.io/etcher/">ici</a>. Ce logiciel vous permet de flasher simplement votre carte&nbsp;: sélectionnez l'image à flasher, le périphérique sur lequel flasher, et lancez le flashage.</p>
+        <h5>Flasher en ligne de commande</h5>
+        <p class="large_full">Il est également possible de flasher une carte SD en utilisant la ligne de commande de votre ordinateur. Après avoir ouvert un terminal, entrez la commande&nbsp;:</p>
+        <pre class="command">
+
+  lsblk
+        </pre>
+        <p class="large_full">Insérez la carte SD dans votre ordinateur et relancez la commande <span class="code">lsblk</span>. Un nouvel élément doit être apparu, il s'agit de la carte SD. Vous obtenez alors sa référence (par exemple&nbsp;: /dev/mmcblk0).<br/> Pour flasher la carte, entrez la commande suivante en remplaçant le contenu de <span class="code">if=</span> par l'image Raspberry Pi OS précédemment téléchargée, et celui de <span class="code">of=</span> par l'adresse de la carte SD.</p>
+        <pre class="command">
+
+  <span class="type">dd</span> <span class="fonction">bs</span>=4M <span class="fonction">if</span>=image_linux.img <span class="fonction">of</span>=/dev/carte_sd\
+  <span class="fonction">status</span>=progress <span class="fonction">conv</span>=fsync
+        </pre>
+
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

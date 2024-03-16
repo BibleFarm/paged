@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+      <ul id="menu">
+        <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+        <li>Liens</li>
+
+      </ul>
+
+      <div class="print">
+        <a href="/inkscape03.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Découpe laser</p>
+      </div>
+
+      <div class="main full">
+        <h3>Vectoriser une image à graver</h3>
+        <p class="circuitb large_full">La découpe laser ne pouvant reproduire ni les couleurs ni les surfaces pleines d'ume image, il faut vectoriser celle-ci afin de pouvoir la graver. Plusieurs solutions à cela&nbsp;: transformer les contrastes de l'image originelle en trames, ou ne garder que les contours de ce qu'elle représente.</p>
+
+        <p class="large_full">Inkscape possède un outil de vectorisation d'images. Pour l'utiliser, il faut sélectionner l'image à traiter (après l'avoir importée dans le document avec <span class="code">Fichier</span> > <span class="code">Importer...</span>) et aller dans <span class="code">Chemin</span> > <span class="code">Vectoriser un objet matriciel</span>. Étant donné qu'on ne peut graver que des lignes, on utilisera la fonction <span class="code">Détection de contour</span> qui va tracer automatiquement les contours repérés dans l'image. En jouant sur les différents paramètres on obtient une détection plus ou moins sensible.</p>
+        <img class="tuto" src="{{ url_for('static', filename='ink11.png') }}" alt="">
+
+        <p class="large_full">La détection de contour d'Inkscape se base sur les contrastes et les différences de couleurs trouvés dans l'image originelle.</p>
+        <img class="tuto" src="{{ url_for('static', filename='ink12.png') }}" alt="">
+
+        <p class="large_full">Une autre fonction de vectorisation d'objet matriciel que l'on peut utiliser pour obtenir des contours est <span class="code">Autotrace</span>, qui utilise un autre algorithme de vectorisation des images matricielles.</p>
+        <img class="tuto" src="{{ url_for('static', filename='ink13.png') }}" alt="">
+
+        <p class="large_full">Avec <span class="code">Autotrace</span>, le résultat dépend énormément des contrastes de l'image d'origine. Plus ceux-ci sont marqués, plus l'algorithme détectera des surfaces à remplir de lignes. Cette fonction vectorise de manière moins précise, mais donne des résultats plus artistiques.</p>
+        <img class="tuto" src="{{ url_for('static', filename='ink14.png') }}" alt="">
+
+        <p class="large_full">Si Inkscape ne suffit pas à obtenir une vectorisation satisfaisante, il existe un site web qui permet d'appliquer les algorithmes de rasterisation utilisés pour les plotters et de télécharger au format SVG l'image transformée&nbsp;: mitxela.com/plotterfun. Chaque algorithme répertorié donne un résultat singulier, il faut prendre le temps de tous les essayer. <br/>À partir de chaque algorithme on peut modifier les paramètres de traitement de <br/>l'image pour des résultats allant du simple tramage à la déformation artistique. Lorsque le résultat vous satisfait, cliquez sur <span class="code">Download SVG</span></p>
+        <img class="tuto" src="{{ url_for('static', filename='plot01.png') }}" alt="">
+
+        <p class="large_full">On récupère alors notre image vectorisée selon un algorithme au format SVG, qu'on peut ouvrir dans Inkscape pour préparer le fichier à la gravure laser.</p>
+        <img class="tuto" src="{{ url_for('static', filename='plot04.png') }}" alt="">
+
+
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

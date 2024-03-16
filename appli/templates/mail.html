@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+      <ul id="menu">
+        <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+        <li>Liens</li>
+
+      </ul>
+
+      <div class="print">
+        <a href="/rpi_mail.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Raspberry Pi</p>
+      </div>
+
+      <div class="main full">
+        <h3>Envoyer un mail en ligne de commande</h3>
+        <p class="circuitb large_full">Raspberry Pi est capable de gérer le protocole SMTP et d'envoyer des mails à un serveur fonctionnant en SMTP.</p>
+
+        <h4>LE CODE</h4>
+        <p>Il faut tout d'abord installer les dépendances nécessaires&nbsp;:</p>
+        <pre class="command">
+
+  <span class="type">sudo</span> apt-get install mailutils mpack ssmtp
+        </pre>
+        <p class="large_full">SSMTP est l'utilitaire qui va nous permettre d'envoyer des mails en SMTP. On doit le configurer.</p>
+        <pre class="command">
+
+  <span class="type">sudo</span> nano /etc/ssmtp/ssmtp.conf
+        </pre>
+        <p class="large_full">Une fois le fichier ouvert, voici le type de configuration que vous devez y entrer&nbsp;:</p>
+        <pre class="command">
+
+  root=utilisateur@gmail.com
+  mailhub=smtp.gmail.com:587
+  hostname=nom
+  AuthUser=utilisateur@gmail.com
+  AuthPass=motdepasse
+  FromLineOverride=YES
+  UseTLS=YES
+  UseSTARTTLS=YES
+        </pre>
+        <p class="large_full">Sauvez et quittez en pressant CTRL+X. Enfin pour envoyer le mail la commande est la suivante&nbsp;:</p>
+        <pre class="command">
+
+  <span class="type">echo</span> <span class="fonction">"Contenu du mail"</span> |\
+  mail -s <span class="fonction">"Titre du mail"</span> destinataire@gmail.com
+        </pre>
+
+
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

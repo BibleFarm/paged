@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+    <ul id="menu">
+      <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+      <li>Liens</li>
+    </ul>
+
+      <div class="print">
+        <a href="/arduino_theremine_lumineux.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Arduino</p>
+      </div>
+
+      <div class="main">
+        <div id="onglets">
+          <div id="onglet_circuit" onclick="circuitTop()">Circuit</div>
+          <div id="onglet_code" onclick="codeTop()">Code Arduino</div>
+        </div>
+        <h3>Thérémine lumineux</h3>
+        <p class="circuitb">Dans ce projet nous allons faire varier la fréquence du son émis par le piezo buzzer en fonction de l'intensité lumineuse captée par la photo-résistance. C'est comme un thérémine traditionnel, mais qui capte les variations de lumière.</p>
+        <div id="schemas">
+          <img id="img_ard06" class="scheme" src="{{ url_for('static', filename='theremine_lumiere.svg') }}" alt="">
+        </div>
+
+        <ol>
+          <li>Pour le montage, connectez un câble du piezo à la broche digitale 8 de l'Arduino et l'autre au GND.</li>
+          <li>Concernant la photo-résistance, branchez une patte au 5V et l'autre au GND à travers une résistance de 10k Ω. Entre la patte de la photo-résistance et la résistance, placez un câble qui ira se brancher dans la broche A0 de l'Arduino.</li>
+        </ol>
+
+        <div id="block_code">
+          <p>Code Arduino</p>
+          <pre class="code_full">
+
+  <span class="type">int</span> sensorValue;
+  <span class="type">int</span> sensorLow = 1023;
+  <span class="type">int</span> sensorHigh = 0;
+
+  <span class="type">void</span> <span class="fonction">setup()</span> {
+    <span class="type">Serial</span>.<span class="fonction">begin</span>(9600);
+
+    <span class="type">while</span>(<span class="fonction">millis()</span> < 5000) {
+      sensorValue = <span class="fonction">analogRead</span>(A0);
+      <span class="type">if</span>(sensorValue > sensorHigh) {
+        sensorHigh = sensorValue;
+      }
+      <span class="type">if</span>(sensorValue < sensorLow) {
+        sensorLow = sensorValue;
+      }
+    }
+  }
+
+  <span class="type">void</span> <span class="fonction">loop()</span> {
+    sensorValue = <span class="fonction">analogRead</span>(A0);
+    <span class="type">Serial</span>.<span class="fonction">println</span>(sensorValue);
+    <span class="type">int</span> pitch = <span class="fonction">map</span>(sensorValue,
+    sensorLow, sensorHigh, 50, 4000);
+    <span class="fonction">tone</span>(8, pitch, 20);
+    <span class="fonction">delay</span>(10);
+  }
+
+        </pre>
+      </div>
+
+      <h4>LE CODE</h4>
+      <pre>
+
+  <span class="type">int</span> sensorValue;
+  <span class="type">int</span> sensorLow = 1023;
+  <span class="type">int</span> sensorHigh = 0;
+      </pre>
+      <p>Au début du script nous initialisons trois variables qui nous permettront de stocker respectivement la valeur envoyée par le capteur de luminosité, sa valeur analogique maximale, et la minimale.</p>
+      <pre>
+
+  <span class="type">void</span> <span class="fonction">setup()</span> {
+    <span class="type">Serial</span>.<span class="fonction">begin</span>(9600);
+
+    <span class="type">while</span>(<span class="fonction">millis()</span> < 5000) {
+      sensorValue = <span class="fonction">analogRead</span>(A0);
+      <span class="type">if</span>(sensorValue > sensorHigh) {
+        sensorHigh = sensorValue;
+      }
+      <span class="type">if</span>(sensorValue < sensorLow) {
+        sensorLow = sensorValue;
+      }
+    }
+  }
+      </pre>
+      <p>Lorsque le script se lance, après avoir initialisé le moniteur série, nous laissons 5 secondes à la photo-résistance pour se calibrer. <br/>Une boucle <span class="code">while()</span> s'exécute tant que sa condition est vraie. Dans notre cas, la condition est&nbsp;: tant que le script est lancé depuis moins de 5000 milli-secondes (donc 5 secondes), nous lisons les valeurs envoyées par le capteur et les ajustons sur celles des variables <span class="code">sensorLow</span> et <span class="code">sensorHigh</span> au cas où le capteur est déreglé.</p>
+      <pre>
+
+  <span class="type">void</span> <span class="fonction">loop()</span> {
+    sensorValue = <span class="fonction">analogRead(A0)</span>;
+    <span class="type">Serial</span>.<span class="fonction">println</span>(sensorValue);
+    <span class="type">int</span> pitch = <span class="fonction">map</span>(sensorValue,
+    sensorLow, sensorHigh, 50, 4000);
+    <span class="fonction">tone</span>(8, pitch, 20);
+    <span class="fonction">delay</span>(10);
+  }
+      </pre>
+      <p>Dans la fonction <span class="code">loop()</Span> nous lisons en continu la valeur de la photorésistance à travers la variable <span class="code">sensorValue</span> et l'affichons dans le moniteur série. Ensuite, nous utilisons la fonction <span class="code">map()</span> pour transposer la valeur analogique de <span class="code">sensorValue</span> comprise entre les valeurs de <span class="code">sensorLow</span> et de <span class="code">sensorHigh</span>, vers des valeurs comprises entre 50 et 4000 (Hz). Enfin nous faisons sonner le piezo avec la fonction <span class="code">tone()</span>, dont le premier argument est la broche de sortie, le second la fréquence du son (ici stockée dans la variable <span class="code">pitch</span>), et le troisième (optionnel) la durée du son.</p>
+      <p>Faîtes tourner le script et approchez votre main de la photo-résistance. Vous pouvez maintenant jouer la musique en faisant varier la luminosité devant le capteur.</p>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

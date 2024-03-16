@@ -1,0 +1,171 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+    <ul id="menu">
+      <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+      <li>Liens</li>
+    </ul>
+
+      <div class="print">
+        <a href="/arduino_led2boutons.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Arduino</p>
+      </div>
+
+      <div class="main">
+        <div class="morceau">
+          <div class="debut">
+            <h3>LED + 2 boutons</h3>
+            <p class="circuitb">On va commencer la programmation de l'Arduino avec un projet simple&nbsp;: contrôler une LED avec 2 interrupteurs.</p>
+            <ol>
+              <li>Branchez l'un des interrupteurs au 5V et à la broche digitale 2 de l'Arduino.</li>
+              <li>Connectez le deuxième bouton au 5V et à la broche digitale 3.</li>
+              <li>La LED doit être connectée à la broche digitale 12 sur sa cathode (côté le plus long) et par son anode rejoindre le GND à travers un résistance de 220 Ω.</li>
+            </ol>
+          </div>
+          <div id="schemas">
+            <img id="img_ard03" class="scheme" src="{{ url_for('static', filename='led_boutons.svg') }}" alt="">
+          </div>
+        </div>
+
+        <h4>LE CODE</h4>
+
+        <div class="morceau">
+          <div class="texte">
+            <p>Ouvrez votre IDE Arduino. Lorsque vous ouvrez un nouveau sketch, vous pouvez voir deux fonctions vides.</p>
+            <p>La première fonction, <span class="code">setup()</span>, règle ce que l'Arduino doit initialiser au démarrage du sketch. La seconde fonction, <span class="code">loop()</span> contient le code qui se répète indéfiniment (tant que le sketch tourne), généralement les actions du script.</p>
+            <p>Passons à notre code&nbsp;: voici les premières lignes du script.</p>
+          </div>
+          <pre>
+
+    <span class="type">void</span> <span class="fonction">setup()</span> {
+    }
+
+    <span class="type">void</span> <span class="fonction">loop()</span> {
+    }
+          </pre>
+        </div>
+
+<!--
+        <div id="block_code">
+          <p>Code Arduino</p>
+          <pre class="code_full">
+
+    <span class="type">int</span> switchState1 = 0;
+    <span class="type">int</span> switchState2 = 0;
+
+    <span class="type">void</span> <span class="fonction">setup()</span> {
+      <span class="fonction">pinMode</span>(2, INPUT);
+      <span class="fonction">pinMode</span>(3, INPUT);
+      <span class="fonction">pinMode</span>(12, OUTPUT);
+    }
+
+    <span class="type">void</span> <span class="fonction">loop()</span> {
+      switchState1 = <span class="fonction">digitalRead</span>(2);
+      switchState2 = <span class="fonction">digitalRead</span>(3);
+      <span class="type">if</span>(switchState1 == HIGH) {
+        <span class="fonction">digitalWrite</span>(12, HIGH);
+        <span class="fonction">delay</span>(1000);
+        <span class="fonction">digitalWrite</span>(12, LOW);
+        <span class="fonction">delay</span>(1000);
+      } <span class="type">else if</span>(switchState2 == HIGH) {
+        <span class="fonction">digitalWrite</span>(12, HIGH);
+        <span class="fonction">delay</span>(250);
+        <span class="fonction">digitalWrite</span>(12, LOW);
+        <span class="fonction">delay</span>(250);
+      } <span class="type">else</span> {
+        <span class="fonction">digitalWrite</span>(12, LOW);
+      }
+    }
+          </pre>
+        </div> -->
+
+
+
+        <div class="morceau">
+          <div class="texte">
+            <p>Tout d'abord nous initialisons deux variables, <span class="code">switchState1</span> et <span class="code">switchState2</span> qui nous permettront de stocker l'état de chacun des deux boutons (pressé ou relâché). Pour commencer nous défenissons la valeur à 0, donc relâché.</p>
+            <p>Décomposons la suite du code&nbsp;: dans la fonction <span class="code">loop()</span>, nous commençons par actualiser les valeurs des variables <span class="code">switchState1</span> et <span class="code">switchState2</span>. Nous leur demandons à présent de lire perpétuellement les valeurs lues par les broches 2 et 3 de l'Arduino. Les broches 2 et 3 sont digitales, ce qui signifient qu'elles ne renvoient des valeurs qui ne peuvent être égales qu'à 0 ou 1 (oui ou non, vrai ou faux). La valeur sera de 1 si l'interrupteur est pressé, sinon elle sera de 0.</p>
+          </div>
+          <pre>
+
+    <span class="type">int</span> switchState1 = 0;
+    <span class="type">int</span> switchState2 = 0;
+
+    <span class="type">void</span> <span class="fonction">setup()</span> {
+      <span class="fonction">pinMode</span>(2, INPUT);
+      <span class="fonction">pinMode</span>(3, INPUT);
+      <span class="fonction">pinMode</span>(12, OUTPUT);
+    }
+          </pre>
+        </div>
+
+        <div class="morceau">
+          <div class="texte">
+                    <p>Le premier bloc <span class="code">if()</span> est la première condition&nbsp;: si le premier interrupteur est pressé. Dans ce cas nous donnons l'ordre à la broche 12 de l'Arduino d'envoyer du courant dans la LED (<span class="code">digitalWrite(12, HIGH)</span>). La fonction <span class="code">digitalWrite()</span> sert en effet à envoyer ou non du courant dans une broche. La fonction <span class="code">delay(1000)</span> placée sur la ligne suivante détermine le temps en millisecondes pendant lequel l'instruction doit être exécutée. Ensuite nous arrêtons d'envoyer du courant dans la LED (<span class="code">digitalWrite(12, LOW)</span>), également pendant 1000 millisecondes. Étant donné que le script tournera en boucle sur l'Arduino, cela fera alterner la LED entre les états allumée et éteinte.</p>
+          </div>
+          <pre>
+
+  <span class="type">void</span> <span class="fonction">loop()</span> {
+    switchState1 = <span class="fonction">digitalRead</span>(2);
+    switchState2 = <span class="fonction">digitalRead</span>(3);
+
+  <span class="type">if</span>(switchState1 == HIGH) {
+    <span class="fonction">digitalWrite</span>(12, HIGH);
+    <span class="fonction">delay</span>(1000);
+    <span class="fonction">digitalWrite</span>(12, LOW);
+    <span class="fonction">delay</span>(1000);
+  }
+                </pre>
+        </div>
+
+
+
+          <div class="morceau">
+            <div class="texte">
+                <p>Le deuxième bloc, <span class="code">else if()</span>, est la seconde condition&nbsp;: si le deuxième interrupteur est pressé. Il faut comprende un <span class="code">else if()</span> comme une alternative au premier <span class="code">if()</span>, il s'agit d'une autre possibilité. L'instruction envoyée à la LED est similaire à celle du premier bloc, seule la valeur du <span class="code">delay()</span> change, ce qui aura pour conséquence un clignotement plus rapide.</p>
+            </div>
+            <pre>
+
+        <span class="type">else if</span>(switchState2 == HIGH) {
+          <span class="fonction">digitalWrite</span>(12, HIGH);
+          <span class="fonction">delay</span>(250);
+          <span class="fonction">digitalWrite</span>(12, LOW);
+          <span class="fonction">delay</span>(250);
+        }
+            </pre>
+          </div>
+
+          <div class="morceau">
+            <div class="texte">
+                      <p>Enfin avec le <span class="code">else()</span> nous donnons le contrepoint aux conditions précédemment déclarées&nbsp;; si aucune des deux conditions n'est rencontrée, alors le code présent dans le bloc <span class="code">else()</span> s'exécute. Dans notre cas il s'agira des moments où aucun des interrupteurs n'est pressé.</p>
+            </div>
+            <pre>
+
+        <span class="type">else</span> {
+          <span class="fonction">digitalWrite</span>(12, LOW);
+        }
+      }
+            </pre>
+          </div>
+
+
+
+      </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

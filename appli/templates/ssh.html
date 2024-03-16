@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+      <ul id="menu">
+        <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+        <li>Liens</li>
+
+      </ul>
+
+      <div class="print">
+        <a href="/rpi_ssh.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Raspberry Pi</p>
+      </div>
+
+      <div class="main full">
+        <h3>Configurer la connexion à distance</h3>
+        <p class="circuitb large_full">Autoriser la connexion à distance sur le Raspberry Pi nous permettra de nous y connecter et de la contrôler depuis n'importe quel ordinateur connécté au même réseau.</p>
+        <h4>LE CODE</h4>
+        <h5>Autoriser la connexion SSH</h5>
+        <p class="large_full">Avant de démarrer le Raspberry Pi, il faut que son système d'exploitation accepte une connexion distante via le protocole SSH (un protocole de connexion sécurisé d'un ordinateur vers un autre). Pour cela, il faut ajouter un fichier vide sur la carte SD en entrant la commande suivante (quand vous êtes à la racine de la partition BOOT)&nbsp;:</p>
+
+        <pre class="command">
+
+  <span class="type">sudo</span> touch ssh
+        </pre>
+        <p class="large_full">La commande <span class="code">sudo</span> va vous demander d'entrer votre mot de passe. Faîtes-le et vous êtes connecté en tant que super-utilisateur.</p>
+        <h5>Configurer l'accès au Wifi avant le démarrage</h5>
+
+        <p class="large_full">Si vous souhaitez que votre Raspberry Pi se connecte automatiquement à un réseau Wifi lorsqu'il démarre, il faut préalablement créer un fichier de configuration dans la partition BOOT. Quand vous y êtes entrez la commande&nbsp;:</p>
+
+        <pre class="command">
+
+  <span class="type">sudo</span> nano wpa_supplicant.conf
+        </pre>
+        <p class="large_full">Vous vous retrouvez alors dans un éditeur de texte en ligne de commande. Copiez-y le code suivant, en prenant soin de remplacer les entrées <span class="code">ssid</span> et <span class="code">psk</span> par le nom de votre réseau et son mot de passe.</p>
+        <pre class="command">
+
+  ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+  update_config=1
+  country=BE
+
+  network={
+    ssid="réseau wifi"
+    psk="mot de passe wifi"
+    key_mgmt=WPA-PSK
+  }
+        </pre>
+        <p class="large_full">Une fois ce code copié dans le fichier, sauvegardez et quittez l'éditeur en pressant CTRL+X puis Entrée. Pour information, ce fichier de configuration sera déplacé dans le répertoire <span class="code">/etc/wpa_supplicant/</span> de Raspberry Pi OS.</p>
+        <h5>Modifier le nom du Raspberry Pi</h5>
+
+        <p class="large_full">Par défaut le nom d'un Raspberry Pi est simplement «&nbsp;raspberrypi&nbsp;», mais on peut le changer pour des raisons de commodité (ce nom est celui avec lequel le Raspberry Pi se connecte au réseau).</p>
+        <p class="large_full">Sous Linux on peut faire cette modification avant le démarrage en allant dans la partition ROOTFS. Entrez la commande suivante pour vous déplacer dans le bon dossier (/etc).</p>
+        <pre class="command">
+
+  <span class="type">cd</span> /media/utilisateur/root/etc/
+        </pre>
+        <p class="large_full">On doit ensuite modifier le fichier qui gère les hôtes du Raspberry Pi. Pour cela il faut entrer dans le terminal&nbsp;:</p>
+        <pre class="command">
+
+  <span class="type">sudo</span> nano hosts
+        </pre>
+        <p class="large_full">Dans ce fichier, modifiez la ligne <span class="code">127.0.1.1       raspberrypi</span>&nbsp;: remplacez «&nbsp;raspberrypi&nbsp;» par le nom que vous préférez donner à votre Raspberry. Sauvegardez et quittez avec CTRL+X.</p>
+        <p class="large_full">Puis on doit modifier le nom du Raspberry Pi dans un deuxième fichier&nbsp;:</p>
+        <pre class="command">
+
+  <span class="type">sudo</span> nano hostname
+        </pre>
+        <p class="large_full">Dans ce fichier remplacez «&nbsp;raspberrypi&nbsp;» par le nom précédemment donné à votre Raspberry. Sauvegardez et quittez avec CTRL+X.</p>
+        <p class="large_full">Sous Windows ou Mac il vous faudra vous connecter une première fois au Raspberry Pi avant de pouvoir modifier son nom. Pour cela démarrez le Raspberry et tapez dans un terminal&nbsp;:</p>
+        <pre class="command">
+
+  <span class="type">ssh</span> pi@raspberrypi.local
+        </pre>
+        <p class="large_full">Le nom d'utilisateur par défaut est «&nbsp;pi&nbsp;» et le mot de passe «&nbsp;raspberry&nbsp;». Si le système demande une confirmation avant de faire la connexion, confirmer en entrant «&nbsp;y&nbsp;».<br/>Une fois connecté déplacez vous dans le dossier /etc et appliquez la même marche à suivre que celle expliquée juste au-dessus pour les deux fichiers à modifier. Pour que vos changements soient pris en compte redémarrez le Raspberry Pi en tapant la commande&nbsp;:</p>
+        <pre class="command">
+
+  <span class="type">sudo</span> reboot now
+        </pre>
+
+
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

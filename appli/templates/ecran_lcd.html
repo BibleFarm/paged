@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+    <ul id="menu">
+      <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+      <li>Liens</li>
+    </ul>
+
+      <div class="print">
+        <a href="/arduino_ecran_lcd.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Arduino</p>
+      </div>
+
+      <div class="main">
+        <div id="onglets">
+          <div id="onglet_circuit" onclick="circuitTop()">Circuit</div>
+          <div id="onglet_code" onclick="codeTop()">Code Arduino</div>
+        </div>
+        <h3>Écran LCD</h3>
+        <p class="circuitb">Nous allons maintenant intégrer un écran LCD dans notre projet. On peut y afficher ce qu'on veut, commençons par un simple "Hello world".</p>
+        <div id="schemas">
+          <img id="img_ard12" class="scheme" src="{{ url_for('static', filename='lcd_hello.svg') }}" alt="">
+        </div>
+
+        <p class="circuit">Le montage d'un écran LCD est complexe, nous allons le décrire de façon précise.</p>
+        <ol>
+          <li>En partant de la gauche, les deux premières broches de l'écran doivent être reliées au GND et au 5V. La troisième broche doit être reliée à la patte du milieu d'un potentiomètre (connecté au 5V et au GND de son côté), cela nous permet de régler le contraste de l'écran. La quatrième broche est reliée à la broche digitale 12 de l'Arduino. La cinquième va dans le GND. La sixième se connecte à la broche 11 de l'Arduino. Les onzième à quatorzième broche de l'écran sont à relier respectivement aux broches digitales 5 à 2 de l'Arduino. La quinzième broche est connectée au 5V au travers d'une résistance de 220 Ω, et la seizième broche doit être raccordée au GROUND.</li>
+        </ol>
+
+        <div id="block_code">
+          <p>Code Arduino</p>
+          <pre class="code_full">
+
+  <span class="type">#include</span> &lt;LiquidCrystal.h&gt;
+
+  <span class="type">const int</span> rs = 12, en = 11,
+  d4 = 5, d5 = 4, d6 = 3, d7 = 2;
+  <span class="type">LiquidCrystal</span> lcd(rs, en, d4, d5, d6, d7);
+
+  <span class="type">void</span> <span class="fonction">setup()</span> {
+    lcd.<span class="fonction">begin</span>(16, 2);
+    lcd.<span class="fonction">print</span>("hello, world!");
+  }
+
+  <span class="type">void</span> <span class="fonction">loop()</span> {
+    lcd.<span class="fonction">noDisplay()</span>;
+    <span class="fonction">delay</span>(500);
+    lcd.<span class="fonction">display()</span>;
+    <span class="fonction">delay</span>(500);
+  }
+
+
+        </pre>
+      </div>
+
+      <h4>LE CODE</h4>
+      <pre>
+
+  <span class="type">#include</span> &lt;LiquidCrystal.h&gt;
+
+  <span class="type">const int</span> rs = 12, en = 11,
+  d4 = 5, d5 = 4, d6 = 3, d7 = 2;
+  <span class="type">LiquidCrystal</span> lcd(rs, en, d4, d5, d6, d7);
+      </pre>
+      <p>Pour communiquer avec l'écran LCD, on doit appeller la librairie <span class="code">LiquidCrystal</span>. Ensuite nous déclarons les broches Arduino qui nous serviront à envoyer les informations à l'écran. Puis, grâce à la librairie précédemment importée, nous déclarons un objet <span class="code">LiquidCrystal</span>, ce qui nous permet d'avoir accès aux méthodes préexistantes pour communiquer avec l'écran.</p>
+      <pre>
+
+  <span class="type">void</span> setup() {
+    lcd.<span class="fonction">begin</span>(16, 2);
+    lcd.<span class="fonction">print</span>("hello, world!");
+  }
+      </pre>
+      <p>Dans le <span class="code">setup()</span> on initialise l'écran LCD. La fonction <span class="code">lcd.begin()</span> permet à l'Arduino de savoir avec quel format d'écran va se faire l'interaction. Elle prend deux arguments&nbsp;: le premier est la nombre de caractères par ligne, le second le nombre de lignes. Ensuite avec la fonction <span class="code">lcd.print()</span> on fait s'afficher le texte "hello, world!" sur l'écran.</p>
+      <pre>
+
+  <span class="type">void</span> loop() {
+    lcd.<span class="fonction">noDisplay()</span>;
+    <span class="fonction">delay</span>(500);
+    lcd.<span class="fonction">display()</span>;
+    <span class="fonction">delay</span>(500);
+  }
+      </pre>
+      <p>La <span class="code">loop()</span> de ce projet fait alterner les phases d'affichage et de non-affichage de l'écran par intervalles de 500 milli-secondes.</p>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

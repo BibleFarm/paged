@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+      <ul id="menu">
+        <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+        <li>Liens</li>
+
+      </ul>
+
+      <div class="print">
+        <a href="/freecad10.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Modélisation 3D</p>
+      </div>
+
+      <div class="main full">
+        <h3>Utiliser les opérations de répétition de Freecad</h3>
+        <p class="circuitb large_full">Si l'on veut répéter un motif de manière régulière dans une modélisation 3D, Freecad dispose d'outils pour gérer la disposition du motif.</p>
+
+        <p class="large_full">On commence par créer un solide de base dans l'atelier <span class="code">Part design</span>, puis on crée un nouveau <span class="code">Sketch</span> sur l'une des faces. Ensuite on extrude la forme dessinée sur la face de base (on pourrait creuser à la place).</p>
+        <img class="tuto" src="{{ url_for('static', filename='fc52.png') }}" alt="">
+        <img class="tuto" src="{{ url_for('static', filename='fc53.png') }}" alt="">
+
+        <p class="large_full">Pour appliquer un motif de répétition, il faut tout d'abord sélectionner le solide à répéter. Pour obtenir une répétition linéaire il faut cliquer sur l'outil <span class="code">Create linear pattern</span>. Dans la boîte de dialogue on peut régler la longueur sur laquelle se produit la répétition ainsi que le nombre d'occurrences.</p>
+        <img class="tuto" src="{{ url_for('static', filename='fc54.png') }}" alt="">
+        <img class="tuto" src="{{ url_for('static', filename='fc55.png') }}" alt="">
+
+        <p class="large_full">Si l'on veut appliquer un motif de répétition circulaire, il faut sélectionner le solide à répéter puis cliquer sur l'outil <span class="code">Create circular pattern</span>. De la même façon que pour la répétition linéaire, la boîte de dialogue permet de régler l'angle selon lequel se produit la répétition ainsi que le nombre d'occurrences.</p>
+        <img class="tuto" src="{{ url_for('static', filename='fc56.png') }}" alt="">
+
+        <p class="large_full">On peut également choisir l'axe selon lequel va se produire la répétition du motif. Le choix de cet axe change tout à fait la disposition du motif.</p>
+        <img class="tuto" src="{{ url_for('static', filename='fc57.png') }}" alt="">
+
+        <p class="large_full">Pour obtenir des motifs complexes il faut combiner les répétitions. Pour cela on utilise l'outil <span class="code">Create multitransform pattern</span>. On trouve dans la boîte de dialogue les mêmes paramètres que pour les répétitions linéaires et circulaires simples, à la différence notable que lors d'une multi-transformation, l'ordre des motifs de répétition importe. Vous n'obtiendrez pas le même résultat en fonction de l'ordre des transformations.</p>
+        <img class="tuto" src="{{ url_for('static', filename='fc58.png') }}" alt="">
+
+
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

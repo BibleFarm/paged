@@ -1,0 +1,140 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+      <ul id="menu">
+        <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+        <li>Liens</li>
+
+      </ul>
+
+      <div class="print">
+        <a href="/rpi_moteurcc.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Raspberry Pi</p>
+      </div>
+
+      <div class="main">
+        <h3>Contrôler un moteur à courant continu</h3>
+        <p class="circuitb">Il est possible de contrôler un moteur depuis un Raspberry Pi, mais si on alimente ce moteur avec plus de 5 Volts, on doit séparer le circuit en deux parties, une pour chaque tension, afin de protéger le Raspberry Pi d'un retour de tension qui pourrait le griller. On va à cet effet utiliser un circuit intégré L293D pour faire le lien entre le Raspberry et le moteur.</p>
+        <div id="schemas"><img id="img_rpi11" class="scheme" src="{{ url_for('static', filename='rpi_moteurcc.svg') }}" alt=""></div>
+        <div id="onglets">
+          <div id="onglet_code" onclick="codeTop()">Script Python</div>
+          <div id="onglet_circuit" onclick="circuitTop()">Circuit</div>
+        </div>
+
+        <ol>
+          <li>Commençons par la breadboard&nbsp;: d'un côté alimentez-la avec le 5V du Raspberry Pi, de l'autre avec une pile de 9V.</li>
+          <li>Placez le CI de façon à ce que son encoche pointe vers le haut. Sa première broche à droite va dans le 5V. À gauche, la première broche est reliée à la broche 22 (en mode BOARD) du Raspberry, la deuxième à la 18 et la septième à la 16. <br/>Le moteur se connecte d'un côté à la troisième broche gauche du CI, de l'autre à la sixième broche gauche. La huitième broche à gauche va dans le 9V. Des deux côtés du circuit intégré, les quatrième et cinquième broches sont à connecter au GROUND. Enfin on relie ensemble les GROUND des deux côtés de la breadboard.</li>
+        </ol>
+
+        <div id="block_code">
+          <p>Script Python</p>
+          <pre class="code_full">
+
+  <span class="type">import</span> <span class="fonction">RPi.GPIO</span> <span class="type">as</span> GPIO
+  <span class="type">from</span> time <span class="type">import</span> sleep
+
+  GPIO.<span class="fonction">setmode</span>(GPIO.BOARD)
+
+  Motor1A = 16
+  Motor1B = 18
+  Motor1E = 22
+
+  GPIO.<span class="fonction">setup</span>(Motor1A,GPIO.OUT)
+  GPIO.<span class="fonction">setup</span>(Motor1B,GPIO.OUT)
+  GPIO.<span class="fonction">setup</span>(Motor1E,GPIO.OUT)
+
+  <span class="fonction">print</span>("Turning motor onwards")
+
+  GPIO.<span class="fonction">output</span>(Motor1A,GPIO.HIGH)
+  GPIO.<span class="fonction">output</span>(Motor1B,GPIO.LOW)
+  GPIO.<span class="fonction">output</span>(Motor1E,GPIO.HIGH)
+
+  <span class="fonction">sleep</span>(10)
+
+  <span class="fonction">print</span>("Going backwards")
+
+  GPIO.<span class="fonction">output</span>(Motor1A,GPIO.LOW)
+  GPIO.<span class="fonction">output</span>(Motor1B,GPIO.HIGH)
+  GPIO.<span class="fonction">output</span>(Motor1E,GPIO.HIGH)
+
+  <span class="fonction">sleep</span>(10)
+
+  <span class="fonction">print</span>("Stopping motor")
+
+  GPIO.<span class="fonction">output</span>(Motor1E,GPIO.LOW)
+
+  GPIO.<span class="fonction">cleanup</span>()
+
+
+        </pre>
+      </div>
+
+      <h4>LE CODE</h4>
+        <pre>
+
+  <span class="type">import</span> <span class="fonction">RPi.GPIO</span> <span class="type">as</span> GPIO
+  <span class="type">from</span> time <span class="type">import</span> sleep
+
+  GPIO.<span class="fonction">setmode</span>(GPIO.BOARD)
+
+  Motor1A = 16
+  Motor1B = 18
+  Motor1E = 22
+
+  GPIO.<span class="fonction">setup</span>(Motor1A,GPIO.OUT)
+  GPIO.<span class="fonction">setup</span>(Motor1B,GPIO.OUT)
+  GPIO.<span class="fonction">setup</span>(Motor1E,GPIO.OUT)
+
+        </pre>
+        <p>On commence par importer les modules <span class="code">RPi.GPIO</span> pour interagir avec les broches du Raspberry Pi et <span class="code">sleep</span> de <span class="code">time</span> afin de faire appel à des délais. On initialise ensuite les broches en mode BOARD et on déclare les broches du circuit intégré L293D avec lesquelles le Raspberry Pi va communiquer. Puis on initialise ces trois broches qui sont toutes des sorties donc avec <span class="code">GPIO.OUT</span>.</p>
+        <pre>
+
+  <span class="fonction">print</span>("Turning motor onwards")
+
+  GPIO.<span class="fonction">output</span>(Motor1A,GPIO.HIGH)
+  GPIO.<span class="fonction">output</span>(Motor1B,GPIO.LOW)
+  GPIO.<span class="fonction">output</span>(Motor1E,GPIO.HIGH)
+
+  <span class="fonction">sleep</span>(10)
+        </pre>
+        <p>Un circuit intégré fonctionne d'après des portes logiques. Cela signifie que si une broche qui constitue l'une de ces portes reçoit du courant, cela va déclecher l'action d'une autre porte du circuit, bien qu'elles ne soient pas physiquement reliées (ce qui nous permet de séparer deux circuits de tensions différentes). Pour faire tourner le moteur dans le sens horaire on va jouer avec ces portes logiques. La broche <span class="code">Motor1E</span> alimente le CI, on doit donc lui envoyer du courant (<span class="code">GPIO.output(Motor1E, GPIO.HIGH)</span>). Les broches <span class="code">Motor1A</span> et <span class="code">Motor1B</span> sont reliées aux deux côtés du moteur. Étant donné que le courant doit entrer d'un côté du moteur et ressortir de l'autre pour l'activer, ces deux broches doivent être dans des états différents. C'est pourquoi on a <span class="code">GPIO.output(Motor1A, GPIO.HIGH)</span> et <span class="code">GPIO.output(Motor1B, GPIO.LOW)</span> simultanément. Avec ces trois lignes le moteur tourne dans le sens horaire, pendant un intervalle de 10 secondes.</p>
+
+        <pre>
+
+  <span class="fonction">print</span>("Going backwards")
+
+  GPIO.<span class="fonction">output</span>(Motor1A,GPIO.LOW)
+  GPIO.<span class="fonction">output</span>(Motor1B,GPIO.HIGH)
+  GPIO.<span class="fonction">output</span>(Motor1E,GPIO.HIGH)
+
+  <span class="fonction">sleep</span>(10)
+        </pre>
+        <p>Pour faire tourner le moteur dans le sens anti-horaire, il faut inverser l'envoi de courant dans les broches <span class="code">Motor1A</span> et <span class="code">Motor1B</span>. Le sens du courant n'est pas inversé, c'est simplement une autre porte logique du CI qui est activée, le courant emprunte un autre chemin à travers le composant&nbsp;: dans notre cas il en résulte l'inversion du sens de rotation du moteur. </p>
+
+        <pre>
+
+  <span class="fonction">print</span>("Stopping motor")
+
+  GPIO.<span class="fonction">output</span>(Motor1E,GPIO.LOW)
+
+  GPIO.<span class="fonction">cleanup</span>()
+        </pre>
+        <p>Pour arrêter la rotation du moteur, il suffit de cesser d'envoyer du courant dans la broche <span class="code">Motor1E</span> puisque c'est elle qui active tout le circuit intégré (et par voie de fait les composants qui y sont connectés). On termine le script en nettoyant les broches GPIO. </p>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

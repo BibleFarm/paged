@@ -1,0 +1,267 @@
+
+
+
+/* To define how the book look on the screen: */
+:root{
+  --color-background:  whitesmoke;
+  --color-pageBox: #666;
+  --color-paper: white;
+  --color-marginBox: transparent;
+}
+
+
+/* To define how the book look on the screen: */
+@media screen {
+  body {
+      background-color: var(--color-background);
+  }
+  .pagedjs_pages {
+      display: flex;
+      width: calc(var(--pagedjs-width) * 2);
+      flex: 0;
+      flex-wrap: wrap;
+      margin: 0 auto;
+  }
+  .pagedjs_page{
+        --pagedjs-baseline: 10mm;
+        --pagedjs-baseline-position: 9mm;
+        --pagedjs-baseline-color: cyan;
+        background: linear-gradient( var(--color-paper) 0%, var(--color-paper) calc(var(--pagedjs-baseline) - 1px), var(--pagedjs-baseline-color) calc(var(--pagedjs-baseline) - 1px),  var(--pagedjs-baseline-color) var(--pagedjs-baseline)), transparent;
+        background-size: 100% var(--pagedjs-baseline);
+        background-repeat: repeat-y;
+        background-position-y: var(--pagedjs-baseline-position);
+    }
+
+  .pagedjs_first_page {
+      margin-left: 10mm;
+  }
+
+  .pagedjs_page:last-of-type{
+      margin-bottom: 10mm;
+  }
+
+}
+
+
+
+  @page {
+    size : 351mm 205mm;
+    margin: 0mm;
+    marks: crop;
+    bleed: 5mm;
+  }
+
+body {
+
+}
+
+#city {
+  font-family: 'ElaineTest';
+  font-size: 154pt;
+  -webkit-text-stroke: 2px #ff8080;
+  color: #ff8080;
+  position:absolute;
+  left: 190mm;
+  top: -2mm;
+  line-height: 98.5%;
+}
+
+.quatrieme {
+  position: absolute;
+  left: 5mm;
+  top: 5mm;
+  width: 141mm;
+  column-count: 3;
+  column-gap: 13mm;
+}
+
+.quatrieme > p {
+  font-family: 'Elaine';
+  font-size: 8.5pt;
+  line-height: 115%;
+  margin-top: 0;
+  margin-bottom: 1.75mm;
+  text-indent: 1mm;
+  color: #ff8080;
+}
+
+.quatrieme > span {
+  font-family: 'Fablab';
+  font-size: 11pt;
+  display: block;
+  margin-top: 8mm;
+  padding-top: 2mm;
+  margin-bottom: 2mm;
+  text-transform: uppercase;
+  color: #339966;
+}
+
+.quatrieme > span:first-of-type {
+  margin-top: 38mm !important;
+}
+
+.led, .resistance, .potentiometre, .temperature, .servo,  .moteur, .lcd, .photoresistance, .bouton, .condensateur, .ci {
+  position: absolute;
+}
+
+.led > img, .resistance > img, .potentiometre > img, .temperature > img, .servo > img, .moteur > img, .lcd > img, .photoresistance > img, .bouton > img, .condensateur > img, .ci > img {
+  width: 100%;
+}
+
+.moteur {
+  width: 11mm;
+  left: 153mm;
+  top:154mm;
+  transform: rotate(90deg);
+}
+
+.lcd {
+  width: 15mm;
+  top: 175mm;
+  left: 140mm;
+  transform: rotate(90deg);
+}
+
+.potentiometre {
+  width: 8mm;
+  left: 175mm;
+  top: 124mm;
+}
+
+.led {
+  width: 4mm;
+  left: 123mm;
+  top: 178mm;
+}
+
+
+.bouton {
+  width: 8mm;
+  left: 132mm;
+  top: 175mm;
+}
+
+.ci {
+  width: 12mm;
+  left: 158mm;
+  top: 175mm;
+}
+
+.resistance {
+  width: 8mm;
+  top: 194mm;
+  left: 119mm;
+}
+
+.titre {
+  font-family: 'ElaineTest';
+  width: 145mm;
+  font-size: 154pt;
+  line-height: 98%;
+  position: absolute;
+  left: 203mm;
+  top: -4mm;
+  text-align: left;
+  color: #ff8080;
+}
+
+.titre > span {
+  text-align: left !important;
+  display: block;
+}
+
+.dos {
+  position: absolute;
+  left: 3mm;
+  top: 3mm;
+  width: 334.5mm;
+  height: 199mm;
+  background-color: white;
+
+}
+
+.titre_dos {
+  font-family: 'Fablab';
+  font-size: 26pt;
+  transform: rotate(-90deg);
+  position: absolute;
+  left: 145mm;
+  top: 27mm;
+  color: #ff8080;
+  text-align: right;
+}
+
+.titre_dos > span {
+  color: #339966;
+}
+
+#img01 {
+  width: 80mm;
+  position: absolute;
+  left: 200mm;
+  top: 52mm;
+}
+
+#img04 {
+  width: 52mm;
+  position: absolute;
+  left: 290mm;
+  top: 20mm;
+  transform: rotate(90deg);
+}
+
+#img05 {
+  width: 55mm;
+  position: absolute;
+  left: 175mm;
+  top: 146mm;
+}
+
+#img03 {
+  width: 80mm;
+  position: absolute;
+  left: -27mm;
+  top: -4mm;
+}
+
+#img02 {
+  width: 80mm;
+  position: absolute;
+  left: 240mm;
+  top: 110mm;
+}
+
+
+@font-face {
+    font-family: 'Elaine';
+    src: url(fonts/elainesans-regular-webfont.eot),
+         url(fonts/elainesans-regular-webfont.svg),
+         url(fonts/elainesans-regular-webfont.ttf),
+         url(fonts/elainesans-regular-webfont.woff),
+         url(fonts/elainesans-regular-webfont.woff2);
+}
+
+@font-face {
+    font-family: 'Snapit Mono';
+    src: url(fonts/Snap-itmono-1.6-Regular.otf),
+         url(fonts/Snap-itmono-1.6-Regular.woff),
+         url(fonts/Snap-itmono-1.6-Regular.woff2);
+}
+
+@font-face {
+    font-family: 'Fablab';
+    src: url(fonts/fablab-webfont.eot),
+         url(fonts/fablab-webfont.svg),
+         url(fonts/fablab-webfont.ttf),
+         url(fonts/fablab-webfont.woff),
+         url(fonts/fablab-webfont.woff2);
+}
+
+@font-face {
+    font-family: 'ElaineTest';
+    src: url(fonts/reelaine-webfont.ttf),
+         url(fonts/reelaine-webfont.eot),
+         url(fonts/reelaine-webfont.svg),
+         url(fonts/reelaine-webfont.woff),
+         url(fonts/reelaine-webfont.woff2);
+}

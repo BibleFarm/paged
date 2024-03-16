@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+      <ul id="menu">
+        <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+        <li>Liens</li>
+
+      </ul>
+
+      <div class="print">
+        <a href="/rpi_samba.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Raspberry Pi</p>
+      </div>
+
+      <div class="main full">
+        <h3>Configurer le partage de dossiers (Samba)</h3>
+        <p class="circuitb large_full">Samba est un programme qui permet de partager les dossiers du Raspberry Pi sur le réseau et d'y accéder depuis d'autres ordinateurs.</p>
+
+        <h4>LE CODE</h4>
+        <p>Pour installer Samba, tapez dans un terminal&nbsp;:</p>
+        <pre class="command">
+
+  <span class="type">sudo</span> apt-get install samba samba-common-bin
+        </pre>
+        <p class="large_full">Ouvrez le fichier de configuration de Samba avec&nbsp;:</p>
+        <pre class="command">
+
+  <span class="type">sudo</span> nano /etc/samba/smb.conf
+        </pre>
+        <p class="large_full">Dans ce fichier changez la ligne <span class="code">wins support = no</span> en <span class="code">wins support = yes</span>. Ajoutez le code suivant à la fin du fichier.</p>
+        <pre class="command">
+
+  [pihome]
+    comment=home pi
+    path=/home/pi
+    browseable=Yes
+    writeable=Yes
+    only guest=no
+    create mask=0775
+    directory mask=0775
+    public=no
+        </pre>
+        <p class="large_full"> La configuration que nous faisons ci-dessus rend l'ensemble des dossiers du Raspberry Pi accessibles via Samba (<span class="code">pihome</span> étant le dossier racine). Si vous souhaitez ne partager qu'un seul dossier il faut entrer dans le fichier une configuration du type&nbsp;:</p>
+        <pre class="command">
+
+  [monDossierPartage]
+    path=/home/pi/monDossierPartage
+    browseable=Yes
+    writeable=Yes
+    create mask=0777
+    directory mask=0777
+    public=no
+        </pre>
+        <p class="large_full">Une fois la configuration voulue faite, sauvez et quittez l'éditeur de texte en pressant CTRL+X. Enfin ajoutez l'utilisateur «&nbsp;pi&nbsp;» à la configuration de Samba (le nom d'utilisateur vous sera demandé quand vous essaierez de vous connecter aux dossiers du Raspberry depuis un autre ordinateur) et renseignez son mot de passe.</p>
+        <pre class="command">
+
+  <span class="type">sudo</span> smbpasswd -a pi
+        </pre>
+        <p class="large_full">Redémarrez le daemon de Samba pour que vos modifications soient prises en compte&nbsp;:</p>
+        <pre class="command">
+
+  <span class="type">sudo</span> systemctl restart smbd
+        </pre>
+
+
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+      <ul id="menu">
+        <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+        <li>Liens</li>
+
+      </ul>
+
+      <div class="print">
+        <a href="/freecad02.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Impression 3D</p>
+      </div>
+
+      <div class="main full">
+        <h3>Utiliser les contraintes dans Freecad</h3>
+        <p class="circuitb large_full">Les contraintes sont une composante essentielle de Freecad puisqu'elles permettent de rendre l'objet designé paramétrique. On s'en sert par exemple pour déterminer la longueur de côté d'un objet, le rayon d'un cercle, si l'on veut que deux segments soient perpendiculaires, etc. Le grand avantage de les utiliser est que l'on peut changer les paramètres contraints plus tard, et notre objet s'adapte automatique à ses nouvelles cotes.</p>
+
+        <p class="large_full">Les contraintes se trouvent à droite de la barre d'outil supérieure dans la fenêtre de Freecad.</p>
+        <img class="tuto" src="{{ url_for('static', filename='fc11.png') }}" alt="">
+
+        <p class="large_full">On peut contraindre un cercle à avoir un rayon donné avec la contrainte <span class="code">Radius</span>, où l'on rentre dans une boîte de dialogue le rayon souhaité.</p>
+        <img class="tuto" src="{{ url_for('static', filename='fc12.png') }}" alt="">
+
+        <p class="large_full">Une autre contrainte intéressante est de faire concorder deux points, autrement dit de faire que deux points différents deviennent le même point. Cette contrainte est la première de la barre d'outil, représentée par un point rouge. Sélectionnez les deux points à faire concorder puis cliquez sur la contrainte.</p>
+        <img class="tuto" src="{{ url_for('static', filename='fc13.png') }}" alt="">
+
+        <p class="large_full">Dans le cas de polygones, on peut utiliser les contraintes <span class="code">Set horizontal</span> et <span class="code">Set vertical</span> pour forcer des lignes à être alignées sur l'axe des abscisses ou celui des ordonnées.</p>
+        <img class="tuto" src="{{ url_for('static', filename='fc14.png') }}" alt="">
+
+        <p class="large_full">Pour faire en sorte que deux segments soient rigoureusement parallèles, il y a la contrainte <span class="code">Parallel</span>, qui s'utilise en sélectionnant les deux segments à aligner puis en cliquant sur la contrainte.</p>
+        <img class="tuto" src="{{ url_for('static', filename='fc15.png') }}" alt="">
+
+        <p class="large_full">Pour fixer la longueur d'un segment, on utilise les contraintes <span class="code">Set horizontal length</span> et <span class="code">Set vertical length</span> selon l'orientation du segment.</p>
+        <img class="tuto" src="{{ url_for('static', filename='fc16.png') }}" alt="">
+
+        <p class="large_full">Si l'on souhaite que deux segments se croisent selon un angle précis, on utilise la contrainte <span class="code">Set angle between two lines</span> qui nous permet de définir paramétriquement cet angle.</p>
+        <img class="tuto" src="{{ url_for('static', filename='fc17.png') }}" alt="">
+
+        <p class="large_full">Prenez le temps d'essayer toutes les contraintes, celles-ci permettent de faire appel à des règles géométriques scrupuleuses dans vos esquisses et restent modifiables à tout moment si vous souhaitez modifier votre objet plus tard.</p>
+
+
+
+
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+      <ul id="menu">
+        <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+        <li>Liens</li>
+
+      </ul>
+
+      <div class="print">
+        <a href="/rpi_bot_retweet.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Raspberry Pi</p>
+      </div>
+
+      <div class="main">
+        <div id="onglets">
+          <div id="onglet_code" onclick="codeTop()">Script Python</div>
+        </div>
+
+        <h3>Bot Twitter&nbsp;: retweet et favori automatique</h3>
+        <p class="circuitb">Un autre module qui permet de gérer une API Twitter est Tweepy. Nous allons l'utiliser pour créer un bot qui retweete et met dans ses favoris tout tweet qui contient un mot donné.</p>
+        <div id="block_code">
+          <p>Script Python</p>
+          <pre class="code_full">
+
+  <span class="type">import</span> tweepy <span class="type">as</span> tp
+  <span class="type">from</span> time <span class="type">import</span> sleep
+
+  consumer_key = '****'
+  consumer_secret = '****'
+  access_token = '****'
+  access_secret = '****'
+
+  auth = tp.<span class="fonction">OAuthHandler</span>(consumer_key,\
+  consumer_secret)
+  auth.<span class="fonction">set_access_token</span>(access_token,\
+  access_secret)
+  api = tp.<span class="fonction">API</span>(auth)
+
+  tag = ("Cityfab2", "cityfab2",
+  "Cityfab 2", "cityfab 2")
+
+  <span class="type">for</span> status <span class="type">in</span> tp.<span class="fonction">Cursor</span>(api.search, tag,
+  result_type="mixed", lang="fr").<span class="fonction">items</span>():
+      <span class="type">try</span>:
+          tweet.<span class="fonction">favorite</span>()
+          tweet.<span class="fonction">retweet</span>()
+          <span class="fonction">sleep</span>(60)
+      <span class="type">except</span> tp.TweepError as e:
+          <span class="fonction">print</span>(e.reason)
+
+        </pre>
+      </div>
+
+        <pre>
+
+  <span class="type">import</span> tweepy <span class="type">as</span> tp
+  <span class="type">from</span> time <span class="type">import</span> sleep
+
+  consumer_key = '****'
+  consumer_secret = '****'
+  access_token = '****'
+  access_secret = '****'
+
+  auth = tp.<span class="fonction">OAuthHandler</span>(consumer_key,\
+  consumer_secret)
+  auth.<span class="fonction">set_access_token</span>(access_token,\
+  access_secret)
+  api = tp.<span class="fonction">API</span>(auth)
+
+        </pre>
+        <p>On importe les modules <span class="code">tweepy</span> et <span class="code">sleep</span> de <span class="code">time</span>. Copiez les codes secrets de votre API respectivement dans les variables <span class="code">consumer_key</span>, <span class="code">consumer_secret</span>, <span class="code">access_token</span> et <span class="code">access_secret</span>. L'authentification à l'API se fait en trois temps&nbsp;: tout d'abord l'utilisateur s'identifie (<span class="code">auth = tp.OAuthHandler(consumer_key, consumer_secret)</span>), puis il entre ses codes d'accès (<span class="code">auth.set_access_token(access_token, access_secret)</span>), et crée un objet API (<span class="code">api = tp.API(auth)</span>).</p>
+
+
+        <pre>
+
+  tag = ("Cityfab2", "cityfab2",
+  "Cityfab 2", "cityfab 2")
+
+  <span class="type">for</span> status <span class="type">in</span> tp.<span class="fonction">Cursor</span>(api.search, tag,
+  result_type="mixed", lang="fr").<span class="fonction">items</span>():
+      <span class="type">try</span>:
+          tweet.<span class="fonction">favorite</span>()
+          tweet.<span class="fonction">retweet</span>()
+          <span class="fonction">sleep</span>(60)
+      <span class="type">except</span> tp.TweepError as e:
+          <span class="fonction">print</span>(e.reason)
+        </pre>
+        <p>Les termes que l'on va chercher dans les tweets sont stockés dans <span class="code">tag</span>. Ensuite, la boucle <span class="code">for status in tp.Cursor(api.search, tag, result_type="mixed", lang="fr").items():</span> va parcourir Twitter à la recherche des mots-clés, et pour chaque tweet qui contient au moins l'un de ces mots (<span class="code">items()</span>), on le retweete et on le met en favori avec <span class="code">tweet.favorite()</span> et <span class="code">tweet.retweet()</span>. S'il y a eu une erreur dans le processus (<span class="code">except tp.TweepError</span>), alors on affiche l'erreur dans le terminal.</p>
+
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

@@ -1,0 +1,195 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+    <ul id="menu">
+      <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+      <li>Liens</li>
+    </ul>
+
+      <div class="print">
+        <a href="/arduino_processing2.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Arduino</p>
+      </div>
+
+      <div class="main">
+        <div id="onglets">
+          <div id="onglet_circuit" onclick="circuitTop()">Circuit</div>
+          <div id="onglet_code" onclick="codeTop()">Code Arduino</div>
+          <div id="onglet_html" onclick="htmlTop()">Code Processing</div>
+        </div>
+        <h3>Message OSC</h3>
+          <p class="circuitb">L'OSC (Open Sound Control) est un modèle de transmission de données entre ordinateurs qui se compose d'une adresse, d'une caîne de caractères de type et d'arguments. Processing possède une librairie OSC qui permet de lire et d'envoyer des messages OSC. Nous allons connecter Processing et Arduino afin de faire s'illuminer une LED chaque fois qu'un message OSC avec un argument donné est envoyé depuis Processing.</p>
+        <div id="schemas">
+          <img id="img_ard19" class="scheme" src="{{ url_for('static', filename='osc_message.svg') }}" alt="">
+        </div>
+
+        <ol>
+          <li>Pour le montage Arduino, branchez simplement une LED sur le pin digitale 13 de votre carte.</li>
+        </ol>
+
+        <div id="block_code">
+          <p>Code Arduino</p>
+          <pre class="code_full">
+
+  <span class="type">int</span> ledPin = 13;
+
+  <span class="type">void</span> <span class="fonction">setup()</span>{
+    <span class="type">Serial</span>.<span class="fonction">begin</span>(9600);
+    <span class="fonction">pinMode</span>(ledPin, OUTPUT);
+  }
+
+  <span class="type">void</span> <span class="fonction">loop()</span>{
+    <span class="type">byte</span> val;
+
+    <span class="type">if</span>(<span class="type">Serial</span>.<span class="fonction">available()</span>) {
+      val = <span class="type">Serial</span>.<span class="fonction">read()</span>;
+      <span class="fonction">analogWrite</span>(ledPin, val);
+      <span class="fonction">delay</span>(1000);
+      <span class="fonction">analogWrite</span>(ledPin, 0);
+      <span class="fonction">delay</span>(1000);
+    }
+  }
+
+        </pre>
+      </div>
+
+      <h4>LE CODE</h4>
+      <p>Dans le code Arduino nous initialisons la LED et un port série, mais à la différence de la manière dont nous avons utilisé le port série jusqu'à maintenant, nous n'allons ici pas y écrire de l'information mais y lire des données envoyées par Processing. Nous pouvons faire cela à l'aide de la fonction <span class="code">Serial.read()</span>. À noter que nous lisons les données du port série en byte, et ce afin de convertir directement la valeur numérique lue dans le port en byte, qui est une unité compréhensible pour la LED. Si le port série est disponible (<span class="code">if (Serial.available()) {}</span>), nous lisons ce qui y est écrit et faisons clignoter la LED avec une intensité égale à la valeur stockée dans <span class="code">val</span>.</p>
+      <div id="block_html">
+        <p>Code Processing</p>
+        <pre class="code_full">
+
+  <span class="typep">import</span> oscP5.*;
+  <span class="typep">import</span> netP5.*;
+  <span class="typep">import</span> processing.serial.*;
+
+  <span class="typep">OscP5</span> oscP5;
+  <span class="typep">NetAddress</span> myRemoteLocation;
+  <span class="typep">Serial</span> myPort;
+  <span class="typep">int</span> lf = 10;
+  <span class="typep">String</span> myString = null;
+  <span class="typep">float</span> num;
+
+  <span class="typep">void</span> <span class="fonctionp">setup()</span> {
+    <span class="fonctionp">size</span>(400, 400);
+    oscP5 = new <span class="typep">OscP5</span>(this, 12000);
+    myRemoteLocation =
+    new <span class="typep">NetAddress</span>("....", 12000);
+    myPort = new <span class="typep">Serial</span>(this,
+    <span class="typep">Serial</span>.<span class="fonctionp">list()</span>[0], 9600);
+    myPort.<span class="fonctionp">clear()</span>;
+  }
+
+  <span class="typep">void</span> <span class="fonctionp">draw()</span> {
+    if (myPort.<span class="fonctionp">available()</span> > 0) {
+      myString = myPort.<span class="fonctionp">read()</span>;
+      <span class="fonctionp">rect</span>(0, 0, val, val);
+    }
+  }
+
+  <span class="typep">void</span> <span class="fonctionp">mousePressed()</span> {
+    <span class="typep">OscMessage</span> myMessage =
+    new <span class="typep">OscMessage</span>("/ledON");
+    myMessage1.<span class="fonctionp">add</span>(255);
+    oscP5.<span class="fonctionp">send</span>(myMessage, myRemoteLocation);
+  }
+
+  <span class="typep">void</span> <span class="fonctionp">oscEvent</span>(<span class="typep">OscMessage</span> theOscMessage) {
+    <span class="fonctionp">print</span>("### received an osc message.");
+    <span class="fonctionp">print</span>(" addrpattern: "
+    +theOscMessage.addrPattern());
+    <span class="fonctionp">println</span>(" typetag: "
+    +theOscMessage.typetag());
+    <span class="typep">if</span>(theOscMessage.<span class="fonctionp">checkTypetag</span>("i")) {
+      println(" typetag: "
+      +theOscMessage.<span class="fonctionp">get</span>(0).<span class="fonctionp">intValue()</span>);
+    }
+  }
+
+      </pre>
+    </div>
+
+
+    <pre class="proc">
+
+  <span class="typep">import</span> oscP5.*;
+  <span class="typep">import</span> netP5.*;
+  <span class="typep">import</span> processing.serial.*;
+
+  <span class="typep">OscP5</span> oscP5;
+  <span class="typep">NetAddress</span> myRemoteLocation;
+  <span class="typep">Serial</span> myPort;
+  <span class="typep">int</span> lf = 10;
+  <span class="typep">String</span> myString = null;
+  <span class="typep">float</span> num;
+    </pre>
+    <p>Dans Processing, en plus de la librairie <span class="processing">processing.serial</span> qui gère la communication avec le port série, nous devons ici importer les librairies <span class="processing">oscP5</span> et <span class="processing">netP5</span> qui gèreront respectivement le format de message OSC et les adresses NET (nécessaires à l'envoi d'un message OSC). Nous déclarons ensuite tous les objets dont nous allons avoir besoin&nbsp;: <span class="processing">OscP5</span> pour le message OSC en soi, <span class="processing">NetAddress</span> pour stocker les adresses d'envoi et de destination, un <span class="processing">Serial</span> pour y envoyer les valeurs numériques à destination d'Arduino.</p>
+    <pre class="proc">
+
+  <span class="typep">void</span> <span class="fonctionp">setup()</span> {
+    <span class="fonctionp">size</span>(400, 400);
+    oscP5 = new <span class="typep">OscP5</span>(this, 12000);
+    myRemoteLocation =
+    new <span class="typep">NetAddress</span>("....", 12000);
+    myPort = new <span class="typep">Serial</span>(this,
+    <span class="typep">Serial</span>.<span class="fonctionp">list()</span>[0], 9600);
+    myPort.<span class="fonctionp">clear()</span>;
+  }
+    </pre>
+    <p>Dans le <span class="processing">setup()</span>, nous initialisons l'objet <span class="processing">oscP5</span> à un baudrate de 12000. La NetAddress <span class="processing">myRemoteLocation</span> contient l'adresse IP à laquelle vous voulez envoyer des messages, elle doit se situer sur le même baudrate que l'<span class="processing">OscP5</span>. La communication série sur ce baudrate sera propre aux messages OSC via Processing&nbsp;; pour l'interaction avec Arduino on initialise un autre port série à 9600 bauds.</p>
+    <pre class="proc">
+
+  <span class="typep">void</span> <span class="fonctionp">draw()</span> {
+    if (myPort.<span class="fonctionp">available()</span> > 0) {
+      myString = myPort.<span class="fonctionp">read()</span>;
+      <span class="fonctionp">rect</span>(0, 0, val, val);
+    }
+  }
+    </pre>
+    <p>Voici le corps du script Processing. À partir du moment où notre port série <span class="processing">myPort</span> à 9600 bauds est disponible, nous lisons ce qui s'y passe et dessinons dans la fenêtre Processing un carré dont les dimensions sont proportionnelles à la valeur lue dans le port série. Comme vous pouvez le constater, la boucle <span class="processing">draw()</span> ne gère pas l'envoi de messages OSC. Nous voulons dans ce projet qu'un message OSC soit envoyé quand on clique dans la fenêtre Processing, pour parvenir à cela nous devons créer une fonction supplémentaire dans le script.</p>
+    <pre class="proc">
+
+  <span class="typep">void</span> <span class="fonctionp">mousePressed()</span> {
+    <span class="typep">OscMessage</span> myMessage =
+    new <span class="typep">OscMessage</span>("/ledON");
+    myMessage1.<span class="fonctionp">add</span>(255);
+    oscP5.<span class="fonctionp">send</span>(myMessage, myRemoteLocation);
+  }
+    </pre>
+    <p>Nous avons créé notre propre fonction <span class="processing">mousePressed()</span> qui, comme son nom l'indique gère l'évènement click dans la fenêtre Processing. Celle-ci crée un nouveau message OSC dont l'argument est "ledON", auquel on ajoute une valeur de 255. Enfin, avec la fonction <span class="processing">oscP5.send()</span> on envoie le message à l'adresse stockée dans <span class="processing">myRemoteLocation</span>. Voilà pour l'envoi du message OSC. Nous allons également inclure dans le script une fonction gérant l'action des messages OSC, afin de vérifier que tout est correct.</p>
+    <pre class="proc">
+
+  <span class="typep">void</span> <span class="fonctionp">oscEvent</span>(<span class="typep">OscMessage</span> theOscMessage) {
+    <span class="fonctionp">print</span>("### received an osc message.");
+    <span class="fonctionp">print</span>(" addrpattern: "
+    +theOscMessage.addrPattern());
+    <span class="fonctionp">println</span>(" typetag: "
+    +theOscMessage.typetag());
+    <span class="typep">if</span>(theOscMessage.<span class="fonctionp">checkTypetag</span>("i")) {
+      println(" typetag: "
+      +theOscMessage.<span class="fonctionp">get</span>(0).<span class="fonctionp">intValue()</span>);
+    }
+  }
+    </pre>
+    <p>Cette fonction est active lorsqu'un message OSC est produit. On écrit dans le port série le message décomposé&nbsp;: l'adresse, le tag de type et enfin la valeur du message. Cette valeur est égale à 255 si on a cliqué car le message OCS a ajouté cette valeur à son corps. C'est ainsi que nous transmettons cette valeur à l'Arduino, dont le script lit en continu les valeurs du port série. L'Arduino lira une valeur de 255 qui éclairera la LED chaque fois qu'un message est envoyé.
+    <br/> Dans ce projet nous n'envoyons qu'un message à une adresse, mais en modifiant un peu ce script on peut envoyer plusieurs messages selon les actions réalisées dans Processing à plusieurs adresses et ainsi mettre en place un réseau de communication sans fil entre plusieurs ordinateurs auxquels seraient connectés des Arduino.</p>
+
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

@@ -1,0 +1,192 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+    <ul id="menu">
+      <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+      <li>Liens</li>
+    </ul>
+
+      <div class="print">
+        <a href="/arduino_pontenh.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Arduino</p>
+      </div>
+
+      <div class="main">
+        <div id="onglets">
+          <div id="onglet_circuit" onclick="circuitTop()">Circuit</div>
+          <div id="onglet_code" onclick="codeTop()">Code Arduino</div>
+        </div>
+        <h3>Pont en H</h3>
+        <p class="circuitb">Nous avons vu avec le projet précédent comment activer de la manière la plus simple possible un moteur à courant continu avec l'Arduino. Nous allons maintenant voir comment faire un circuit plus complexe, avec une alimentation de 9V pour le moteur et un pont en H qui permet de séparer la partie du circuit alimentée par ces 9V de ce qui est directement connecté à l'Arduino. En effet un retour de courant de 9V directement sur la cate Arduino la grillerait, c'est pourquoi nous devons procéder de cette manière.</p>
+        <div id="schemas">
+          <img id="img_ard11" class="scheme" src="{{ url_for('static', filename='ponth.svg') }}" alt="">
+        </div>
+
+        <ol>
+          <li>On commence par alimenter la breadboard d'un côté par le 5V de l'Arduino, de l'autre par la pile de 9V. Les GROUND des deux côtés du circuits doivent être reliés.</li>
+          <li>Les interrupteurs doivent tous les deux être branchés en entrée sur le 5V, puis, en sortie, du côté du 5V aux broches digitales 4 et 5 de l'Arduino, du côté du 9V au GND via des résistances de 10k Ω (on place ces résistances pour empêcher un retour de courant dans les interrupteurs étant donné qu'ils sont placés à cheval entre les deux côtés du circuit).</li>
+          <li>Le potentiomètre doit simplement être alimenté par le 5V et relié à la broche A0 de l'Arduino.</li>
+          <li>Nous arrivons au circuit intégré, la partie la plus complexe du montage. Un circuit intégré fonctionne comme une porte logique&nbsp;: si une broche est alimentée, elle va créer un signal qui va déclencher l'action d'une autre de ses broches, et ce sans être directement connectées physiquement. C'est de cette façon que nous pourrons, depuis les composants branchés sur le 5V, envoyer du courant dans le moteur alimenté par le 9V, et être sûrs que le 9V ne peut pas passer du côté du 5V. La disposition de ces portes logiques varie selon le modèle, si vous utilisez d'autres circuits intégrés, consultez la datasheet du composant auparavant afin de savoir son brochage. Une petite encoche sur le circuit intégré vous indique son sens&nbsp;: celle-ci doit être placée en haut. <br/>Du côté droit, la première broche du CI doit être reliée au 5V. Du côté gauche, la première broche se connecte à la pin 9 de l'Arduino, et la deuxième à la pin 3. Nous branchons le moteur dans les troisième et sixième broches du côté gauche. Les quatrième et cinquième broches de ce côté du CI sont à relier au GND. Toujours de ce côté la septième broche va dans la pin digitale 2 de l'Arduino, et la huitième dans le 9V.</li>
+        </ol>
+
+        <div id="block_code">
+          <p>Code Arduino</p>
+          <pre class="code_full">
+
+  <span class="type">const int</span> controlPin1 = 2;
+  <span class="type">const int</span> controlPin2 = 3;
+  <span class="type">const int</span> enablePin = 9;
+  <span class="type">const int</span> directionPin = 4;
+  <span class="type">const int</span> onOffPin = 5;
+  <span class="type">const int</span> potPin = A0;
+
+  <span class="type">int</span> onOff = 0;
+  <span class="type">int</span> previousOnOff = 0;
+  <span class="type">int</span> direction = 0;
+  <span class="type">int</span> previousDirection = 0;
+
+  <span class="type">int</span> motorEnabled = 0;
+  <span class="type">int</span> motorSpeed = 0;
+  <span class="type">int</span> motorDirection =
+
+  <span class="type">void</span> setup() {
+    <span class="fonction">pinMode</span>(directionPin, INPUT);
+    <span class="fonction">pinMode</span>(onOffPin, INPUT);
+    <span class="fonction">pinMode</span>(controlPin1, OUTPUT);
+    <span class="fonction">pinMode</span>(controlPin2, OUTPUT);
+    <span class="fonction">pinMode</span>(enablePin, OUTPUT);
+
+    <span class="fonction">digitalWrite</span>(enablePin, LOW);
+  }
+
+  <span class="type">void</span> loop() {
+    onOff = <span class="fonction">digitalRead</span>(onOffPin);
+    <span class="fonction">delay</span>(1);
+    direction = <span class="fonction">digitalRead</span>(directionPin);
+
+    motorSpeed = <span class="fonction">analogRead</span>(potPin) / 4;
+
+    <span class="type">if</span>(onOffState != previousOnOff) {
+      <span class="type">if</span>(onOffState == HIGH) {
+        motorEnabled = !motorEnabled;
+      }
+    }
+
+    <span class="type">if</span>(direction != previousDirection) {
+      <span class="type">if</span>(direction == HIGH) {
+        motorDirection = !motorDirection;
+      }
+    }
+
+    <span class="type">if</span>(motorDirection == 1) {
+      <span class="fonction">digitalWrite</span>(controlPin1, HIGH);
+      <span class="fonction">digitalWrite</span>(controlPin2, LOW);
+    } <span class="type">else</span> {
+      <span class="fonction">digitalWrite</span>(controlPin1, LOW);
+      <span class="fonction">digitalWrite</span>(controlPin2, HIGH);
+    }
+
+    <span class="type">if</span>(motorEnabled == 1) {
+      <span class="fonction">analogWrite</span>(enablePin, motorSpeed);
+    } <span class="type">else</span> {
+      <span class="fonction">analogWrite</span>(enablePin, 0);
+    }
+    previousDirection = direction;
+    previousOnOff = onOff;
+  }
+
+
+        </pre>
+      </div>
+
+      <h4>LE CODE</h4>
+      <pre>
+
+  <span class="type">const int</span> controlPin1 = 2;
+  <span class="type">const int</span> controlPin2 = 3;
+  <span class="type">const int</span> enablePin = 9;
+  <span class="type">const int</span> directionPin = 4;
+  <span class="type">const int</span> onOffPin = 5;
+  <span class="type">const int</span> potPin = A0;
+
+  <span class="type">int</span> onOff = 0;
+  <span class="type">int</span> previousOnOff = 0;
+  <span class="type">int</span> direction = 0;
+  <span class="type">int</span> previousDirection = 0;
+
+  <span class="type">int</span> motorEnabled = 0;
+  <span class="type">int</span> motorSpeed = 0;
+  <span class="type">int</span> motorDirection = 1;
+      </pre>
+      <p>Pour commencer le script, on déclare un certain nombre de variables. Prenons les dans l'ordre. <span class="code">controlPin1</span> et <span class="code">controlPin2</span> déterminent les broches de contrôle du CI reliées aux pins de l'Arduino. <span class="code">enablePin</span> contient le numéro de la broche Arduino reliée à la broche du circuit intégré qui contrôlera l'activation du moteur. Ensuite nous initialisons les pins connectées aux deux interrupteurs avec <span class="code">directionPin</span> et <span class="code">onOffPin</span>, et le potentiomètre sur la A0. Toutes les variables suivantes nous permettront à chaque tour de boucle de la fonction <span class="code">loop()</span> de stocker l'état des interrupteurs, d'activation du moteur, de sa vitesse et de sa direction afin de pouvoir passer d'un état à son contraire s'il y a eu un changement.</p>
+      <pre>
+
+  <span class="type">void</span> setup() {
+    <span class="fonction">pinMode</span>(directionPin, INPUT);
+    <span class="fonction">pinMode</span>(onOffPin, INPUT);
+    <span class="fonction">pinMode</span>(controlPin1, OUTPUT);
+    <span class="fonction">pinMode</span>(controlPin2, OUTPUT);
+    <span class="fonction">pinMode</span>(enablePin, OUTPUT);
+
+    <span class="fonction">digitalWrite</span>(enablePin, LOW);
+  }
+      </pre>
+      <p>Dans la fonction <span class="code">setup()</span> on initialise l'état de toutes les pins que nous venons de déclarer&nbsp;: les deux interrupteurs sont des <span class="code">INPUT</span>, les pins connectées au circuit intégré sont des <span class="code">OUTPUT</span>. On initialise également le valeur de <span class="code">enablePin</span> sur <span class="code">LOW</span>, afin que le moteur soit éteint au lancement du script.</p>
+      <pre>
+
+  <span class="type">void</span> loop() {
+    onOff = <span class="fonction">digitalRead</span>(onOffPin);
+    <span class="fonction">delay</span>(1);
+    direction = <span class="fonction">digitalRead</span>(directionPin);
+
+    motorSpeed = <span class="fonction">analogRead</span>(potPin) / 4;
+
+    <span class="type">if</span>(onOffState != previousOnOff) {
+      <span class="type">if</span>(onOffState == HIGH) {
+        motorEnabled = !motorEnabled;
+      }
+    }
+
+    <span class="type">if</span>(direction != previousDirection) {
+      <span class="type">if</span>(direction == HIGH) {
+        motorDirection = !motorDirection;
+      }
+    }
+
+    <span class="type">if</span>(motorDirection == 1) {
+      <span class="fonction">digitalWrite</span>(controlPin1, HIGH);
+      <span class="fonction">digitalWrite</span>(controlPin2, LOW);
+    } <span class="type">else</span> {
+      <span class="fonction">digitalWrite</span>(controlPin1, LOW);
+      <span class="fonction">digitalWrite</span>(controlPin2, HIGH);
+    }
+
+    <span class="type">if</span>(motorEnabled == 1) {
+      <span class="fonction">analogWrite</span>(enablePin, motorSpeed);
+    } <span class="type">else</span> {
+      <span class="fonction">analogWrite</span>(enablePin, 0);
+    }
+    previousDirection = direction;
+    previousOnOff = onOff;
+  }
+      </pre>
+      <p>Dans la <span class="code">loop()</span>, on commence par lire en continu les valeurs des interrupteurs et du potentiomètre (celle-ci est directement stockée dans la variable <span class="code">motorSpeed</span>). Puis, étant donné que nous avons début du script initialisé les états d'activation de de direction du moteur à 0, nous pouvons savoir dans la <span class="code">loop()</span> si ces états ont changé depuis le démarrage du script (donc si les boutons sont pressés) en comparant les valeurs actuelles des interrupteurs à leurs valeurs originelles de 0. <br/>Si ces valeurs ne sont effectivement plus égales à 0, alors on inverse les valeurs de <span class="code">motorEnabled</span> et de <span class="code">motorDirection</span>, qui passent de ce fait à 1. Puis, dans deux boucles conditionnelles <span class="code">if()</span>, qui vérifient si <span class="code">motorEnabled</span> et <span class="code">motorDirection</span> valent 1, on va pouvoir commander le moteur. Si <span class="code">motorDirection</span> vaut 1, on envoie du courant dans le circuit intégré dans un sens, sinon dans l'autre. Si <span class="code">motorEnabled</span> vaut 1, on envoie un signal analogique à la broche d'activation du circuit intégré ainsi que la valeur de <span class="code">motorSpeed</span>, ce qui aura pour conséquence de mettre en mouvement le moteur à la vitesse donnée.<br/>Enfin à la fin de chaque tour de boucle <span class="code">loop()</span> on donne à <span class="code">previousOnOffState</span> et <span class="code">previousDirectionState</span> les valeurs actuelles de <span class="code">onOffState</span> et de <span class="code">directionState</span>, pour pouvoir comparer ces valeurs au tour suivant.</p>
+      <p>Vous voyez donc comment, à l'aide du circuit intégré nous pouvons contrôler un moteur alimenté par une autre source d'énergie que celle de l'Arduino sans pour autant brancher directement le moteur et cette tension trop importante pour la carte sur l'Arduino.</p>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

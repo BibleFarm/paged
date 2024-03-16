@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+      <ul id="menu">
+        <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+        <li>Liens</li>
+
+      </ul>
+
+      <div class="print">
+        <a href="/rpi_piezo.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Raspberry Pi</p>
+      </div>
+
+      <div class="main">
+        <h3>Piezo buzzer + bouton</h3>
+        <p class="circuitb">Un Raspberry Pi est doté de nombreuses broches, on peut donc aisément faire des circuits impliquant plusieurs composants. On va ici brancher un bouton poussoir et un piezo buzzer au Raspberry Pi.</p>
+        <div id="schemas"><img id="img_rpi10" class="scheme" src="{{ url_for('static', filename='rpi_piezo_bouton.svg') }}" alt=""></div>
+        <div id="onglets">
+          <div id="onglet_code" onclick="codeTop()">Script Python</div>
+          <div id="onglet_circuit" onclick="circuitTop()">Circuit</div>
+        </div>
+
+        <ol>
+          <li>Pour ce circuit, on va relier une broche 5V et une broche GROUND du RPi à une breadboard pour l'alimenter.</li>
+          <li>Sur la breadboard, connectez un côté du bouton au 5V et l'autre à la broche 12 en mode BOARD.</li>
+          <li>Reliez le fil noir du piezo au GROUND et son fil rouge à la broche 7 du Raspberry Pi.</li>
+        </ol>
+
+        <div id="block_code">
+          <p>Script Python</p>
+          <pre class="code_full">
+
+  <span class="type">import</span> <span class="fonction">RPi.GPIO</span> <span class="type">as</span> GPIO
+
+  GPIO.<span class="fonction">setwarnings</span>(<span class="type">False</span>)
+
+  GPIO.<span class="fonction">setmode</span>(GPIO.BOARD)
+
+  GPIO.<span class="fonction">setup</span>(7,GPIO.OUT)
+  GPIO.<span class="fonction">setup</span>(12, GPIO.IN)
+
+  <span class="type">while</span> <span class="type">True</span>:
+      <span class="type">if</span> GPIO.<span class="fonction">input</span>(12):
+          <span class="fonction">print</span>('Beep')
+          GPIO.<span class="fonction">output</span>(7, GPIO.HIGH)
+      <span class="type">else</span>:
+          <span class="fonction">print</span>('No beep')
+          GPIO.<span class="fonction">output</span>(7, GPIO.LOW)
+
+        </pre>
+      </div>
+
+      <h4>LE CODE</h4>
+        <pre>
+
+  <span class="type">import</span> <span class="fonction">RPi.GPIO</span> <span class="type">as</span> GPIO
+
+  GPIO.<span class="fonction">setwarnings</span>(<span class="type">False</span>)
+
+  GPIO.<span class="fonction">setmode</span>(GPIO.BOARD)
+
+  GPIO.<span class="fonction">setup</span>(7,GPIO.OUT)
+  GPIO.<span class="fonction">setup</span>(12, GPIO.IN)
+
+        </pre>
+        <p>On commence par importer le module <span class="code">RPi.GPIO</span> pour interagir avec les broches du Raspberry Pi. On initialise ensuite les broches en mode BOARD puisqu'on a réalisé le branchement de cette façon. Puis on déclare la broche du piezo depuis laquelle sortira du courant, donc on la définit en mode <span class="code">GPIO.OUT</span>. Au contraire, la broche du bouton lira la valeur que ce composant envoie, donc elle est définie comme <span class="code">GPIO.IN</span></p>
+        <pre>
+
+  <span class="type">while</span> <span class="type">True</span>:
+      <span class="type">if</span> GPIO.<span class="fonction">input</span>(12):
+          <span class="fonction">print</span>('Beep')
+          GPIO.<span class="fonction">output</span>(7, GPIO.HIGH)
+      <span class="type">else</span>:
+          <span class="fonction">print</span>('No beep')
+          GPIO.<span class="fonction">output</span>(7, GPIO.LOW)
+        </pre>
+        <p>Ce script va tourner en boucle jusqu'à ce qu'on l'interrompe manuellement. Nous pouvons faire cela grâce à la boucle <span class="code">while True</span>&nbsp;: cette condition étant toujours vraie, elle se répète à l'infini. Ce que nous allons vérifier à l'infini (du moins tant que le script tourne), c'est si le bouton est pressé. En effet la condition <span class="code">if GPIO.input(12):</span> signifie&nbsp;: si la valeur lue dans la broche 12, celle du bouton, est égale à 1 (ou à True), alors on exécute un certain code. Le code en question en question est d'écrire dans le terminal <span class="code">'Beep'</span> et d'envoyer du courant dans la broche du piezo (<span class="code">GPIO.output(7, GPIO.HIGH)</span>), donc de le faire sonner. Dans le cas contraire, si le bouton n'est pas pressé (ce que gère le <span class="code">else:</span> après le <span class="code">if</span>), alors on écrit <span class="code">'No beep'</span> dans le terminal et on ne fait pas sonner le piezo.</p>
+
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

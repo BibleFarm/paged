@@ -1,0 +1,137 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+      <ul id="menu">
+        <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+        <li>Liens</li>
+
+      </ul>
+
+      <div class="print">
+        <a href="/rpi_wifi.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Raspberry Pi</p>
+      </div>
+
+      <div class="main full">
+        <h3>Créer un point d'accès wifi</h3>
+        <p class="circuitb large_full">En convertissant un Raspberry Pi en point d'accès wifi, on le fait partager sa connexion Internet à n'importe quel appareil qui se connecterait à son réseau et on peut afficher son propre contenu dans le navigateur de l'appareil connecté. Pour cela, il faut dédier l'interface wifi du Raspberry à la diffusion du réseau.</p>
+
+        <h4>LE CODE</h4>
+        <h5>Configurer l'interface wifi</h5>
+        <p class="large_full">On commence par installer deux services, <span class="code">hostapd</span> et <span class="code">dnsmasq</span>. Le premier servira à configurer le point d'accès wifi et le second à distribuer des adresses IP aux appareils connectés (via le protocole DHCP).</p>
+        <pre class="command">
+
+  <span class="type">sudo</span> apt-get install dnsmasq hostapd
+        </pre>
+        <p class="large_full">Puis on éteint les deux services pour les configurer&nbsp;:</p>
+        <pre class="command">
+
+  <span class="type">sudo</span> systemctl stop dnsmasq
+  <span class="type">sudo</span> systemctl stop hostapd
+        </pre>
+        <p class="large_full">On doit configurer l'interface wlan0 pour lui attribuer une adresse IP fixe et l'empêcher de se connecter à un réseau wifi via <span class="code">wpa_supplicant</span>&nbsp;:</p>
+        <pre class="command">
+
+  <span class="type">sudo</span> /etc/dhcpcd.conf
+        </pre>
+        <p class="large_full">Dans le fichier ajouter&nbsp;:</p>
+        <pre class="command">
+
+  interface wlan0
+    static ip_address=10.10.0.1/24
+    nohook wpa_supplicant
+        </pre>
+        <p class="large_full"><span class="code">10.10.0.1</span> correspond à l'adresse IP de l'interface qui agira comme serveur DHCP. Sauvez et quittez en pressant CTRL+X. Puis sauvegardez le fichier de configuration par défaut de <span class="code">dnsmasq</span>&nbsp;:</p>
+        <pre class="command">
+
+  <span class="type">sudo</span> <span class="fonction">mv</span> /etc/dnsmasq.conf /etc/dnsmasq.conf.orig
+        </pre>
+        <p class="large_full">Créez un nouveau fichier de configuration de <span class="code">dnsmasq</span>&nbsp;:</p>
+        <pre class="command">
+
+  <span class="type">sudo</span> nano /etc/dnsmasq.conf
+        </pre>
+        <p class="large_full">Ajoutez-y les lignes suivantes, qui spécifient que l'interface wifi embarquée sur le Raspberry pourra distribuer des adresses IP à ses clients dans l'intervalle entre <span class="code">10.10.0.2</span> et <span class="code">10.10.0.20</span>.</p>
+        <pre class="command">
+
+  interface=wlan0
+    dhcp-range=10.10.0.2,10.10.0.20,255.255.255.0,24h
+        </pre>
+        <p class="large_full">Créez un fichier de configuration pour le point d'accès wifi (<span class="code">hostapd</span>)&nbsp;:</p>
+        <pre class="command">
+
+  <span class="type">sudo</span> nano /etc/hostapd/hostapd.conf
+        </pre>
+        <p class="large_full">Insérez-y le contenu suivant (en adaptant le nom du point d'accès et le mot de passe)&nbsp;:</p>
+        <pre class="command" style="break-inside: auto">
+
+  interface=wlan0
+  driver=nl80211
+  ssid=leNomDuPointDAcces
+  hw_mode=g
+  channel=7
+  wmm_enabled=0
+  macaddr_acl=0
+  auth_algs=1
+  ignore_broadcast_ssid=0
+  wpa=2
+  wpa_passphrase=LeMotDePasse
+  wpa_key_mgmt=WPA-PSK
+  wpa_pairwise=TKIP
+  rsn_pairwise=CCMP
+        </pre>
+        <p class="large_full">On doit ensuite préciser à <span class="code">hostapd</span> que le fichier a été créé. Pour cela entrez la commande&nbsp;:</p>
+        <pre class="command">
+
+  <span class="type">sudo</span> nano /etc/default/hostapd
+        </pre>
+        <p class="large_full">Dans ce fichier, trouvez la ligne<span class="code">#DAEMON_CONF=""</span> et remplacez-la par&nbsp;: <span class="code">DAEMON_CONF="/etc/hostapd/hostapd.conf"</span>.<br/> Une fois cela fait, on peut redémarrer les deux services.</p>
+        <pre class="command">
+
+  <span class="type">sudo</span> service hostapd start
+  <span class="type">sudo</span> service dnsmasq start
+        </pre>
+        <h5>Partager la connexion réseau</h5>
+        <p class="large_full">Pour que les appareils clients puissent accéder à Internet via le point d'accès créé, il faut que l'interface réseau soit connectée à Internet et partage sa connexion avec l'interface wlan0 (qui sert au point d'accès wifi). Pour cela, on utilise un système de traductions d'adresses, le NAT (Network Address Translation). Concrètement, lorsque le client enverra une requête vers le Raspberry sur l'interface wlan0, cette dernière transmettra cette requête sur wlan1 qui l'enverra à l'adresse désignée sur Internet en utilisant sa propre adresse IP. L'appareil à cette adresse enverra sa réponse sur wlan1 qui la retransmettra sur wlan0.
+          <br/>Pour réaliser cette action il faut modifier le fichier <span class="code">/etc/systcl.conf</span> pour permettre le port forwarding entre les interfaces. Tapez dans le terminal&nbsp;:</p>
+        <pre class="command">
+
+  <span class="type">sudo</span> nano /etc/sysctl.conf
+        </pre>
+        <p class="large_full">Dans ce fichier, trouvez la ligne<span class="code">#net.ipv4.ip_forward=1</span> et remplacez-la par <span class="code">net.ipv4.ip_forward=1</span>.<br/> Pour finir exécutez la commande suivante&nbsp;:</p>
+        <pre class="command">
+
+  <span class="type">sudo</span> sh -c <span class="fonction">"echo 1 > /proc/sys/net/ipv4/ip_forward"</span>
+        </pre>
+        <h5>Installer un serveur local</h5>
+        <p class="large_full">Une fois l'interface réseau du Raspberry Pi configurée, celui-ci est accessible à tous les appareils se connectant sur son réseau&nbsp;; il peut donc faire office de serveur local. Pour faire cela de manière très simple, on installe Nginx&nbsp;:</p>
+        <pre class="command">
+
+  <span class="type">sudo</span> apt-get install nginx
+        </pre>
+        <p class="large_full">Nginx gère un serveur local accessible sur le réseau à la racine du Raspberry Pi (tapez dans la barre de recherche de votre navigateur «&nbsp;raspberrypi.local&nbsp;» si vous n'avez pas changé le nom du RPI, sinon «&nbsp;nomDuRaspberry.local&nbsp;»). Pour modifier la page d'accueil par défaut de votre serveur local il vous faut créer un fichier HTML à la racine du serveur. Pour cela entrez dans le terminal&nbsp;:</p>
+        <pre class="command">
+
+  nano /var/www/html/index.html
+        </pre>
+        <p class="large_full">Sauvez et quittez avec CTRL+X quand vous avez fini vos modifications.</p>
+
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

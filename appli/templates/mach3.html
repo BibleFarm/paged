@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+      <ul id="menu">
+        <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+        <li>Liens</li>
+
+      </ul>
+
+      <div class="print">
+        <a href="/mach3.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>CNC</p>
+      </div>
+
+      <div class="main full">
+        <h3>Gérer l'usinage d'un fichier GCODE dans Mach3</h3>
+        <p class="circuitb large_full">Mach3 est un logiciel de type contrôleur CNC&nbsp;: il contrôle le mouvement des moteurs de la machine par l'éxécution de fichiers GCODE.</p>
+
+        <p class="large_full">La CNC doit être allumée avant d'ouvrir Mach3 car le logiciel va chercher le contrôleur avec lequel il va communiquer. La première chose à faire lorsqu'on ouvre l'interface de Mach3 est de cliquer sur le gros bouton rouge <span class="code">Reset</span> en bas à gauche pour stopper tous les processus qui pourraient encore être en cours sur la machine.</p>
+        <img class="tuto" src="{{ url_for('static', filename='mach3_01.PNG') }}" alt="">
+
+        <p class="large_full">Pour charger votre fichier GCODE, cliquez sur le bouton <span class="code">Load G-code</span> qui va vous permettre de parcourir les fichiers de l'ordinateur. Le contenu du fichier GCODE choisi s'affiche alors dans la fenêtre en haut à gauche.</p>
+        <img class="tuto" src="{{ url_for('static', filename='mach3_02.PNG') }}" alt="">
+
+        <p class="large_full">Si vous souhaitez modifier des lignes du fichier GCODE, cliquez sur le bouton <span class="code">Edit G-code</span> qui ouvrira alors le fichier dans un éditeur de texte.</p>
+        <img class="tuto" src="{{ url_for('static', filename='mach3_03.PNG') }}" alt="">
+
+        <p class="large_full">Il faut à présent positionner les axes de la machine à leurs origines. Pour ouvrir la fenêtre <span class="code">MPG mode</span>, pressez la touche <span class="code">Tab</span> du clavier. Les boutons rouges et verts permettent de déplacer négativement ou positivement chacun des quatre axes. Par défaut le <span class="code">Jog Mode</span> est réglé sur <span class="code">Continuous</span>. Ce mode déplace les axes de manière continu&nbsp;: aussi longtemps que vous pressez l'un des boutons verts ou rouges, l'axe continuera de se déplacer dans cette direction.</p>
+        <img class="tuto" src="{{ url_for('static', filename='mach3_04.PNG') }}" alt="">
+
+        <p class="large_full">Pour déplacer les axes de façon plus précise on peut régler le <span class="code">Jog Mode</span> sur <span class="code">Step</span> en cliquant sur le bouton. Quand ce mode est activé, les axes se déplacent selon les pas que l'on a définis (la valeur des pas se règle dans la case <span class="code">Cycle Jog Step</span>).</p>
+
+        <img class="tuto" src="{{ url_for('static', filename='mach3_05.PNG') }}" alt="">
+
+        <p class="large_full">Quand les axes sont positionnés convenablement, cliquez sur les boutons <span class="code">Zero X</span>, <span class="code">Zero Y</span> et <span class="code">Zero Z</span> pour définir l'emplacement de l'origine de chacun des axes. Les valeurs numériques des axes passent alors à <span class="code">0.0000</span>.</p>
+        <img class="tuto" src="{{ url_for('static', filename='mach3_06.PNG') }}" alt="">
+
+        <p class="large_full">Pressez à nouveau la touche <span class="code">Tab</span> du clavier pour quitter la fenêtre <span class="code">MPG mode</span>. Allumez le moteur de la fraise sur la machine si ce n'était pas déjà fait et lancez l'usinage en cliquant sur le bouton vert <span class="code">Cycle Start</span>.</p>
+        <img class="tuto" src="{{ url_for('static', filename='mach3_07.PNG') }}" alt="">
+
+        <p class="large_full">L'onglet <span class="code">Tool Path</span> de Mach3 permet également de contrôler l'usinage tout en offrant une fenêtre d'affichage du travail en cours plus grande. Vous pouvez voir pendant l'usinage comment Mach3 parcourt les lignes de GCODE une par une dans la fenêtre en haut à gauche. En cas de problème pendant l'usinage, cliquez sur <span class="code">Stop</span> pour mettre fin au travail en cours. Ne pressez le bouton <span class="code">Reset</span> en cours d'usinage qu'en cas de problème majeur car lorsque ce bouton est pressé toute la configuration que vous aviez faite est perdue.</p>
+        <img class="tuto" src="{{ url_for('static', filename='mach3_08.PNG') }}" alt="">
+
+        <p class="large_full">Lorsque vous aurez une pratique plus poussée sur Mach3, sachez que l'onglet <span class="code">MDI</span> permet de définir les axes de la machine à l'aide de fonctions avancées et de lignes de code que vous pouvez passer directement au logiciel.</p>
+        <img class="tuto" src="{{ url_for('static', filename='mach3_09.PNG') }}" alt="">
+
+        <p class="large_full">L'onglet <span class="code">Settings</span> permet quant à lui de calibrer la CNC de manière très précise.</p>
+        <img class="tuto" src="{{ url_for('static', filename='mach3_10.PNG') }}" alt="">
+
+        <p class="large_full">Enfin l'onglet <span class="code">Diagnostics</span> rapporte l'état de la machine, aussi bien le positionnement des axes que les signaux électriques passant par les ports du câble.</p>
+        <img class="tuto" src="{{ url_for('static', filename='mach3_11.PNG') }}" alt="">
+
+
+
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

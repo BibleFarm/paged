@@ -1,0 +1,505 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+      <ul id="menu">
+        <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+        <li>Liens</li>
+
+      </ul>
+
+      <div class="print">
+        <a href="/rpi_tweets_json.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Raspberry Pi</p>
+      </div>
+
+      <div class="main">
+        <div id="onglets">
+          <div id="onglet_code" onclick="codeTop()">tweets_json.py</div>
+          <div id="onglet_code2" onclick="code2Top()">app.py</div>
+          <div id="onglet_html" onclick="htmlTop()">index.html</div>
+          <div id="onglet_css" onclick="cssTop()">style.css</div>
+        </div>
+        <h3>Application bot Twitter web-to-print</h3>
+        <p class="circuitb">Ce projet est une application web grâce à laquelle on visualisera sur une page HTML des tweets préalablement enregistrés au format JSON. Il sera aussi possible de générer un PDF mis en page dans le navigateur de ces tweets.</p>
+
+
+        <div id="block_code">
+          <p>tweets_json.py</p>
+          <pre class="code_full">
+
+  <span class="type">import</span> tweepy
+  <span class="type">import</span> requests
+  <span class="type">import</span> json
+  <span class="type">from</span> time <span class="type">import</span> sleep
+  <span class="type">import</span> os.path
+  <span class="type">import</span> sys
+
+
+  consumer_key='****'
+  consumer_secret='****'
+  access_token='****'
+  access_token_secret='****'
+
+  auth = tweepy.<span class="fonction">OAuthHandler</span>(consumer_key,\
+  consumer_secret)
+  auth.<span class="fonction">set_access_token</span>(access_token,\
+  access_token_secret)
+  api = tweepy.<span class="fonction">API</span>(auth)
+
+  continue_loops = <span class="type">True</span>
+
+  query = 'raspberry pi'
+
+  tweet_dict = {}
+  <span class="type">if</span> os.path.<span class="fonction">isfile</span>('tweets.json'):
+      <span class="type">with</span> <span class="fonction">open</span>("tweets.json", "r") <span class="type">as</span> read_file:
+          data = json.<span class="fonction">load</span>(read_file)
+          <span class="fonction">print</span>( 'json > python',data )
+          read_file.<span class="fonction">close</span>()
+
+  <span class="type">def</span> <span class="fonction">get_my_tweets</span>():
+      <span class="type">while</span> continue_loops == <span class="type">True</span>:
+          tweets = api.<span class="fonction">search</span>(q=query, lang="en",\
+          count=1, tweet_mode="extended"\
+          wait_on_rate_limit = <span class="type">True</span>)
+          smthnew = <span class="type">False</span>
+          <span class="type">for</span> tweet <span class="type">in</span> tweets:
+              <span class="type">if</span> not tweet._json[u'id']\
+              <span class="type">in</span> tweet_dict:
+                  tweet_dict[tweet._json[u'id']]={
+                      'content': tweet.full_text,
+                      'timestamp':\
+                      <span class="fonction">str</span>(tweet.created_at)
+                  }
+                  smthnew = <span class="type">True</span>
+
+          <span class="type">if</span> smthnew:
+              jdata = json.<span class="fonction">dumps</span>( tweet_dict )
+              <span class="fonction">print</span>('python > json',jdata)
+              <span class="type">with</span> <span class="fonction">open</span>("tweets.json", "w")\
+              <span class="type">as</span> write_file:
+          	  json.<span class="fonction">dump</span>(tweet_dict, write_file)
+          	  write_file.<span class="fonction">close</span>()
+
+          <span class="fonction">sleep</span>(1)
+
+  <span class="type">while</span> continue_loops:
+      <span class="fonction">sleep</span>( 0.5 )
+
+        </pre>
+      </div>
+
+      <h4>LE CODE</h4>
+      <h5>tweets_json.py</h5>
+      <pre>
+
+  <span class="type">import</span> tweepy
+  <span class="type">import</span> requests
+  <span class="type">import</span> json
+  <span class="type">from</span> time <span class="type">import</span> sleep
+  <span class="type">import</span> os.path
+  <span class="type">import</span> sys
+
+  consumer_key='****'
+  consumer_secret='****'
+  access_token='****'
+  access_token_secret='****'
+
+  auth = tweepy.<span class="fonction">OAuthHandler</span>(consumer_key,\
+  consumer_secret)
+  auth.<span class="fonction">set_access_token</span>(access_token,\
+  access_token_secret)
+  api = tweepy.<span class="fonction">API</span>(auth)
+      </pre>
+      <p>Il faut commencer ce projet par le script <span class="code">tweets_json.py</span> car c'est lui qui va enregistrer les tweets dans le fichier JSON qu'on va charger dans la page web. Ce script commence par se connecter à l'API Twitter à l'aide des clés secrètes que vous mettrez dans <span class="code">consumer_key</span>, <span class="code">consumer_secret</span>, <span class="code">access_token</span> et <span class="code">access_secret</span>.</p>
+
+      <pre>
+
+  continue_loops = <span class="type">True</span>
+
+  query = 'raspberry pi'
+
+  tweet_dict = {}
+  <span class="type">if</span> os.path.<span class="fonction">isfile</span>('tweets.json'):
+      <span class="type">with</span> <span class="fonction">open</span>("tweets.json", "r") <span class="type">as</span> read_file:
+          data = json.<span class="fonction">load</span>(read_file)
+          <span class="fonction">print</span>( 'json > python',data )
+          read_file.<span class="fonction">close</span>()
+
+  <span class="type">def</span> <span class="fonction">get_my_tweets</span>():
+      <span class="type">while</span> continue_loops == <span class="type">True</span>:
+          tweets = api.<span class="fonction">search</span>(q=query, lang="en",
+          count=1, tweet_mode="extended",
+          wait_on_rate_limit = <span class="type">True</span>)
+          smthnew = <span class="type">False</span>
+          <span class="type">for</span> tweet <span class="type">in</span> tweets:
+              <span class="type">if</span> not tweet._json[u'id']\
+              <span class="type">in</span> tweet_dict:
+                  tweet_dict[tweet._json[u'id']]={
+                      'content': tweet.full_text,
+                      'timestamp':\
+                      <span class="fonction">str</span>(tweet.created_at)
+                  }
+              smthnew = <span class="type">True</span>
+
+          <span class="type">if</span> smthnew:
+              jdata = json.<span class="fonction">dumps</span>( tweet_dict )
+              <span class="fonction">print</span>('python > json',jdata)
+              <span class="type">with</span> <span class="fonction">open</span>("tweets.json", "w")\
+              <span class="type">as</span> write_file:
+                  json.<span class="fonction">dump</span>(tweet_dict, write_file)
+                  write_file.<span class="fonction">close</span>()
+
+          <span class="fonction">sleep</span>(1)
+
+  <span class="type">while</span> continue_loops:
+      <span class="fonction">sleep</span>( 0.5 )
+      </pre>
+      <p>Ce script va ensuite vérifier si le fichier JSON qui contient les tweets existe déjà avec <span class="code">if os.path.isfile('tweets.json'):</span> et si c'est le cas l'ouvrir (<span class="code">with open("tweets.json", "r") as read_file:</span>) et afficher son contenu dans le terminal.<br/> C'est là que la fonction <span class="code">get_my_tweets()</span>, qui va chercher et enregistrer les tweets correspondants, intervient.  <span class="code">while continue_loops == True</span> fait en sorte que la fonction se répète indéfiniment tant que le script est actif. La ligne <span class="code">api.search(q=query, lang="en", count=1, tweet_mode="extended", wait_on_rate_limit = True)</span> recherche les tweets comportant le mot-clé que l'on a demandé, stocké dans <span class="code">query</span>. Chaque tweet est identifiable par un identifiant unique dont on va se servir pour savoir si l'on a déjà enregistré ce tweet dans notre fichier JSON&nbsp;: pour chacun de ces tweets repérés, s'il ne figure pas déjà dans le dictionnaire <span class="code">tweet_dict</span> (<span class="code">if not tweet._json[u'id'] in tweet_dict:</span>), alors on crée une entrée dans <span class="code">tweet_dict</span> pour ce tweet à laquelle on associe le contenu du tweet ainsi que son horodatage. Chaque fois que cela arrive, la valeur de <span class="code">smthnew</span> est passée à <span class="code">True</span>&nbsp;; or à la ligne suivante nous spécifions que si tel est le cas (<span class="code">if smthnew:</span>), alors on convertit <span class="code">tweet_dict</span> au format JSON et on met à jour le fichier JSON.<br/> Laissez tourner ce script aussi longtemps que nécessaire pour avoir un nombre suffisant de tweets.</p>
+
+
+
+      <div id="block_code2">
+        <p>app.py</p>
+        <pre class="code_full">
+
+  <span class="type">from</span> flask <span class="type">import</span> *
+  <span class="type">from</span> time <span class="type">import</span> sleep
+  <span class="type">import</span> json
+  <span class="type">from</span> flask_weasyprint <span class="type">import</span> HTML, render_pdf
+
+  app = <span class="fonction">Flask</span>(__name__)
+
+  <span class="type">with</span> <span class="fonction">open</span>('tweets.json') <span class="type">as</span> json_file:
+      data = json.<span class="fonction">load</span>(json_file)
+      liste = <span class="fonction">list</span>(data)
+
+  @app.<span class="fonction">route</span>("/")
+  <span class="type">def</span> <span class="fonction">index</span>():
+      return <span class="fonction">render_template</span>('index.html',\
+      value=data, list=liste)
+
+  @app.<span class="fonction">route</span>('/tweets.pdf')
+  <span class="type">def</span> <span class="fonction">tweets_pdf</span>():
+      html = <span class="fonction">render_template</span>('index.html',\
+      value=data, list=liste)
+      return <span class="fonction">render_pdf</span>(<span class="fonction">HTML</span>(string=html))
+
+  if __name__ == '__main__':
+      app.<span class="fonction">run</span>(debug=<span class="type">True</span>, host='0.0.0.0')
+
+      </pre>
+    </div>
+
+    <h5>app.py</h5>
+    <pre>
+
+  <span class="type">from</span> flask <span class="type">import</span> *
+  <span class="type">import</span> json
+  <span class="type">from</span> flask_weasyprint <span class="type">import</span> HTML, render_pdf
+
+  app = <span class="fonction">Flask</span>(__name__)
+
+  <span class="type">with</span> <span class="fonction">open</span>('tweets.json') <span class="type">as</span> json_file:
+      data = json.<span class="fonction">load</span>(json_file)
+      liste = <span class="fonction">list</span>(data)
+
+  </pre>
+  <p>Ce script gère le fonctionnement de l'application web en elle-même. On importe <span class="code">flask</span> car on développe l'appli sous ce framework Python, <span class="code">json</span> pour pouvoir lire le fichier <span class="code">tweets.json</span>, et <span class="code">flask_weasyprint</span>, le module qui nous permettra de générer automatiquement un PDF depuis la page web. On crée l'objet <span class="code">Flask</span>, puis on ouvre le fichier JSON avec <span class="code">with open('tweets.json') as json_file</span>, grâce à quoi on enregistre tous les tweets du fichier au format <span class="code">list</span> dans <span class="code">liste</span>.</p>
+
+  <pre>
+
+  @app.<span class="fonction">route</span>("/")
+  <span class="type">def</span> <span class="fonction">index</span>():
+      return <span class="fonction">render_template</span>('index.html',
+      value=data, list=liste)
+
+  @app.<span class="fonction">route</span>('/tweets.pdf')
+  <span class="type">def</span> <span class="fonction">tweets_pdf</span>():
+      html = <span class="fonction">render_template</span>('index.html',\
+      value=data, list=liste)
+      return <span class="fonction">render_pdf</span>(<span class="fonction">HTML</span>(string=html))
+
+    if __name__ == '__main__':
+        app.<span class="fonction">run</span>(debug=<span class="type">True</span>, host='0.0.0.0')
+  </pre>
+  <p>On termine ce script par la définition des routes de l'application. La page web qui affiche les tweets sera placée à la racine de l'application&nbsp;; c'est la page d'accueil. On passe au template HTML la liste des tweets précédemment récupérés à la ligne <span class="code">return render_template('index.html', value=data, list=liste, rlist=rliste)</span>. On crée une deuxième route, <span class="code">@app.route('/tweets.pdf')</span>, qui va générer la mise en page des tweets en un document PDF. Dans la fonction <span class="code">tweets_pdf()</span>, en plus de faire un <span class="code">render_template()</span> du template HTML (on appelle le même template que pour la route principale), la ligne <span class="code">return render_pdf(HTML(string=html))</span> va mettre en page le contenu de la page d'après les indications de media paginé données dans <span class="code">style.css</span>.</p>
+
+    <div id="block_html">
+      <p>index.html</p>
+      <pre class="code_full">
+
+  <!doctype html>
+  &lt;html>
+    &lt;head>
+    &#123;% block head %}
+      &lt;link <span class="typep">rel</span>="stylesheet"
+      <span class="typep">href</span>="{{ url_for('static', filename='style.css') }}">
+      &lt;meta <span class="typep">charset</span>="utf-8">
+      &lt;meta <span class="typep">name</span>="viewport"
+      <span class="typep">content</span>="initial-scale=1.0">
+      &lt;title>&#123;% block title %}
+      &#123;% endblock %}&lt;/title>
+    &#123;% endblock %}
+    &lt;/head>
+
+    &lt;body>
+      &lt;div <span class="typep">id</span>="main">
+        &lt;article>
+          &lt;h2>
+            Tweets about "Raspberry PI" from:
+            &lt;div>
+              &#123;%for x in list[0:1]%}
+                &#123;{value[x]['timestamp']}}
+              &#123;%endfor%}
+            &lt;/div>
+            to:
+            &lt;div>
+              &#123;%for y in list[:-2:-1]%}
+                &#123;{value[y]['timestamp']}}
+              &#123;%endfor%}
+            &lt;/div>
+          &lt;/h2>
+        &lt;/article>
+
+        &lt;a <span class="typep">href</span>="&#123;{ url_for('hello_pdf') }}">
+        Get as PDF&lt;/a>
+        &lt;article>
+          &lt;section>
+            &#123;%for i in value%}
+              &lt;p>&lt;span <span class="typep">class</span>="time">
+              &#123;{value[i]['timestamp']}}&lt;/span>
+              &#123;{value[i]['content']}}&lt;/p>
+            &#123;%endfor%}
+          &lt;/section>
+        &lt;/article>
+      &lt;/div>
+
+      &lt;script <span class="typep">type</span>="text/javascript"
+      <span class="typep">src</span>="&#123;{url_for('static', filename='script.js')}}">
+      &lt;/script>
+      &lt;script <span class="typep">type</span>="text/javascript">
+        window.scrollTo(0,document.body.scrollHeight);
+      &lt;/script>
+    &lt;/body>
+  &lt;/html>
+
+    </pre>
+  </div>
+
+  <h5>index.html</h5>
+  <pre class="processing">
+
+  &lt;article>
+    &lt;h2>
+      Tweets about "Raspberry PI" from:
+      &lt;div>
+        &#123;%for x in list[0:1]%}
+          &#123;{value[x]['timestamp']}}
+        &#123;%endfor%}
+      &lt;/div>
+      to:
+      &lt;div>
+        &#123;%for y in list[:-2:-1]%}
+          &#123;{value[y]['timestamp']}}
+        &#123;%endfor%}
+      &lt;/div>
+    &lt;/h2>
+  &lt;/article>
+  </pre>
+  <p>On a vu dans <span class="code">app.py</span> qu'on passait au template HTML la liste des tweets extraits du fichier JSON. On traite donc cette liste dans le template Jinja en faisant appel à des boucles&nbsp;: par exemple dans le premier bloc <span class="proc">&lt;article&gt;</span> on parcourt la liste de tweets pour récupérer l'attribut <span class="proc">timestamp</span> du premier tweet (<span class="proc">&#123;%for x in list[0:1]%} &#123;{value[x]['timestamp']}} &#123;%endfor%}</span>) ainsi que du dernier (<span class="proc">&#123;%for y in list[:-2:-1]%} &#123;{value[y]['timestamp']}} &#123;%endfor%}</span>) pour placer ces deux valeurs dans le contenu de la balise <span class="proc">&lt;h2&gt;</span>.<br/>
+  Dans la seconde balise <span class="proc">&lt;article&gt;</span> on parcourt l'ensemble des tweets <span class="proc">&#123;%for i in value%}</span> et pour chacun on passe ses attributs <span class="proc">timestamp</span> et <span class="proc">content</span> dans une balise <span class="proc">&lt;p&gt;</span>. Ainsi le contenu de la page HTML est généré dynamiquement.</p>
+
+  <div id="block_css">
+    <p>style.css</p>
+    <pre class="code_full">
+
+  <span class="typep">body</span> {
+    margin: 0;
+    padding: 2vw;
+    font-size: 2vw;
+  }
+
+  <span class="typep">p</span> {
+    font-family: 'Vremena';
+    margin-left: 3vw;
+    width: 80vw;
+  }
+
+  <span class="typep">a</span> {
+    display: inline-block !important;
+    position: fixed;
+    top:6vh;
+    right:5vw;
+    font-family: 'ReHershey';
+    font-size: 2vw;
+    box-shadow: 7px 7px 23px 0px <span class="fonctionp">rgba</span>(255,204,0,1);
+    border-radius: 50px;
+    padding: 1vw;
+    background-color: white;
+    z-index: 1000;
+    text-decoration: none;
+    color: black;
+  }
+
+  .time {
+    font-family: 'ReHershey';
+    margin-right: 8vw;
+    margin-left: -2vw;
+    letter-spacing: 120%;
+  }
+
+  <span class="typep">@font-face</span> {
+    font-family: 'ReHershey';
+    src: <span class="fonctionp">url</span>(fonts/rehersheyitalic-webfont.eot),
+         <span class="fonctionp">url</span>(fonts/rehersheyitalic-webfont.svg),
+         <span class="fonctionp">url</span>(fonts/rehersheyitalic-webfont.ttf),
+         <span class="fonctionp">url</span>(fonts/rehersheyitalic-webfont.woff),
+         <span class="fonctionp">url</span>(fonts/rehersheyitalic-webfont.woff2);
+  }
+
+  <span class="typep">@font-face</span> {
+    font-family: 'Vremena';
+    src: <span class="fonctionp">url</span>(fonts/vremenagrotesk-webfont.eot),
+         <span class="fonctionp">url</span>(fonts/vremenagrotesk-webfont.svg),
+         <span class="fonctionp">url</span>(fonts/vremenagrotesk-webfont.ttf),
+         <span class="fonctionp">url</span>(fonts/vremenagrotesk-webfont.woff),
+         <span class="fonctionp">url</span>(fonts/vremenagrotesk-webfont.woff2);
+  }
+
+  <span class="typep">article</span> {
+    page-break-after: always;
+  }
+
+  <span class="typep">h2</span> {
+    string-set: heading <span class="fonctionp">content()</span>;
+    font-family: 'Vremena';
+    font-size: 5vw !important;
+    font-weight: normal;
+    display: none;
+  }
+
+  <span class="typep">h2></span><span class="typep">div</span> {
+    font-family: 'ReHershey';
+    margin-left: 5vw;
+  }
+
+  <span class="typep">@media</span> print {
+    <span class="typep">@page</span> {
+      size: 210 297mm;
+      padding: 8mm;
+      margin: 0mm;
+      margin-top: 15mm;
+    }
+    <span class="typep">@page</span> <span class="fonctionp">:first</span> {
+      <span class="typep">@top-center</span> {
+        content: '';
+        display: none;}
+      <span class="typep">@top-right</span> {
+        content: '';
+        display: none;}
+      <span class="typep">@top-left</span> {
+        content: '';
+        display: none;}
+      }
+    <span class="typep">@page</span> <span class="fonctionp">:right</span> {
+      <span class="typep">@top-center</span> {
+        font-family: 'Vremena';
+        font-size: 24pt;
+        content: <span class="fonctionp">counter(page)</span>;
+        text-align: right;
+        width: 150mm;
+        height: 12mm;}
+      <span class="typep">@top-left</span> {
+        font-family: 'Vremena';
+        content: <span class="fonctionp">string(heading)</span>;
+        font-size: 10pt;
+        vertical-align: middle;
+        margin-top: 20mm;
+        color: white;}
+        margin-left: 2mm;
+      }
+    }
+    <span class="typep">@page</span> <span class="fonctionp">:left</span> {
+      <span class="typep">@top-center</span> {
+        font-family: 'Vremena';
+        font-size: 24pt;
+        content: <span class="fonctionp">counter(page)</span>;
+        text-align: left;
+        width: 150mm;
+        height: 12mm;}
+      <span class="typep">@top-right</span> {
+        font-family: 'Vremena';
+        content: <span class="fonctionp">string(heading)</span>;
+        font-size: 10pt;
+        vertical-align: middle;
+        margin-top: 20mm;
+        color: white;}
+      margin-right: 5mm;
+    }
+    <span class="typep">a</span> {
+        display: none !important;
+      }
+
+    <span class="typep">p</span> {
+        font-size: 24pt !important;
+        margin-top: 0;
+        margin-left: 7mm;
+        break-inside: avoid;
+      }
+
+    .time {
+        margin-right: 25mm !important;
+        margin-left: -7mm;
+      }
+
+    <span class="typep">h2</span> {
+        font-size: 18pt !important;
+        margin-top: -18mm;
+        margin-left: 8mm;
+        display: inline-block !important;
+      }
+
+    <span class="typep">h2</span>><span class="typep">div</span> {
+        margin-left: 10mm;
+      }
+    }
+
+  </pre>
+</div>
+
+  <h5>style.css</h5>
+  <pre class="processing">
+
+  <span class="typep">@media</span> print {
+    <span class="typep">@page</span> {
+      size: 210 297mm;
+      padding: 8mm;
+      margin: 0mm;
+      margin-top: 15mm;
+    }
+  </pre>
+  <p>Le fichier CSS modifie l'apparence des éléments HTML. Tout ce qui est contenu dans le media query <span class="proc">@media print</span> gère le document paginé. Par exemple <span class="proc">@page</span> permet de déterminer le format des pages ainsi que les marges du document.</p>
+  <p>Les fichiers <span class="code">app.py</span> et <span class="code">tweets_json.py</span> doivent être placés à la racine du dossier de l'application, <span class="code">index.html</span> doit se trouver dans un dossier nommé «&nbsp;templates&nbsp;» et <span class="code">style.css</span> dans un dossier nommé «&nbsp;static&nbsp;».</p>
+  <p>Pour lancer l'application entrez dans un terminal (une fois Flask et éventuellement les autres modules Python installés sur votre ordinateur) la commande&nbsp;: <span class="code">python3 app.py</span>.</p>
+
+        <img class="capt" src="{{ url_for('static', filename='tb01.png') }}" alt="">
+        <img class="capt" src="{{ url_for('static', filename='tb02.png') }}" alt="">
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

@@ -1,0 +1,283 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+    <ul id="menu">
+      <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+      <li>Liens</li>
+    </ul>
+
+      <div class="print">
+        <a href="/arduino_datalogging_shield.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Arduino</p>
+      </div>
+
+      <div class="main">
+        <div id="onglets">
+          <div id="onglet_circuit" onclick="circuitTop()">Circuit</div>
+          <div id="onglet_code" onclick="codeTop()">Code Arduino</div>
+        </div>
+        <h3>Datalogging shield</h3>
+        <p class="circuitb">Le datalogging shield offre la possibilité d'enregistrer sur une carte SD les valeurs lues par des capteurs reliés à un Arduino. Nous allons ici mener un petit projet de statistiques météo en sauvegardant au format CSV les valeurs de température, de taux d'humidité et de luminosité perçus par un capteur DHT et une photorésistance.</p>
+        <div id="schemas">
+          <img id="img_ard17" class="scheme" src="{{ url_for('static', filename='datalogger_meteo.svg') }}" alt="">
+        </div>
+
+        <ol>
+          <li>Un capteur DHT est un composant qui combine un capteur de température précis et un capteur d'humidité. Le modèle que nous utilisons est un DHT22, il possède 4 pattes. La première est à connecter au 5V, la deuxième est celle qui transfère l'information et est à relier à la broche digitale 7 de l'Arduino. La quatrième patte est à brancher au GROUND.</li>
+          <li>La photorésistance elle est simplement à brancher entre le 5V et la broche A0.</li>
+        </ol>
+
+        <div id="block_code">
+          <p>Code Arduino</p>
+          <pre class="code_full">
+
+  <span class="type">#include</span> &lt;SPI.h&gt;
+  <span class="type">#include</span> &lt;Wire.h&gt;
+  <span class="type">#include</span> &lt;SD.h&gt;
+  <span class="type">#include</span> &lt;Time.h&gt;
+  <span class="type">#include</span> "RTClib.h"
+  <span class="type">#include</span> &lt;DS1307RTC.h&gt;
+  <span class="type">#include</span> &lt;DHT.h&gt;
+
+  <span class="type">#define</span> LOG_INTERVAL  5000
+  <span class="type">#define</span> ECHO_TO_SERIAL   1
+
+  <span class="type">#define</span> DHTPIN 7
+  <span class="type">#define</span> DHTTYPE DHT22
+  <span class="type">#define</span> LIGHTPIN A0
+
+  <span class="type">DHT</span> dht(DHTPIN, DHTTYPE);
+  <span class="type">RTC_DS3231</span> rtc;
+
+  <span class="type">const int</span> chipSelect = 10;
+  <span class="type">float</span> humReading;
+  <span class="type">float</span> tempReading;
+  <span class="type">int</span> light;
+
+  <span class="type">void</span> <span class="fonction">setup()</span> {
+    <span class="type">Serial</span>.<span class="fonction">begin</span>(9600);
+    <span class="fonction">pinMode</span>(LIGHTPIN, INPUT);
+    dht.<span class="fonction">begin()</span>;
+
+    <span class="fonction">delay</span>(3000);
+
+    <span class="type">Serial</span>.<span class="fonction">print</span>("Initializing SD card...");
+
+    <span class="type">if</span>(!SD.<span class="fonction">begin</span>(chipSelect)) {
+      <span class="type">Serial</span>.<span class="fonction">println</span>("Card failed,
+      or not present");
+      <span class="type">while</span>(1);
+    }
+    <span class="type">Serial</span>.<span class="fonction">println</span>("card initialized.");
+
+    <span class="type">if</span>(! rtc.<span class="fonction">begin()</span>) {
+      <span class="type">Serial</span>.<span class="fonction">println</span>("Couldn't find RTC");
+      <span class="type">while</span>(1);
+    }
+
+    <span class="type">if</span>(rtc.<span class="fonction">lostPower()</span>) {
+      <span class="type">Serial</span>.<span class="fonction">println</span>("RTC lost power,
+      lets set the time!");
+      rtc.<span class="fonction">adjust</span>(<span class="fonction">DateTime</span>(2020, 04, 11,
+      00, 48, 30));
+    }
+  }
+
+  <span class="type">void</span> <span class="fonction">loop()</span> {
+    rtc.<span class="fonction">adjust(<span class="fonction">DateTime</span></span>(F(__DATE__),
+    F(__TIME__)));
+    <span class="type">DateTime</span> now = rtc.<span class="fonction">now()</span>;
+
+    <span class="fonction">delay</span>(LOG_INTERVAL);
+
+    humReading = dht.<span class="fonction">readHumidity()</span>;
+    tempReading = dht.<span class="fonction">readTemperature()</span>;
+    light = <span class="fonction">analogRead</span>(A0);
+    int lightVal = <span class="fonction">map</span>(light, 0, 1023,
+    0, 93);
+
+    <span class="type">File</span> logfile = SD.<span class="fonction">open</span>("meteo.csv",
+    FILE_WRITE);
+
+    <span class="type">if</span>(logfile) {
+      logfile.<span class="fonction">print</span>(now.<span class="fonction">year()</span>, DEC);
+      logfile.<span class="fonction">print</span>("/");
+      logfile.<span class="fonction">print</span>(now.<span class="fonction">month()</span>, DEC);
+      logfile.<span class="fonction">print</span>("/");
+      logfile.<span class="fonction">print</span>(now.<span class="fonction">day()</span>, DEC);
+      logfile.<span class="fonction">print</span>(" ");
+      logfile.<span class="fonction">print</span>(now.<span class="fonction">hour()</span>, DEC);
+      logfile.<span class="fonction">print</span>(":");
+      logfile.<span class="fonction">print</span>(now.<span class="fonction">minute()</span>, DEC);
+      logfile.<span class="fonction">print</span>(", ");
+      logfile.<span class="fonction">print</span>(tempReading);
+      logfile.<span class="fonction">print</span>(", ");
+      logfile.<span class="fonction">print</span>(humReading);
+      logfile.<span class="fonction">print</span>(", ");
+      logfile.<span class="fonction">print</span>(lightVal);
+      logfile.<span class="fonction">print</span>("\n ");
+      logfile.<span class="fonction">close()</span>;
+      <span class="type">#if</span> ECHO_TO_SERIAL
+        <span class="type">Serial</span>.<span class="fonction">print</span>(now.<span class="fonction">year()</span>);
+        <span class="type">Serial</span>.<span class="fonction">print</span>("/");
+        <span class="type">Serial</span>.<span class="fonction">print</span>(now.<span class="fonction">month()</span>);
+        <span class="type">Serial</span>.<span class="fonction">print</span>("/");
+        <span class="type">Serial</span>.<span class="fonction">print</span>(now.<span class="fonction">day()</span>);
+        <span class="type">Serial</span>.<span class="fonction">print</span>(" ");
+        <span class="type">Serial</span>.<span class="fonction">print</span>(now.<span class="fonction">hour()</span>);
+        <span class="type">Serial</span>.<span class="fonction">print</span>(":");
+        <span class="type">Serial</span>.<span class="fonction">print</span>(now.<span class="fonction">minute()</span>);
+        <span class="type">Serial</span>.<span class="fonction">print</span>(", ");
+        <span class="type">Serial</span>.<span class="fonction">print</span>(tempReading);
+        <span class="type">Serial</span>.<span class="fonction">print</span>(", ");
+        <span class="type">Serial</span>.<span class="fonction">println</span>(humReading);
+        <span class="type">Serial</span>.<span class="fonction">print</span>(", ");
+        <span class="type">Serial</span>.<span class="fonction">println</span>(lightVal);
+      <span class="type">#endif</span>
+    } <span class="type">else</span> {
+      <span class="type">Serial</span>.<span class="fonction">println</span>("error opening file");
+    }
+  }
+
+        </pre>
+      </div>
+
+      <h4>LE CODE</h4>
+        <pre>
+
+  <span class="type">#include</span> &lt;SPI.h&gt;
+  <span class="type">#include</span> &lt;Wire.h&gt;
+  <span class="type">#include</span> &lt;SD.h&gt;
+  <span class="type">#include</span> &lt;Time.h&gt;
+  <span class="type">#include</span> "RTClib.h"
+  <span class="type">#include</span> &lt;DS1307RTC.h&gt;
+  <span class="type">#include</span> &lt;DHT.h&gt;
+
+  <span class="type">#define</span> LOG_INTERVAL  5000
+  <span class="type">#define</span> ECHO_TO_SERIAL   1
+
+  <span class="type">#define</span> DHTPIN 7
+  <span class="type">#define</span> DHTTYPE DHT22
+  <span class="type">#define</span> LIGHTPIN A0
+
+  <span class="type">DHT</span> dht(DHTPIN, DHTTYPE);
+  <span class="type">RTC_DS3231</span> rtc;
+
+  <span class="type">const int</span> chipSelect = 10;
+  <span class="type">float</span> humReading;
+  <span class="type">float</span> tempReading;
+  <span class="type">int</span> light;
+        </pre>
+        <p>Nous devons faire appel à de nombreuses librairies pour ce projet. Tout d'abord <span class="code">SPI</span> et <span class="code">Wire</span> qui serviront à la communication I2C entre l'Arduino et le shield. Ensuite la librairie <span class="code">SD</span> pour gérer l'écriture sur la carte SD. Les librairies <span class="code">Time</span>, <span class="code">RTClib</span> et <span class="code">RTC_DS3231</span> nous serviront à mettre l'Arduino à l'heure afin d'horodater les données dans le fichier créé. Enfin nous appelons la librairie <span class="code">DHT</span> pour interagir avec ce capteur.</p>
+        <p><span class="code">LOG_INTERVAL</span> détermine l'intervalle de temps en milli-secondes entre chaque tour de boucle&nbsp;; quant à la constante <span class="code">ECHO_TO_SERIAL</span>, ici initialisée à 1, donc <span class="code">True</span>, nous l'utilisons comme une valeur booléenne qui nous permet d'activer ou de désactiver la copie des données dans le moniteur série. Si à un moment vous souhaitez ne plus faire apparaître les données dans le monireur série, il vous suffit de changer la valeur de la constante à 0.<br/>Ensuite nous initialisons les pins des capteurs. Le type de capteur doit être déclaré (<span class="code">DHTTYPE</span>), et un objet <span class="code">DHT</span> prenant pour arguments la pin du capteur et son type est créé. On créé également un objet <span class="code">RTC_DS3231</span> qui nous servira pour l'horodatage. La variable <span class="code">chipSelect</span> est nécessaire au bon fonctionnement du datalogging shield, il s'agit de la broche qu'utilise le port de la carte SD du shield pour communiquer avec l'Arduino. Par défaut cette pin est la 10.</p>
+        <pre>
+
+  <span class="type">void</span> <span class="fonction">setup()</span> {
+    <span class="type">Serial</span>.<span class="fonction">begin</span>(9600);
+    <span class="fonction">pinMode</span>(LIGHTPIN, INPUT);
+    dht.<span class="fonction">begin()</span>;
+
+    <span class="fonction">delay</span>(3000);
+
+    <span class="type">Serial</span>.<span class="fonction">print</span>("Initializing SD card...");
+
+    <span class="type">if</span>(!SD.<span class="fonction">begin</span>(chipSelect)) {
+      <span class="type">Serial</span>.<span class="fonction">println</span>("Card failed,
+      or not present");
+      <span class="type">while</span>(1);
+    }
+    <span class="type">Serial</span>.<span class="fonction">println</span>("card initialized.");
+
+    <span class="type">if</span>(! rtc.<span class="fonction">begin()</span>) {
+      <span class="type">Serial</span>.<span class="fonction">println</span>("Couldn't find RTC");
+      <span class="type">while</span>(1);
+    }
+
+    <span class="type">if</span>(rtc.<span class="fonction">lostPower()</span>) {
+      <span class="type">Serial</span>.<span class="fonction">println</span>("RTC lost power,
+      lets set the time!");
+      rtc.<span class="fonction">adjust</span>(<span class="fonction">DateTime</span>(2020, 04, 11,
+      00, 48, 30));
+    }
+  }
+        </pre>
+        <p>On commence par initialiser la pin de la photorésistance et par démarrer le capteur DHT. Ensuite, on laisse 3 secondes (3000 milli-secondes) pour que la carte SD s'initialise. On vérifie également que la RTC a démarré, et si celle-ci s'est déreglée (<span class="code">if (rtc.lostPower()){}</span>), on peut la réinitialiser à partir d'un date et heure rentrée manuellement à l'aide de la fonction <span class="code">rtc.adjust()</span>.</p>
+        <pre>
+
+  <span class="type">void</span> <span class="fonction">loop()</span> {
+    rtc.<span class="fonction">adjust(<span class="fonction">DateTime</span></span>(F(__DATE__),
+    F(__TIME__)));
+    <span class="type">DateTime</span> now = rtc.<span class="fonction">now()</span>;
+
+    <span class="fonction">delay</span>(LOG_INTERVAL);
+
+    humReading = dht.<span class="fonction">readHumidity()</span>;
+    tempReading = dht.<span class="fonction">readTemperature()</span>;
+    light = <span class="fonction">analogRead</span>(A0);
+    int lightVal = <span class="fonction">map</span>(light, 0, 1023,
+    0, 93);
+
+    <span class="type">File</span> logfile = SD.<span class="fonction">open</span>("meteo.csv",
+    FILE_WRITE);
+
+    <span class="type">if</span>(logfile) {
+      logfile.<span class="fonction">print</span>(now.<span class="fonction">year()</span>, DEC);
+      logfile.<span class="fonction">print</span>("/");
+      logfile.<span class="fonction">print</span>(now.<span class="fonction">month()</span>, DEC);
+      logfile.<span class="fonction">print</span>("/");
+      logfile.<span class="fonction">print</span>(now.<span class="fonction">day()</span>, DEC);
+      logfile.<span class="fonction">print</span>(" ");
+      logfile.<span class="fonction">print</span>(now.<span class="fonction">hour()</span>, DEC);
+      logfile.<span class="fonction">print</span>(":");
+      logfile.<span class="fonction">print</span>(now.<span class="fonction">minute()</span>, DEC);
+      logfile.<span class="fonction">print</span>(", ");
+      logfile.<span class="fonction">print</span>(tempReading);
+      logfile.<span class="fonction">print</span>(", ");
+      logfile.<span class="fonction">print</span>(humReading);
+      logfile.<span class="fonction">print</span>(", ");
+      logfile.<span class="fonction">print</span>(lightVal);
+      logfile.<span class="fonction">print</span>("\n ");
+      logfile.<span class="fonction">close()</span>;
+      <span class="type">#if</span> ECHO_TO_SERIAL
+        <span class="type">Serial</span>.<span class="fonction">print</span>(now.<span class="fonction">year()</span>);
+        <span class="type">Serial</span>.<span class="fonction">print</span>("/");
+        <span class="type">Serial</span>.<span class="fonction">print</span>(now.<span class="fonction">month()</span>);
+        <span class="type">Serial</span>.<span class="fonction">print</span>("/");
+        <span class="type">Serial</span>.<span class="fonction">print</span>(now.<span class="fonction">day()</span>);
+        <span class="type">Serial</span>.<span class="fonction">print</span>(" ");
+        <span class="type">Serial</span>.<span class="fonction">print</span>(now.<span class="fonction">hour()</span>);
+        <span class="type">Serial</span>.<span class="fonction">print</span>(":");
+        <span class="type">Serial</span>.<span class="fonction">print</span>(now.<span class="fonction">minute()</span>);
+        <span class="type">Serial</span>.<span class="fonction">print</span>(", ");
+        <span class="type">Serial</span>.<span class="fonction">print</span>(tempReading);
+        <span class="type">Serial</span>.<span class="fonction">print</span>(", ");
+        <span class="type">Serial</span>.<span class="fonction">println</span>(humReading);
+        <span class="type">Serial</span>.<span class="fonction">print</span>(", ");
+        <span class="type">Serial</span>.<span class="fonction">println</span>(lightVal);
+      <span class="type">#endif</span>
+    } <span class="type">else</span> {
+      <span class="type">Serial</span>.<span class="fonction">println</span>("error opening file");
+    }
+  }
+        </pre>
+        <p>Il est à présent temps de passer à l'action dans la <span class="code">loop()</span>. Nous voulons horodater selon l'heure actuelle, donc nous initialisons la RTC au bon format et à l'heure UTC avec la fonction <span class="code">rtc.now()</span>. Juste après, on dit à la boucle <span class="code">loop()</span> d'attendre la valeur définie dans <span class="code">LOG_INTERVAL</span> avant chaque tour. Nous commençons par enregistrer les valeurs lues par le capteur DHT dans deux variables. On obtient la température avec <span class="code">dht.readTemperature()</span> et le taux d'humidité avec <span class="code">dht.readHumidity()</span>. Pour la luminosité, on lit la valeur analogique du capteur avant de la transposer vers une valeur comprise entre 0 et 100, car nous voulons en faire un pourcentage.<br/>Une fois les valeurs récupérées, on peut les passer à la carte SD. Pour cela on crée un objet <span class="code">File</span> que l'on initialise dans la ligne <span class="code">File logfile = SD.open("meteo.csv", FILE_WRITE);</span>. À partir du moment où ce fichier est bien créé, donc s'il existe, on lui transfère les valeurs avec la fonction <span class="code">logfile.print()</span>. Nous envoyons d'abord l'horodatage au format "AAAA/MM/JJ HH:MM". Nous écrivons un fichier CSV, les valeurs doivent donc être séparées par des virgules. C'est pourquoi nous écrivons dans le fichier des virgules entre l'horodatage et chacune des trois valeurs&nbsp;; de cette façon ces 4 données apparaîtront dans des cellules différentes dans le fichier CSV final. Pour créer une nouvelle ligne dans le fichier à chaque tour de la boucle <span class="code">loop()</span>, on envoie à chaque fois au fichier CSV le caractère "\n" (retour à la ligne). Si le fichier CSV n'a pas correctement été créé on retourne simplement un message d'erreur.<br/>Notez que toutes les instruction comprises entre les lignes <span class="code">#if ECHO_TO_SERIAL</span> et <span class="code">#endif</span> peuvent être désactivées si la valeur de <span class="code">ECHO_TO_SERIAL</span> est passée à 0.</p>
+
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

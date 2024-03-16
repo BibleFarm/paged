@@ -1,0 +1,164 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+    <ul id="menu">
+      <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+      <li>Liens</li>
+    </ul>
+
+      <div class="print">
+        <a href="/arduino_potentiometre_4led.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Arduino</p>
+      </div>
+
+      <div class="main">
+        <div id="onglets">
+          <div id="onglet_circuit" onclick="circuitTop()">Circuit</div>
+          <div id="onglet_code" onclick="codeTop()">Code Arduino</div>
+        </div>
+        <h3>Potentiomètre + 4 LED</h3>
+        <p class="circuitb">Ce circuit nous permettra de voir les autres notions de base d'Arduino&nbsp;: lire une valeur analogique et utiliser dans le code une boucle conditionnelle complexe grâce à laquelle nous allumerons les LEDs en fonction de la valeur envoyée par le potentiomètre.</p>
+        <div id="schemas">
+          <img id="img_ard04" class="scheme" src="{{ url_for('static', filename='4_leds_pot.svg') }}" alt="">
+        </div>
+
+
+        <ol>
+          <li>Le montage du circuit commence par les LEDs. Connectez la cathode de la LED rouge à la broche digitale 2 de l'Arduino et son anode au GND via une résistance de 220 Ω.</li>
+          <li>D'après la même logique, branchez les cathodes des LEDs jaune, verte et bleue respectivement sur les pins digitales 3, 4 et 5, et leurs anodes sur le GND à travers des résistances de 220 Ω.</li>
+          <li>Venons-en ensuite au potentiomètre&nbsp;: ce composant fait varier l'intensité du courant qui le traverse selon la position de sa molette. Nous pouvons ainsi l'utiliser pour lire un éventail de valeurs allant de 0 à 1024&nbsp;; c'est une valeur analogique (à la différence de la valeur digitale qui ne peut être que de 0 ou 1). Son branchement est facile&nbsp;: l'une des broches externes va sur le 5V, l'autre sur le GND, enfin la broche du milieu  doit être connectée à la broche A0 (A pour Analog) de l'Arduino.</li>
+        </ol>
+
+        <div id="block_code">
+          <p>Code Arduino</p>
+          <pre class="code_full">
+
+  <span class="type">int</span> const potPin = A0;
+  <span class="type">int</span> potVal;
+  <span class="type">int</span> led1 = 2;
+  <span class="type">int</span> led2 = 3;
+  <span class="type">int</span> led3 = 4;
+  <span class="type">int</span> led4 = 5;
+
+  <span class="type">void</span> <span class="fonction">setup()</span> {
+    <span class="fonction">pinMode</span>(led1, OUTPUT);
+    <span class="fonction">pinMode</span>(led2, OUTPUT);
+    <span class="fonction">pinMode</span>(led3, OUTPUT);
+    <span class="fonction">pinMode</span>(led4, OUTPUT);
+    <span class="type">Serial</span>.<span class="fonction">begin</span>(9600);
+  }
+
+  <span class="type">void</span> <span class="fonction">loop()</span> {
+    potVal = <span class="fonction">analogRead</span>(potPin);
+    <span class="type">Serial</span>.<span class="fonction">print</span>("Valeur potentiomètre : ");
+    <span class="type">Serial</span>.<span class="fonction">print</span>(potVal);
+    <span class="type">if</span>(potVal <= 256) {
+      <span class="fonction">digitalWrite</span>(led1, HIGH);
+      <span class="fonction">digitalWrite</span>(led2, LOW);
+      <span class="fonction">digitalWrite</span>(led3, LOW);
+      <span class="fonction">digitalWrite</span>(led4, LOW);
+    } <span class="type">else if</span>(potVal > 256
+    && potVal <= 512) {
+      <span class="fonction">digitalWrite</span>(led2, HIGH);
+      <span class="fonction">digitalWrite</span>(led1, LOW);
+      <span class="fonction">digitalWrite</span>(led3, LOW);
+      <span class="fonction">digitalWrite</span>(led4, LOW);
+    } <span class="type">else if</span>(potVal > 512
+    && potVal <= 768) {
+      <span class="fonction">digitalWrite</span>(led3, HIGH);
+      <span class="fonction">digitalWrite</span>(led2, LOW);
+      <span class="fonction">digitalWrite</span>(led1, LOW);
+      <span class="fonction">digitalWrite</span>(led4, LOW);
+    } <span class="type">else</span> {
+      <span class="fonction">digitalWrite</span>(led4, HIGH);
+      <span class="fonction">digitalWrite</span>(led2, LOW);
+      <span class="fonction">digitalWrite</span>(led3, LOW);
+      <span class="fonction">digitalWrite</span>(led1, LOW);
+    }
+    <span class="fonction">delay</span>(15);
+  }
+
+        </pre>
+      </div>
+
+      <h4>LE CODE</h4>
+        <pre>
+
+  <span class="type">int</span> const potPin = A0;
+  <span class="type">int</span> potVal;
+  <span class="type">int</span> led1 = 2;
+  <span class="type">int</span> led2 = 3;
+  <span class="type">int</span> led3 = 4;
+  <span class="type">int</span> led4 = 5;
+        </pre>
+        <p>Nous commençons par déclarer les variables dont nous allons avoir besoin. La première, <span class="code">potPin</span>, stocke la broche à laquelle est relié le potentiomètre. Ensuite nous déclarons une variable <span class="code">potVal</span> mais nous ne l'initialisons pas encore (cela viendra dans la <span class="code">loop()</span>). Pour finir nous déclarons une variable par LED pour leur associer leurs broches digitales.</p>
+        <pre>
+
+  <span class="type">void</span> <span class="fonction">setup()</span> {
+    <span class="fonction">pinMode</span>(led1, OUTPUT);
+    <span class="fonction">pinMode</span>(led2, OUTPUT);
+    <span class="fonction">pinMode</span>(led3, OUTPUT);
+    <span class="fonction">pinMode</span>(led4, OUTPUT);
+    <span class="type">Serial</span>.<span class="fonction">begin(9600)</span>;
+  }
+        </pre>
+        <p>Dans le <span class="code">setup()</span> nous définissons le mode des 4 LEDs sur <span class="code">OUTPUT</span>. Cela permet à l'Arduino de savoir que les broches des LEDs ne seront utilisées que pour faire sortir du courant dedans (et non pour recevoir et lire un signal électrique). La dernière ligne, <span class="code">Serial.begin(9600);</span> sert à ouvrir un port série. Cet outil nous sert de console&nbsp;: nous pourrons y afficher les valeurs transitant par l'Arduino pour déboguer.</p>
+        <pre>
+
+  <span class="type">void</span> <span class="fonction">loop()</span> {
+    potVal = <span class="fonction">analogRead</span>(potPin);
+    <span class="type">Serial</span>.<span class="fonction">print</span>("Valeur potentiomètre : ");
+    <span class="type">Serial</span>.<span class="fonction">print</span>(potVal);
+        </pre>
+        <p>Nous commençons dans la <span class="code">loop()</span> par actualiser la valeur de la variable <span class="code">potVal</span>&nbsp;: nous lui demandons à présent de stocker la valeur analogique envoyée par le potentiomètre. Étant donné que la fonction <span class="code">loop()</span> tourne en boucle indéfiniment, la valeur provenant du potentiomètre sera donc continuellement mise à jour selon la position de son curseur. Ensuite nous demandons au port série d'afficher cette valeur (<span class="code">Serial.print()</span>). Cela nous permettra de savoir la valeur de <span class="code">potVal</span> et de déboguer si nécessaire.</p>
+        <pre>
+
+    <span class="type">if</span>(potVal <= 256) {
+      <span class="fonction">digitalWrite</span>(led1, HIGH);
+      <span class="fonction">digitalWrite</span>(led2, LOW);
+      <span class="fonction">digitalWrite</span>(led3, LOW);
+      <span class="fonction">digitalWrite</span>(led4, LOW);
+    } <span class="type">else if</span>(potVal > 256
+    && potVal <= 512) {
+      <span class="fonction">digitalWrite</span>(led2, HIGH);
+      <span class="fonction">digitalWrite</span>(led1, LOW);
+      <span class="fonction">digitalWrite</span>(led3, LOW);
+      <span class="fonction">digitalWrite</span>(led4, LOW);
+    } <span class="type">else if</span>(potVal > 512
+    && potVal <= 768) {
+      <span class="fonction">digitalWrite</span>(led3, HIGH);
+      <span class="fonction">digitalWrite</span>(led2, LOW);
+      <span class="fonction">digitalWrite</span>(led1, LOW);
+      <span class="fonction">digitalWrite</span>(led4, LOW);
+    } <span class="type">else</span> {
+      <span class="fonction">digitalWrite</span>(led4, HIGH);
+      <span class="fonction">digitalWrite</span>(led2, LOW);
+      <span class="fonction">digitalWrite</span>(led3, LOW);
+      <span class="fonction">digitalWrite</span>(led1, LOW);
+    }
+    <span class="fonction">delay</span>(15);
+  }
+        </pre>
+        <p>Pour finir nous écrivons (toujours dans la <span class="code">loop()</span>) une boucle conditionnelle qui traitera 4 cas de figure, un par LED. Les valeurs pouvant être envoyées par le potentiomètre à la broche analogique allant de 0 à 1024, nous avons découpé cet intervalle en 4 parties pour créer 4 conditions.</p>
+        <p>Première condition&nbsp;: si <span class="code">potVal</span> vaut moins que 256, alors c'est la LED rouge qui s'allume, les autres restent éteintes.</p>
+        <p>Deuxième condition&nbsp;: si <span class="code">potVal</span> vaut entre 257 et 512, c'est la LED jaune qui s'allume, les autres restent éteintes.</p>
+        <p>Troisième condition&nbsp;: si <span class="code">potVal</span> vaut entre 513 et 768, c'est la LED verte qui s'allume, les autres restent éteintes.</p>
+        <p>Enfin, si aucune des trois conditions ci-dessus n'est rencontrée, c'est que <span class="code">potVal</span> vaut plus que 768, c'est alors la LED bleue qui s'allume et les autres restent éteintes.</p>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

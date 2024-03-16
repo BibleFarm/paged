@@ -1,0 +1,183 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+    <ul id="menu">
+      <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+      <li>Liens</li>
+    </ul>
+
+      <div class="print">
+        <a href="/arduino_firmata.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Arduino</p>
+      </div>
+
+      <div class="main">
+        <div id="onglets">
+          <div id="onglet_circuit" onclick="circuitTop()">Circuit</div>
+          <div id="onglet_html" onclick="htmlTop()">Code Processing</div>
+        </div>
+        <h3>Firmata</h3>
+        <p class="circuitb">Firmata est un protocole de communication entre Arduino et Processing. Il permet de rendre l'Arduino "esclave" de Processing, c'est-à-dire que nous pourrons lire des capteurs et lui donner des ordres depuis l'IDE Processing.</p>
+        <div id="schemas">
+          <img id="img_ard20" class="scheme" src="{{ url_for('static', filename='arduino_firmata1.svg') }}" alt="">
+        </div>
+
+        <ol>
+          <li>Nous allons contrôler cinq composants connectés à l'Arduino depuis Processing dans ce projet. Tout d'abord deux interrupteurs, l'un relié au 5V et à la pin 9, l'autre relié au 5V et à la pin 10.</li>
+          <li>On place un potentiomètre sur le circuit, branché sur ses extrémités au 5V et au GND, sur sa patte du milieu à l'A0.</li>
+          <li>Ensuite un capteur de température, branché au 5V à gauche (quand son côté plat est face à vous), au GND à droite et à l'A1 sur sa patte du milieu.</li>
+          <li>Pour terminer une photorésistance, connectée au 5V à travers une résistance de 10k Ω et à la broche A2 de l'Arduino.</li>
+        </ol>
+
+      <div id="block_html">
+        <p>Code Processing</p>
+        <pre class="code_full">
+
+  <span class="typep">import</span> processing.serial.*;
+  <span class="typep">import</span> cc.arduino.*;
+
+  <span class="typep">Arduino</span> arduino;
+
+  <span class="typep">color</span> back = <span class="fonctionp">color</span>(64, 218, 255);
+
+  <span class="typep">int</span> pot = 0;
+  <span class="typep">int</span> temp = 1;
+  <span class="typep">int</span> photo = 2;
+  <span class="typep">int</span> button1 = 9;
+  <span class="typep">int</span> button2 = 10;
+  <span class="typep">int</span> read_pot;
+  <span class="typep">int</span> read_temp;
+  <span class="typep">int</span> read_photo;
+  <span class="typep">int</span> read_button1;
+  <span class="typep">int</span> read_button2;
+
+  <span class="typep">void</span> <span class="fonctionp">setup()</span> {
+    <span class="fonctionp">size</span>(800, 600);
+    arduino = new <span class="typep">Arduino</span>(this,
+    <span class="typep">Arduino</span>.<span class="fonctionp">list()</span>[0], 57600);
+    arduino.<span class="fonctionp">pinMode</span>(pot, <span class="typep">Arduino.INPUT</span>);
+    arduino.<span class="fonctionp">pinMode</span>(temp, <span class="typep">Arduino.INPUT</span>);
+    arduino.<span class="fonctionp">pinMode</span>(photo, <span class="typep">Arduino.INPUT</span>);
+    arduino.<span class="fonctionp">pinMode</span>(button1, <span class="typep">Arduino.INPUT</span>);
+    arduino.<span class="fonctionp">pinMode</span>(button2, <span class="typep">Arduino.INPUT</span>);
+    <span class="fonctionp">background</span>(back);
+  }
+
+  <span class="typep">void</span> <span class="fonctionp">draw()</span> {
+    read_pot = arduino.<span class="fonctionp">analogRead</span>(pot);
+    read_temp = arduino.<span class="fonctionp">analogRead</span>(temp);
+    read_photo = arduino.<span class="fonctionp">analogRead</span>(photo);
+    read_button1 =
+    arduino.<span class="fonctionp">digitalRead</span>(button1);
+    read_button2 =
+    arduino.<span class="fonctionp">digitalRead</span>(button2);
+
+    <span class="typep">float</span> value_pot = <span class="fonctionp">map</span>(read_pot, 0,
+    680, 0, width);
+    <span class="typep">float</span> value_temp = <span class="fonctionp">map</span>(read_temp, 0,
+    600, 0, height);
+    <span class="fonctionp">ellipse</span>(value_pot, value_temp,
+    read_photo, read_photo);
+
+    <span class="typep">if</span>(read_button1 == 1) {
+      <span class="fonctionp">background</span>(0, 0, 0);
+    }
+    <span class="typep">if</span>(read_button2 == 1) {
+      <span class="typep">color</span> fond = <span class="fonctionp">color</span>(<span class="fonctionp">random</span>(0,255),
+      <span class="fonctionp">random</span>(0,255), <span class="fonctionp">random</span>(0,255));
+      <span class="fonctionp">fill</span>(fond);
+    }
+  }
+
+      </pre>
+    </div>
+
+    <h4>LE CODE</h4>
+    <p>Pour ce qui est du code à téléverser sur l'Arduino, Firmata est un protocole préexistant que nous n'avons pas à réécrire. Tout ce que nous avons à faire dans ce projet du côté de l'Arduino est d'y téléverser le protocole Firmata. Pour ce faire, dans l'IDE Arduino, allez dans Fichier > Exemples > Firmata > StandardFirmata. Une fois ce code ouvert, téléversez-le sur votre Arduino. Et c'est tout pour Arduino.</p>
+    <p>Le téléversement de ce code sur l'Arduino rend la carte entièrement contrôlable depuis Processing, c'est là que nous allons scripter les actions demandées à l'Arduino.</p>
+    <pre class="proc">
+
+  <span class="typep">import</span> processing.serial.*;
+  <span class="typep">import</span> cc.arduino.*;
+
+  <span class="typep">Arduino</span> arduino;
+
+  <span class="typep">color</span> back = <span class="fonctionp">color</span>(64, 218, 255);
+
+  <span class="typep">int</span> pot = 0;
+  <span class="typep">int</span> temp = 1;
+  <span class="typep">int</span> photo = 2;
+  <span class="typep">int</span> button1 = 9;
+  <span class="typep">int</span> button2 = 10;
+  <span class="typep">int</span> read_pot;
+  <span class="typep">int</span> read_temp;
+  <span class="typep">int</span> read_photo;
+  <span class="typep">int</span> read_button1;
+  <span class="typep">int</span> read_button2;
+    </pre>
+    <p>Dans Processing, on importe <span class="processing">processing.serial</span> pour pouvoir utiliser le port série et <span class="processing">cc.arduino</span>, la librairie qui nous permet de contrôler l'Arduino fonctionnant sous le protocole Firmata. On crée donc un objet <span class="processing">Arduino</span> pour avoir accès à ses méthodes. Ensuite, comme on le ferait dans l'IDE Arduino, on initialise les variables qui vont stocker les pins de chaque composant ainsi que les valeurs à lire. À notre que pour les composants connectés aux broches analogiques de l'Arduino (le potentiomètre, le capteur de température et la photorésistance) on les déclare à ce stade seulement par leur numéro&nbsp;: 0, 1 et 2, là où dans l'IDE Arduino on aurait déclaré A0, A1 et A2.</p>
+    <pre class="proc">
+
+  <span class="typep">void</span> <span class="fonctionp">setup()</span> {
+    <span class="fonctionp">size</span>(800, 600);
+    arduino = new <span class="typep">Arduino</span>(this,
+    <span class="typep">Arduino</span>.<span class="fonctionp">list()</span>[0], 57600);
+    arduino.<span class="fonctionp">pinMode</span>(pot, <span class="typep">Arduino.INPUT</span>);
+    arduino.<span class="fonctionp">pinMode</span>(temp, <span class="typep">Arduino.INPUT</span>);
+    arduino.<span class="fonctionp">pinMode</span>(photo, <span class="typep">Arduino.INPUT</span>);
+    arduino.<span class="fonctionp">pinMode</span>(button1, <span class="typep">Arduino.INPUT</span>);
+    arduino.<span class="fonctionp">pinMode</span>(button2, <span class="typep">Arduino.INPUT</span>);
+    <span class="fonctionp">background</span>(back);
+  }
+    </pre>
+    <p>Au démarrage du script on initialise l'objet <span class="processing">Arduino</span> à un baudrate de 57600. Ensuite, comme on le ferait dans la fonction <span class="processing">setup()</span> d'Arduino, on déclare le mode des pins. La seule différence est que l'on doit ajouter le préfixe <span class="processing">arduino</span> aux fonctions. Ici comme on veut récupérer les valeurs des capteurs et l'état des interrupteurs, toutes les pins sont des <span class="processing">INPUT</span>.</p>
+    <pre class="proc">
+
+  <span class="typep">void</span> <span class="fonctionp">draw()</span> {
+    read_pot = arduino.<span class="fonctionp">analogRead</span>(pot);
+    read_temp = arduino.<span class="fonctionp">analogRead</span>(temp);
+    read_photo = arduino.<span class="fonctionp">analogRead</span>(photo);
+    read_button1 =
+    arduino.<span class="fonctionp">digitalRead</span>(button1);
+    read_button2 =
+    arduino.<span class="fonctionp">digitalRead</span>(button2);
+
+    <span class="typep">float</span> value_pot = <span class="fonctionp">map</span>(read_pot, 0,
+    680, 0, width);
+    <span class="typep">float</span> value_temp = <span class="fonctionp">map</span>(read_temp, 0,
+    600, 0, height);
+    <span class="fonctionp">ellipse</span>(value_pot, value_temp,
+    read_photo, read_photo);
+
+    <span class="typep">if</span>(read_button1 == 1) {
+      <span class="fonctionp">background</span>(0, 0, 0);
+    }
+    <span class="typep">if</span>(read_button2 == 1) {
+      <span class="typep">color</span> fond = <span class="fonctionp">color</span>(<span class="fonctionp">random</span>(0,255),
+      <span class="fonctionp">random</span>(0,255), <span class="fonctionp">random</span>(0,255));
+      <span class="fonctionp">fill</span>(fond);
+    }
+  }
+    </pre>
+    <p>Dans le corps du script on lit en continu les valeurs de nos capteurs et interrupteurs (le code est quasiment le même que celui qu'on écrirait dans Arduino pour obtenir le même résultat). À partir de ces valeurs, on va déclencher des actions dans la fenêtre Processing.<br/>
+    Les valeurs envoyées par le potentiomètre et le capteur de température sont ré-échelonnées à l'aide de la fonction <span class="processing">map()</span> pour correspondre respectivement à la largeur et à la hauteur maximale de l'écran. La fonction <span class="processing">ellipse()</span> de Processing permet de dessiner des cercles ou des ellipses dans la fenêtre en prenant pour arguments la position en X du centre, sa position en Y, son diamètre en X et son diamètre en Y. En appelant cette fonction avec pour paramètres <span class="processing">ellipse(value_pot, value_temp, read_photo, read_photo);</span>, nous dessinons un cercle dans la fenêtre Processing dont la position en X est déterminée par la valeur du potentiomètre, la position en Y par la valeur du capteur de température, et le diamètre par la luminosité captée par la photorésistance.<br/>Puis à l'aide de deux boucles conditionnelles nous vérifions si les interrupteurs sont pressés. Si c'est le cas pour le premier, le fond de la fenêtre devient noir. Si c'est le deuxième bouton qui est pressé alors le fond prend une couleur déterminée au hasard par <span class="processing">random(0,255)</span>.</p>
+
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>{% block title %}Cityfab2.docs{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    <div id="entete">
+      <a href="/">Cityfab2.docs</a>
+    </div>
+      <ul id="menu">
+        <li><a href="/ressources_pedagogiques">Ressources pédagogiques</a></li>
+        <li>Liens</li>
+
+      </ul>
+
+      <div class="print">
+        <a href="/freecad08.pdf">Version PDF</a>
+      </div>
+      <div class="previous">
+        <p>Découpe laser</p>
+      </div>
+
+      <div class="main full">
+        <h3>Exporter un fichier DXF depuis Freecad</h3>
+        <p class="circuitb large_full">Le format DXF est utilisé pour la découpe laser, il s'agit à la base d'un format propriétaire créé par Autodesk aujourd'hui tombé dans le domaine public. C'est un format de fichier 2D.</p>
+
+        <p class="large_full">On peut dessiner une forme traçable par une découpeuse laser en créant un <span class="code">Sketch</span> dans l'atelier <span class="code">Part design</span>. On peut utiliser tous les outils de dessin disponibles ainsi que les contraintes si on veut pouvoir modifier le croquis paramétriquement.</p>
+        <img class="tuto" src="{{ url_for('static', filename='fc49.png') }}" alt="">
+        <img class="tuto" src="{{ url_for('static', filename='fc50.png') }}" alt="">
+
+        <p class="large_full">Une fois l'esquisse terminée, cliquez sur <span class="code">Close</span>. Pour exporter le fichier en DXF, sélectionnez l'esquisse dans l'arborescence du projet et cliquez sur <span class="code">Fichier</span> > <span class="code">Exporter</span> puis choisissez le format <span class="code">Autodesk DXF 2D</span>.</p>
+        <img class="tuto" src="{{ url_for('static', filename='fc51.png') }}" alt="">
+
+
+    </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>
