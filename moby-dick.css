@@ -1,164 +1,253 @@
+/* BEG @media print */
+@media print{
+
 @page {
+    
   size: A7;
   margin: 10mm 10mm;
   marks: crop;
-
+/*
   @footnote {
     margin: 0.6em 0 0 0;
     padding: 0.3em 0 0 0;
     max-height: 10em;
   }
-/*
-  @top-center {
-    vertical-align: bottom;
-    padding-bottom: 10mm;
-    content: string(booktitle);
-  }
-    */
-}
+*/
+} /* END @page  */
 
-@page :left {
+@page :first {
     
   margin: 10mm 10mm 10mm 10mm;
 
-    /*
-  @top-left {
-    vertical-align: bottom;
-    padding-bottom: 10mm;
-    content: string(page-number, first-except);
-    letter-spacing: 0.1em;
-    margin-left: -1em;
-    font-size: 0.9em;
- }
-
- @bottom-left-corner {
-   content: counter(page);
- }
-    */
-    
 @top-left-corner {
-    content: "top-left-corner";
-    font-size: 8pt;
+    content: url("Menorah-Silver-24x24.png");
+  padding-top: 26px;
+    filter: opacity(80%);
+    background: none;
 }
 @top-left {
-        content: "top-left";
+        content: "";
     font-size: 8pt;
 }
 @top-center {
         content: "יהוה";
-    font-size: 24pt;
+    font-size: 36pt;
     font-family: "David Libre";
+  color: #ffffff;
+  text-shadow: 1px 1px 2px #000000;
+      padding-top: 15px;
+    letter-spacing: -2px;
 }
 @top-right {
-        content: "top-right";
+        content: "";
     font-size: 8pt;
 }
 @top-right-corner {
-        content: "top-right-corner";
-    font-size: 8pt;
+    content: url("Menorah-Silver-24x24.png");
+  padding-top: 26px;
+    filter: opacity(80%);
+    background: none;
 }
 @left-top {
-        content: "left-top";
+        content: "";
     font-size: 8pt;
 }
 @left-middle {
-        content: "רוח הקודש";
-    font-size: 24pt;
+        content: "";
+    font-size: 10pt;
       transform: rotate(270deg);
-    font-family: "David Libre";
+        width: 50mm;
+    height: 10mm;
+    margin-left: -20mm;
+        background: none;
 }
 @left-bottom {
-        content: "left-bottom";
+        content: "";
     font-size: 8pt;
 }
 @right-top {
-        content: "right-top";
+        content: "";
     font-size: 8pt;
 }
 @right-middle {
-        content: "right-middle";
-    font-size: 8pt;
+        content: "";
+    font-size: 10pt;
       transform: rotate(90deg);
+    width: 50mm;
+    height: 10mm;
+    margin-left: -20mm;
+    background: none;
 }
 @right-bottom {
-        content: "right-bottom";
+        content: "";
     font-size: 8pt;
 }
 @bottom-left-corner {
-        content: "bottom-left-corner";
-    font-size: 8pt;
+    content: url("Menorah-Silver-24x24.png");
+  padding-bottom: 12px;
+    padding-left: 14px;
+    filter: opacity(80%);
+    background: none;
 }
 @bottom-left {
-        content: "bottom-left";
+        content: "";
     font-size: 8pt;
 }
 @bottom-center {
         content: "ישוע";
-    font-size: 24pt;
+    font-size: 36pt;
     font-family: "David Libre";
+  color: #ffffff;
+  text-shadow: 1px 1px 2px #000000;
+      padding-bottom: 22px;
+        letter-spacing: -2px;
 }
 @bottom-right {
-        content: "bottom-right";
+        content: "";
     font-size: 8pt;
 }
 @bottom-right-corner {
-        content: "bottom-right-corner";
-    font-size: 8pt;
+    content: url("Menorah-Silver-24x24.png");
+  padding-bottom: 12px;
+    filter: opacity(80%);
+    background: none;
 }
+} /* END @page :first  */
+
+
+@page :left {
+    
+  margin: 10mm 10mm 10mm 10mm;
+    
+@top-left-corner {
+    content: url("Menorah-Silver-24x24.png");
+  padding-top: 26px;
+    filter: opacity(80%);
+    background: none;
     
 }
+@top-left {
+        content: "";
+    font-size: 8pt;
+}
+@top-center {
+        content: "יהוה";
+    font-size: 36pt;
+    font-family: "David Libre";
+  color: #ffffff;
+  text-shadow: 1px 1px 2px #000000;
+      padding-top: 16px;
+        letter-spacing: -2px;
+}
+@top-right {
+        content: "";
+    font-size: 8pt;
+}
+@top-right-corner {
+        content: "";
+    font-size: 8pt;
+}
+@left-top {
+        content: "";
+    font-size: 8pt;
+}
+@left-middle {
+    content: string(title);
+    font-size: 18pt;
+    transform: rotate(270deg);
+    width: 50mm;
+    height: 10mm;
+    margin-left: -20mm;
+    background-color:#b6b6b6;
+    }    
+@left-bottom {
+        content: "";
+    font-size: 8pt;
+}
+@right-top {
+        content: "";
+    font-size: 8pt;
+}
+@right-middle {
+        content: "Behold, I come quickly";
+    font-size: 12pt;
+      transform: rotate(90deg);
+    width: 50mm;
+    height: 10mm;
+    margin-left: -20mm;
+}
+@right-bottom {
+        content: "";
+    font-size: 8pt;
+}
+@bottom-left-corner {
+    content: url("Menorah-Silver-24x24.png");
+  padding-bottom: 12px;
+    padding-left: 14px;
+    filter: opacity(80%);
+    background: none;
+}
+@bottom-left {
+        content: "";
+    font-size: 8pt;
+}
+@bottom-center {
+        content: "ישוע";
+    font-size: 36pt;
+    font-family: "David Libre";
+  color: #ffffff;
+  text-shadow: 1px 1px 2px #000000;
+      padding-bottom: 22px;
+        letter-spacing: -2px;
+}
+@bottom-right {
+        content: "";
+    font-size: 8pt;
+}
+@bottom-right-corner {
+    content: counter(page);
+    font-size: 12pt;
+    text-align: center;
+}
+} /* END @page :left  */
 
 @page :right {
     
   margin: 10mm 10mm 10mm 10mm;
     
-
-   /* 
-  @top-right {
-    vertical-align: bottom;
-    padding-bottom: 10mm;
-    content: string(page-number, first-except);
-    letter-spacing: 0.08em;
-    margin-right: -1em;
-    font-size: 0.9em;
- }
-
- @bottom-right-corner {
-   content: counter(page);
- }
-
- @top-center{
-   content: string(booktitle);
-  }
-    */
-    
 @top-left-corner {
-    content: "top-left-corner";
+    content: "";
     font-size: 8pt;
 }
 @top-left {
-        content: "top-left";
+        content: "";
     font-size: 8pt;
 }
 @top-center {
-        content: "ישוע";
-    font-size: 24pt;
+        content: "יהוה";
+    font-size: 36pt;
     font-family: "David Libre";
+  color: #ffffff;
+  text-shadow: 1px 1px 2px #000000;
+      padding-top: 16px;
+        letter-spacing: -2px;
 }
 @top-right {
-        content: "top-right";
+        content: "";
     font-size: 8pt;
 }
 @top-right-corner {
-        content: "top-right-corner";
-    font-size: 8pt;
+    content: url("Menorah-Silver-24x24.png");
+  padding-top: 26px;
+    filter: opacity(80%);
+    background: none;
 }
 @left-top {
-        content: "left-top";
+        content: "";
     font-size: 8pt;
 }
 @left-middle {
-        content: "left-middle longer words";
+        content: "Behold, I come quickly";
     font-size: 12pt;
       transform: rotate(270deg);
     width: 50mm;
@@ -166,107 +255,79 @@
     margin-left: -20mm;
 }
 @left-bottom {
-        content: "left-bottom";
+        content: "";
     font-size: 8pt;
 }
 @right-top {
-        content: "right-top";
+        content: "";
     font-size: 8pt;
 }
 @right-middle {
-        content: "left-middle longer words";
-    font-size: 12pt;
+        content: string(title);
+    font-size: 18pt;
       transform: rotate(90deg);
     width: 50mm;
     height: 10mm;
     margin-left: -20mm;
-        background-color:#dcdcdc;
+        background-color:#b6b6b6;
 }
 @right-bottom {
-        content: "right-bottom";
+        content: "";
     font-size: 8pt;
 }
 @bottom-left-corner {
-        content: "bottom-left-corner";
-    font-size: 8pt;
+    content: counter(page);
+    font-size: 12pt;
+    text-align: center;
 }
 @bottom-left {
-        content: "bottom-left";
+        content: "";
     font-size: 8pt;
 }
 @bottom-center {
-        content: "יהוה";
-    font-size: 24pt;
+        content: "ישוע";
+    font-size: 36pt;
     font-family: "David Libre";
+  color: #ffffff;
+  text-shadow: 1px 1px 2px #000000;
+      padding-bottom: 22px;
+        letter-spacing: -2px;
 }
 @bottom-right {
-        content: "bottom-right";
+        content: "";
     font-size: 8pt;
 }
 @bottom-right-corner {
-        content: counter(page);
-    font-size: 8pt;
-    text-align: center;
-
-    
+    content: url("Menorah-Silver-24x24.png");
+  padding-bottom: 12px;
+    filter: opacity(80%);
+    background: none;
 }
-    
-}
-
+} /* END @page :right  */
 @page cover {
   @top-center{
     content: none;
    }
 }
+} /* END @media print */
 
-
-@font-face {
-font-family: 'Stix';
-font-weight: normal;
-font-style: normal;
-}
-
-@font-face {
-font-family: 'Stix';
-font-weight: bold;
-font-style: normal;
-}
-
-@font-face {
-font-family:'Stix';
-font-weight: normal;
-font-style: italic;
-}
-
-@font-face {
-font-family:'Stix';
-font-weight: bold;
-font-style: italic;
-}
-
-section:nth-child(1) h1 {
-  string-set: booktitle content(text);
-}
+/************/
+/* BEG custom style */
+/************/
 
 section {
-  break-before: right;
   break-after: always;
 }
-
-
 body {
-font-size: 1em;
-line-height: 1.33em;
-font-family: 'Stix', serif;
-font-variant-numeric: oldstyle-nums;
+  font-family: "PT Sans Narrow", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
-
 p {
 padding: 0;
 margin: 0;
 text-align: justify;
 }
-
 header + p:first-line {
 text-transform: lowercase !important;
 font-variant: small-caps;
@@ -314,8 +375,6 @@ height: 1.33em;
 text-indent: 0;
 }
 
-
-
 h1 {
 font-size: 24pt;
 line-height: 1.33em;
@@ -328,6 +387,9 @@ letter-spacing: 4px;
 }
 
 h2 {
+display: none; visibility: hidden;
+string-set: title content(text);
+    
 text-align: center;
 font-size: 16pt;
 line-height: 1.2em;
@@ -404,7 +466,6 @@ font-size: 2.7em;
 line-height: .87em;
 }
 
-
 .signature-rw {
 margin-left: 50%;
 text-align: left;
@@ -428,70 +489,36 @@ text-align: center;
 text-indent: 0;
 }
 
-
-
 /* NAVIGATION */
 
 a {
 color: black !important;
 }
 
-#toc ol {
-list-style-type: none;
-margin: 0 0 0 2em;
-padding: 0 0 0 0;
+#toc {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+    width: 200px;
+    height: 320px;
+    margin-top: 0px;
+    padding-top: 0px;
+   margin-left: 4px;
+   margin-right: 4px;
+    background: none;
 }
-
-#toc ol ol {
-list-style-type: none;
-margin: 0 0 0 1em;
-padding: 0 0 0 0;
-}
-
-
-
-
-
-#toc ol li {
-margin: 0 0 0 0;
-padding: 0 0 0 0;
-}
-
-#toc ol li a {
-text-decoration: none;
-font-family: sans-serif;
-}
-
-.toc-short ol li a {
-text-decoration: none;
-font-family: sans-serif;
-}
-
-
-.toc-short ol {
-list-style-type: none;
-margin: 0 0 0 2em;
-padding: 0 0 0 0;
-}
-
 
 #guide {
 display: none;
 }
 
-
 header {
-padding: 3em 0 2em 0;
 }
 
 header a {
 text-decoration: none;
 color: black;
 }
-
-
-
-
 
 .center {
 text-align: center;
@@ -502,8 +529,6 @@ img {
 max-width: 100%;
 max-height: 100%;
 }
-
-
 
 .title-other-rw {
 text-align: center;
@@ -518,7 +543,6 @@ margin-top: 1.33em;
 margin-bottom: 1.33em;
 }
 
-
 .frontmatter-rw h1 {
 font-size: 1.5em;
 }
@@ -526,8 +550,6 @@ font-size: 1.5em;
 .backmatter-rw h1 {
 font-size: 1.5em;
 }
-
-
 
    .direction-rw {
    text-align: center;
@@ -566,33 +588,70 @@ div.photo {
 margin-top: 1em;
 padding-top: 2em;
 text-align: center;
-
 }
 
 div.photo p {
 text-align: center;
 padding: 6px;
 font-style: italic;
-
-
-
 }
-
-
-
-
 
 .-epub-media-overlay-active {
     background-color: #abc;
 }
 
-
 @media all and (orientation:portrait) {
 p { font-family: serif; }
 }
-
 
 @media all and (orientation:landscape) {
 p { font-family: sans-serif; }
 
 }
+
+.Ubuntu-Thin-Topics {
+    font-size: 14pt;
+    height:16pt;
+  text-align: center;
+}
+.Ubuntu-Thin-Side-Scriptures {
+
+}
+.Ubuntu-Thin-Verses {
+
+}
+.Ubuntu-Thin-References {
+
+}
+.onePerPage {
+    page-break-before: always;
+    break-before: always;
+    background: none;
+    width: 200px;
+    height: 290px;
+    margin-top: 20px;
+   margin-left: 4px;
+   margin-right: 4px;
+      display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+    }
+.verse{
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+width: 180px;
+height: 270px;
+        margin-top: 20px;
+   margin-left: 10px;
+   margin-right: 10px;
+background: none;
+}
+.ref{
+    font-size: 12pt;
+background: none;
+}
+
+/************/
+/* END custom style */
+/************/
