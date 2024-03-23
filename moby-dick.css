@@ -16,7 +16,7 @@
 }
 /* END @page  */
 /* ////////////////////////// */
-/* BEG @page :first  */
+/* BEG @page :first  Dedication */
 /* ////////////////////////// */
 @page :first {
     
@@ -84,21 +84,29 @@
         content: "";
     font-size: 8pt;
     background: none;
+        width: 0px;
+
 }
 /* done */ @right-middle {
-        content: "ושלשתם אחד המה";
-    font-size: 18pt;
-    font-family: "David Libre";
-  color: #ffffff;
-  text-shadow: 1px 1px 2px #000000;
-   /* letter-spacing: -2px;*/
-      transform: rotate(90deg);
+        content: "Yehováh our Father . Yeshúa The Word . The Holy Spirit";
+font-size: 12pt;
+    font-family: "PT Sans Narrow", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: #707070;
+    transform: rotate(90deg);
     background: none;
+    width: 298px;
+    margin-top: -4px;
+    margin-left: -140px;
+    text-align: center;
 }
 /* done */ @right-bottom {
         content: "";
     font-size: 8pt;
     background: none;
+            width: 0px;
+
 }
 /* done */ @bottom-left-corner {
     content: url("");
@@ -137,12 +145,144 @@
 }
 }
 /* ////////////////////////// */
-/* END @page :first  */
+/* END @page :first  Dedication  */
 /* ////////////////////////// */
 /* ////////////////////////// */
-/* BEG @page :nth(1)  */
+/* BEG @page :nth(2) Shma Hebrew - Translit - English */
 /* ////////////////////////// */
 @page :nth(2) {
+    
+  margin: 10mm 10mm 10mm 10mm;
+
+/* done */ @top-left-corner {
+    /*content: url("Menorah-Silver-24x24.png");*/
+  padding-top: 26px;
+    filter: opacity(80%);
+    background: none;
+}
+/* done */ @top-left {
+        content: "";
+    font-size: 8pt;
+    background: none;
+    width:   0px;
+}
+/* done */ @top-center {
+        content: "יהוה אבינו";
+    font-size: 38pt;
+    font-family: "David Libre";
+  color: #ffffff;
+  text-shadow: 1px 1px 2px #000000;
+      padding-top: 15px;
+    letter-spacing: -2px;
+    min-width   200px;
+    background: none;
+    text-align: center;
+}
+/* done */ @top-right {
+        content: "";
+    font-size: 8pt;
+    background: none;
+    width:   0px;
+}
+/* done */ @top-right-corner {
+    /*content: url("Menorah-Silver-24x24.png");*/
+  padding-top: 26px;
+    filter: opacity(80%);
+    background: none;
+}
+/* done */ @left-top {
+        content: "";
+    font-size: 8pt;
+    background: none;
+}
+/* done */ @left-middle {
+        content: "רוח הקודש";
+    font-size: 34pt;
+    font-family: "David Libre";
+  color: #ffffff;
+  text-shadow: 1px 1px 2px #000000;
+    letter-spacing: -2px;
+    transform: rotate(270deg);
+    background: none;
+    text-align: center;
+    margin-left: -65px;
+}
+/* done */ @left-bottom {
+        content: "";
+    font-size: 8pt;
+    background: none;
+}
+/* done */ @right-top {
+        content: "";
+    font-size: 8pt;
+    background: none;
+        width: 0px;
+
+}
+/* done */ @right-middle {
+        content: "Yehováh our Father . Yeshúa The Word . The Holy Spirit";
+font-size: 12pt;
+    font-family: "PT Sans Narrow", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: #707070;
+    transform: rotate(90deg);
+    background: none;
+    width: 298px;
+    margin-top: -4px;
+    margin-left: -140px;
+    text-align: center;
+}
+/* done */ @right-bottom {
+        content: "";
+    font-size: 8pt;
+    background: none;
+            width: 0px;
+
+}
+/* done */ @bottom-left-corner {
+    content: url("");
+  padding-bottom: 12px;
+    padding-left: 14px;
+    filter: opacity(80%);
+    background: none;
+}
+/* done */ @bottom-left {
+        content: "";
+    font-size: 8pt;
+    background: none;
+    width:   0px;
+}
+/* done */ @bottom-center {
+        content: "ישוע הדבר";
+    font-size: 39pt;
+    font-family: "David Libre";
+  color: #ffffff;
+  text-shadow: 1px 1px 2px #000000;
+      padding-bottom: 23px;
+      letter-spacing: -2px;
+    background: none;
+}
+/* done */ @bottom-right {
+        content: "";
+    font-size: 8pt;
+    background: none;
+    width:   0px;
+}
+/* done */ @bottom-right-corner {
+    content: url("");
+  padding-bottom: 12px;
+    filter: opacity(80%);
+    background: none;
+}
+}
+/* ////////////////////////// */
+/* END @page :nth(2) Shma Hebrew - Translit - English  */
+/* ////////////////////////// */
+/* ////////////////////////// */
+/* BEG @page :nth(3) For there are three */
+/* ////////////////////////// */
+@page :nth(3) {
     
   margin: 10mm 10mm 10mm 10mm;
 
@@ -261,8 +401,522 @@
 }
 }
 /* ////////////////////////// */
-/* END @page :nth(1)  */
+/* END @page :nth(3) For there are three */
 /* ////////////////////////// */
+/* ////////////////////////// */
+/* BEG @page :nth(4) lo tikom ve lo tittor */
+/* ////////////////////////// */
+@page :nth(4) {
+    
+  margin: 10mm 10mm 10mm 10mm;
+
+/* done */ @top-left-corner {
+    /*content: url("Menorah-Silver-24x24.png");*/
+  padding-top: 26px;
+    filter: opacity(80%);
+    background: none;
+}
+/* done */ @top-left {
+        content: "";
+    font-size: 8pt;
+    background: none;
+    width:   0px;
+}
+/* done */ @top-center {
+        content: "יהוה אבינו";
+    font-size: 38pt;
+    font-family: "David Libre";
+  color: #ffffff;
+  text-shadow: 1px 1px 2px #000000;
+      padding-top: 15px;
+    letter-spacing: -2px;
+    min-width   200px;
+    background: none;
+    text-align: center;
+}
+/* done */ @top-right {
+        content: "";
+    font-size: 8pt;
+    background: none;
+    width:   0px;
+}
+/* done */ @top-right-corner {
+    /*content: url("Menorah-Silver-24x24.png");*/
+  padding-top: 26px;
+    filter: opacity(80%);
+    background: none;
+}
+/* done */ @left-top {
+        content: "";
+    font-size: 8pt;
+    background: none;
+}
+/* done */ @left-middle {
+        content: "רוח הקודש";
+    font-size: 34pt;
+    font-family: "David Libre";
+  color: #ffffff;
+  text-shadow: 1px 1px 2px #000000;
+    letter-spacing: -2px;
+    transform: rotate(270deg);
+    background: none;
+    text-align: center;
+    margin-left: -65px;
+}
+/* done */ @left-bottom {
+        content: "";
+    font-size: 8pt;
+    background: none;
+}
+/* done */ @right-top {
+        content: "";
+    font-size: 8pt;
+    background: none;
+        width: 0px;
+
+}
+/* done */ @right-middle {
+        content: "Yehováh our Father . Yeshúa The Word . The Holy Spirit";
+font-size: 12pt;
+    font-family: "PT Sans Narrow", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: #707070;
+    transform: rotate(90deg);
+    background: none;
+    width: 298px;
+    margin-top: -4px;
+    margin-left: -140px;
+    text-align: center;
+}
+/* done */ @right-bottom {
+        content: "";
+    font-size: 8pt;
+    background: none;
+            width: 0px;
+
+}
+/* done */ @bottom-left-corner {
+    content: url("");
+  padding-bottom: 12px;
+    padding-left: 14px;
+    filter: opacity(80%);
+    background: none;
+}
+/* done */ @bottom-left {
+        content: "";
+    font-size: 8pt;
+    background: none;
+    width:   0px;
+}
+/* done */ @bottom-center {
+        content: "ישוע הדבר";
+    font-size: 39pt;
+    font-family: "David Libre";
+  color: #ffffff;
+  text-shadow: 1px 1px 2px #000000;
+      padding-bottom: 23px;
+      letter-spacing: -2px;
+    background: none;
+}
+/* done */ @bottom-right {
+        content: "";
+    font-size: 8pt;
+    background: none;
+    width:   0px;
+}
+/* done */ @bottom-right-corner {
+    content: url("");
+  padding-bottom: 12px;
+    filter: opacity(80%);
+    background: none;
+}
+}
+/* ////////////////////////// */
+/* END @page :nth(4) lo tikom ve lo tittor  */
+/* ////////////////////////// */
+/* ////////////////////////// */
+/* BEG @page :nth(5)  ve ahavta lereacha kamocha */
+/* ////////////////////////// */
+@page :nth(5) {
+    
+  margin: 10mm 10mm 10mm 10mm;
+
+/* done */ @top-left-corner {
+    /*content: url("Menorah-Silver-24x24.png");*/
+  padding-top: 26px;
+    filter: opacity(80%);
+    background: none;
+}
+/* done */ @top-left {
+        content: "";
+    font-size: 8pt;
+    background: none;
+    width:   0px;
+}
+/* done */ @top-center {
+        content: "יהוה אבינו";
+    font-size: 38pt;
+    font-family: "David Libre";
+  color: #ffffff;
+  text-shadow: 1px 1px 2px #000000;
+      padding-top: 15px;
+    letter-spacing: -2px;
+    min-width   200px;
+    background: none;
+    text-align: center;
+}
+/* done */ @top-right {
+        content: "";
+    font-size: 8pt;
+    background: none;
+    width:   0px;
+}
+/* done */ @top-right-corner {
+    /*content: url("Menorah-Silver-24x24.png");*/
+  padding-top: 26px;
+    filter: opacity(80%);
+    background: none;
+}
+/* done */ @left-top {
+        content: "";
+    font-size: 8pt;
+    background: none;
+}
+/* done */ @left-middle {
+        content: "רוח הקודש";
+    font-size: 34pt;
+    font-family: "David Libre";
+  color: #ffffff;
+  text-shadow: 1px 1px 2px #000000;
+    letter-spacing: -2px;
+    transform: rotate(270deg);
+    background: none;
+    text-align: center;
+    margin-left: -65px;
+}
+/* done */ @left-bottom {
+        content: "";
+    font-size: 8pt;
+    background: none;
+}
+/* done */ @right-top {
+        content: "";
+    font-size: 8pt;
+    background: none;
+}
+/* done */ @right-middle {
+        content: "ושלשתם אחד המה";
+    font-size: 18pt;
+    font-family: "David Libre";
+  color: #ffffff;
+  text-shadow: 1px 1px 2px #000000;
+   /* letter-spacing: -2px;*/
+      transform: rotate(90deg);
+    background: none;
+}
+/* done */ @right-bottom {
+        content: "";
+    font-size: 8pt;
+    background: none;
+}
+/* done */ @bottom-left-corner {
+    content: url("");
+  padding-bottom: 12px;
+    padding-left: 14px;
+    filter: opacity(80%);
+    background: none;
+}
+/* done */ @bottom-left {
+        content: "";
+    font-size: 8pt;
+    background: none;
+    width:   0px;
+}
+/* done */ @bottom-center {
+        content: "ישוע הדבר";
+    font-size: 39pt;
+    font-family: "David Libre";
+  color: #ffffff;
+  text-shadow: 1px 1px 2px #000000;
+      padding-bottom: 23px;
+      letter-spacing: -2px;
+    background: none;
+}
+/* done */ @bottom-right {
+        content: "";
+    font-size: 8pt;
+    background: none;
+    width:   0px;
+}
+/* done */ @bottom-right-corner {
+    content: url("");
+  padding-bottom: 12px;
+    filter: opacity(80%);
+    background: none;
+}
+}
+/* ////////////////////////// */
+/* END @page :nth(5)  ve ahavta lereacha kamocha  */
+/* ////////////////////////// */
+/* ////////////////////////// */
+/* BEG @page :nth(6) If ye continue */
+/* ////////////////////////// */
+@page :nth(6) {
+    
+  margin: 10mm 10mm 10mm 10mm;
+
+/* done */ @top-left-corner {
+    /*content: url("Menorah-Silver-24x24.png");*/
+  padding-top: 26px;
+    filter: opacity(80%);
+    background: none;
+}
+/* done */ @top-left {
+        content: "";
+    font-size: 8pt;
+    background: none;
+    width:   0px;
+}
+/* done */ @top-center {
+        content: "יהוה אבינו";
+    font-size: 38pt;
+    font-family: "David Libre";
+  color: #ffffff;
+  text-shadow: 1px 1px 2px #000000;
+      padding-top: 15px;
+    letter-spacing: -2px;
+    min-width   200px;
+    background: none;
+    text-align: center;
+}
+/* done */ @top-right {
+        content: "";
+    font-size: 8pt;
+    background: none;
+    width:   0px;
+}
+/* done */ @top-right-corner {
+    /*content: url("Menorah-Silver-24x24.png");*/
+  padding-top: 26px;
+    filter: opacity(80%);
+    background: none;
+}
+/* done */ @left-top {
+        content: "";
+    font-size: 8pt;
+    background: none;
+}
+/* done */ @left-middle {
+        content: "רוח הקודש";
+    font-size: 34pt;
+    font-family: "David Libre";
+  color: #ffffff;
+  text-shadow: 1px 1px 2px #000000;
+    letter-spacing: -2px;
+    transform: rotate(270deg);
+    background: none;
+    text-align: center;
+    margin-left: -65px;
+}
+/* done */ @left-bottom {
+        content: "";
+    font-size: 8pt;
+    background: none;
+}
+/* done */ @right-top {
+        content: "";
+    font-size: 8pt;
+    background: none;
+        width: 0px;
+
+}
+/* done */ @right-middle {
+        content: "Yehováh our Father . Yeshúa The Word . The Holy Spirit";
+font-size: 12pt;
+    font-family: "PT Sans Narrow", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: #707070;
+    transform: rotate(90deg);
+    background: none;
+    width: 298px;
+    margin-top: -4px;
+    margin-left: -140px;
+    text-align: center;
+}
+/* done */ @right-bottom {
+        content: "";
+    font-size: 8pt;
+    background: none;
+            width: 0px;
+
+}
+/* done */ @bottom-left-corner {
+    content: url("");
+  padding-bottom: 12px;
+    padding-left: 14px;
+    filter: opacity(80%);
+    background: none;
+}
+/* done */ @bottom-left {
+        content: "";
+    font-size: 8pt;
+    background: none;
+    width:   0px;
+}
+/* done */ @bottom-center {
+        content: "ישוע הדבר";
+    font-size: 39pt;
+    font-family: "David Libre";
+  color: #ffffff;
+  text-shadow: 1px 1px 2px #000000;
+      padding-bottom: 23px;
+      letter-spacing: -2px;
+    background: none;
+}
+/* done */ @bottom-right {
+        content: "";
+    font-size: 8pt;
+    background: none;
+    width:   0px;
+}
+/* done */ @bottom-right-corner {
+    content: url("");
+  padding-bottom: 12px;
+    filter: opacity(80%);
+    background: none;
+}
+}
+/* ////////////////////////// */
+/* END @page :nth(6) If ye continue  */
+/* ////////////////////////// */
+/* ////////////////////////// */
+/* BEG @page :nth(7)  TOC */
+/* ////////////////////////// */
+@page :nth(7) {
+    
+  margin: 10mm 10mm 10mm 10mm;
+
+/* done */ @top-left-corner {
+    /*content: url("Menorah-Silver-24x24.png");*/
+  padding-top: 26px;
+    filter: opacity(80%);
+    background: none;
+}
+/* done */ @top-left {
+        content: "";
+    font-size: 8pt;
+    background: none;
+    width:   0px;
+}
+/* done */ @top-center {
+        content: "יהוה אבינו";
+    font-size: 38pt;
+    font-family: "David Libre";
+  color: #ffffff;
+  text-shadow: 1px 1px 2px #000000;
+      padding-top: 15px;
+    letter-spacing: -2px;
+    min-width   200px;
+    background: none;
+    text-align: center;
+}
+/* done */ @top-right {
+        content: "";
+    font-size: 8pt;
+    background: none;
+    width:   0px;
+}
+/* done */ @top-right-corner {
+    /*content: url("Menorah-Silver-24x24.png");*/
+  padding-top: 26px;
+    filter: opacity(80%);
+    background: none;
+}
+/* done */ @left-top {
+        content: "";
+    font-size: 8pt;
+    background: none;
+}
+/* done */ @left-middle {
+        content: "רוח הקודש";
+    font-size: 34pt;
+    font-family: "David Libre";
+  color: #ffffff;
+  text-shadow: 1px 1px 2px #000000;
+    letter-spacing: -2px;
+    transform: rotate(270deg);
+    background: none;
+    text-align: center;
+    margin-left: -65px;
+}
+/* done */ @left-bottom {
+        content: "";
+    font-size: 8pt;
+    background: none;
+}
+/* done */ @right-top {
+        content: "";
+    font-size: 8pt;
+    background: none;
+}
+/* done */ @right-middle {
+        content: "ושלשתם אחד המה";
+    font-size: 18pt;
+    font-family: "David Libre";
+  color: #ffffff;
+  text-shadow: 1px 1px 2px #000000;
+   /* letter-spacing: -2px;*/
+      transform: rotate(90deg);
+    background: none;
+}
+/* done */ @right-bottom {
+        content: "";
+    font-size: 8pt;
+    background: none;
+}
+/* done */ @bottom-left-corner {
+    content: url("");
+  padding-bottom: 12px;
+    padding-left: 14px;
+    filter: opacity(80%);
+    background: none;
+}
+/* done */ @bottom-left {
+        content: "";
+    font-size: 8pt;
+    background: none;
+    width:   0px;
+}
+/* done */ @bottom-center {
+        content: "ישוע הדבר";
+    font-size: 39pt;
+    font-family: "David Libre";
+  color: #ffffff;
+  text-shadow: 1px 1px 2px #000000;
+      padding-bottom: 23px;
+      letter-spacing: -2px;
+    background: none;
+}
+/* done */ @bottom-right {
+        content: "";
+    font-size: 8pt;
+    background: none;
+    width:   0px;
+}
+/* done */ @bottom-right-corner {
+    content: url("");
+  padding-bottom: 12px;
+    filter: opacity(80%);
+    background: none;
+}
+}
+/* ////////////////////////// */
+/* END @page :nth(7)  TOC  */
+/* ////////////////////////// */
+
+
 @page :left {
     
   margin: 10mm 10mm 10mm 10mm;
@@ -798,6 +1452,54 @@ background: none;
 .ref{
     font-size: 12pt;
 background: none;
+}
+#dedicationPage{
+display: flex;
+      display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+    width: 200px;
+    height: 320px;
+    margin-top: 0px;
+    padding-top: 0px;
+   margin-left: 4px;
+   margin-right: 4px;
+    background: ;
+
+}
+.HEB{
+        font-size: 21pt;
+    font-family: "David Libre";
+  /*color: #ffffff;*/
+  /*text-shadow: 1px 1px 2px #000000;*/
+      padding-top: ;
+    letter-spacing: ;
+    min-width   ;
+    background: none;
+    text-align: center;   
+    line-height: 24pt;
+}
+.TRA{
+        font-size: 11pt;
+  font-family: "PT Sans Narrow", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  padding-top: 5px;
+    letter-spacing: ;
+    min-width   ;
+    background: none;
+    text-align: center;  
+}
+.ENG{
+            font-size: 13.5pt;
+  font-family: "PT Sans Narrow", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+      padding-top: 5px;
+    letter-spacing: ;
+    min-width   ;
+    background: none;
+    text-align: center;  
 }
 
 /************/
