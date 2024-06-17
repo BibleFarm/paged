@@ -93,7 +93,7 @@ font-size: 11pt;
     font-family: "PT Sans Narrow", sans-serif;
     font-weight: 400;
     font-style: normal;
-    color: red; /*color: #707070;*/
+    color: #707070;
     transform: rotate(90deg);
     background: none;
     width: 298px;
@@ -350,14 +350,18 @@ font-size: 11pt;
     background: none;
 }
 /* done */ @right-middle {
-        content: "ושלשתם אחד המה";
-    font-size: 18pt;
-    font-family: "David Libre";
-  color: #ffffff;
-  text-shadow: 1px 1px 2px #000000;
-   /* letter-spacing: -2px;*/
-      transform: rotate(90deg);
+        content: "Yehováh our Father . Yeshúa The Word . The Holy Spirit";
+font-size: 11pt;
+    font-family: "PT Sans Narrow", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: #707070;
+    transform: rotate(90deg);
     background: none;
+    width: 298px;
+    margin-top: -4px;
+    margin-left: -140px;
+    text-align: center;
 }
 /* done */ @right-bottom {
         content: "";
@@ -606,14 +610,18 @@ font-size: 11pt;
     background: none;
 }
 /* done */ @right-middle {
-        content: "ושלשתם אחד המה";
-    font-size: 18pt;
-    font-family: "David Libre";
-  color: #ffffff;
-  text-shadow: 1px 1px 2px #000000;
-   /* letter-spacing: -2px;*/
-      transform: rotate(90deg);
+        content: "Yehováh our Father . Yeshúa The Word . The Holy Spirit";
+font-size: 11pt;
+    font-family: "PT Sans Narrow", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: #707070;
+    transform: rotate(90deg);
     background: none;
+    width: 298px;
+    margin-top: -4px;
+    margin-left: -140px;
+    text-align: center;
 }
 /* done */ @right-bottom {
         content: "";
@@ -862,13 +870,12 @@ font-size: 11pt;
     background: none;
 }
 /* done */ @right-middle {
-        content: "ושלשתם אחד המה";
-    font-size: 18pt;
-    font-family: "David Libre";
-  color: #ffffff;
-  text-shadow: 1px 1px 2px #000000;
-   /* letter-spacing: -2px;*/
+        content: "Behold, I come quickly";
+    font-size: 12pt;
       transform: rotate(90deg);
+    width: 50mm;
+    height: 10mm;
+    margin-left: -20mm;
     background: none;
 }
 /* done */ @right-bottom {
@@ -971,7 +978,7 @@ font-size: 11pt;
     font-size: 8pt;
 }
 @right-middle {
-        content: "Behold, I come quickly, and";
+        content: "Behold, I come quickly";
     font-size: 12pt;
       transform: rotate(90deg);
     width: 50mm;
