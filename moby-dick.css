@@ -1477,20 +1477,45 @@ display: flex;
     min-width   ;
     background: none;
     text-align: center;   
-    line-height: 24pt;
+    line-height: 18pt;
+}
+.aBitSmallerHEB {
+    font-size: 19pt;
+    line-height: 18pt;
 }
 .TRA{
         font-size: 11pt;
   font-family: "PT Sans Narrow", sans-serif;
   font-weight: 400;
   font-style: normal;
-  padding-top: 5px;
+  padding-top: 2px;
     letter-spacing: ;
     min-width   ;
     background: none;
     text-align: center;  
 }
+.aBitSmallerTRA {
+    font-size: 11pt;
+    line-height: 12pt;
+    padding-top: 1px;
+}
 .ENG{
+            font-size: 13.5pt;
+  font-family: "PT Sans Narrow", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+      padding-top: 2px;
+    letter-spacing: ;
+    min-width   ;
+    background: none;
+    text-align: center;  
+}
+.aBitSmallerENG {
+    font-size: 12pt;
+    line-height: 12pt;
+    padding-top: 1px;
+}
+.SEP{
             font-size: 13.5pt;
   font-family: "PT Sans Narrow", sans-serif;
   font-weight: 400;
@@ -1501,6 +1526,9 @@ display: flex;
     background: none;
     text-align: center;  
 }
+#dedication > .HEB {padding-top: 20px;}
+#shema > .HEB {padding-top: 20px;}
+#thereAreThree {padding-left: 11px}
 
 /************/
 /* END custom style */
