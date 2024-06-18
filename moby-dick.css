@@ -73,7 +73,7 @@
     width: 50mm;
     height: 10mm;
     margin-left: -20mm;
-    background-color:#b6b6b6;
+    background-color:#d7d7d7;
     }    
 @left-bottom {
         content: "";
@@ -119,11 +119,11 @@ font-size: 11pt;
             width: 0px;
 }
 @bottom-left-corner {
-    content: url("");
-  padding-bottom: 12px;
-    padding-left: 14px;
-    filter: opacity(80%);
+    content: counter(page);
+    font-size: 12pt;
     background: none;
+    text-align: left;
+    padding-left: 10px;
 }
 @bottom-left {
         content: "";
@@ -148,9 +148,13 @@ font-size: 11pt;
     width:   0px;
 }
 @bottom-right-corner {
+    /*
     content: counter(page);
     font-size: 12pt;
     background: none;
+    text-align: right;
+    padding-right: 10px;
+    */
 }
 }
 /* END @page :left  */
@@ -230,7 +234,7 @@ font-size: 11pt;
     width: 50mm;
     height: 10mm;
     margin-left: -20mm;
-        background-color:#b6b6b6;
+        background-color:#d7d7d7;
 }
 @right-bottom {
         content: "";
@@ -238,9 +242,13 @@ font-size: 11pt;
     background: none;
 }
 @bottom-left-corner {
+    /*
     content: counter(page);
     font-size: 12pt;
     background: none;
+    text-align: left;
+    padding-left: 10px;
+    */
 }
 @bottom-left {
         content: "";
@@ -265,10 +273,11 @@ font-size: 11pt;
     width:   0px;
 }
 @bottom-right-corner {
-    /*content: url("Menorah-Silver-24x24.png");*/
-  padding-bottom: 12px;
-    filter: opacity(80%);
+    content: counter(page);
+    font-size: 12pt;
     background: none;
+    text-align: right;
+    padding-right: 10px;
 }
 } /* END @page :right  */
 /* ////////////////////////// */
@@ -1172,12 +1181,13 @@ font-size: 11pt;
 }
 /* done */ @right-middle {
         content: "Behold, I come quickly";
-    font-size: 12pt;
+    font-size: 26pt;
       transform: rotate(90deg);
-    width: 50mm;
+    width: 90mm;
     height: 10mm;
-    margin-left: -20mm;
+    margin-left: -43mm;
     background: none;
+    color: #888888;
 }
 /* done */ @right-bottom {
         content: "";
