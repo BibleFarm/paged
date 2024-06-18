@@ -85,20 +85,6 @@
     font-size: 8pt;
 }
 @right-middle {
-    /*
-        content: "Yehováh our Father . Yeshúa The Word . The Holy Spirit";
-font-size: 11pt;
-    font-family: "PT Sans Narrow", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-    color: #707070;
-    transform: rotate(90deg);
-    background: none;
-    width: 298px;
-    margin-top: -4px;
-    margin-left: -140px;
-    text-align: center;
-    */
         content: "רוח הקודש";
     font-size: 34pt;
     font-family: "David Libre";
@@ -365,7 +351,7 @@ font-size: 11pt;
     background: none;
     width: 298px;
     margin-top: -4px;
-    margin-left: -140px;
+    margin-left: -134px;
     text-align: center;
 }
 /* done */ @right-bottom {
@@ -487,7 +473,7 @@ font-size: 11pt;
     background: none;
     width: 298px;
     margin-top: -4px;
-    margin-left: -120px;
+    margin-left: -128px;
     text-align: center;
     
 }
@@ -504,33 +490,6 @@ font-size: 11pt;
 
 }
 /* done */ @right-middle {
-    /*
-        content: "Yehováh our Father . Yeshúa The Word . The Holy Spirit";
-font-size: 11pt;
-    font-family: "PT Sans Narrow", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-    color: #707070;
-    transform: rotate(90deg);
-    background: none;
-    width: 298px;
-    margin-top: -4px;
-    margin-left: -140px;
-    text-align: center;
-    */
-    /*
-        content: "רוח הקודש";
-    font-size: 34pt;
-    font-family: "David Libre";
-  color: #ffffff;
-  text-shadow: 1px 1px 2px #000000;
-    letter-spacing: -2px;
-    transform: rotate(90deg);
-    background: none;
-    text-align: center;
-    margin-left: -90px;
-*/
-    
     
 }
 /* done */ @right-bottom {
@@ -662,7 +621,7 @@ font-size: 11pt;
     background: none;
     width: 298px;
     margin-top: -4px;
-    margin-left: -140px;
+    margin-left: -134px;
     text-align: center;
 }
 /* done */ @right-bottom {
@@ -768,7 +727,7 @@ font-size: 11pt;
     background: none;
     width: 298px;
     margin-top: -4px;
-    margin-left: -120px;
+    margin-left: -128px;
     text-align: center;
 }
 /* done */ @left-bottom {
@@ -926,7 +885,7 @@ font-size: 11pt;
     background: none;
     width: 298px;
     margin-top: -4px;
-    margin-left: -140px;
+    margin-left: -134px;
     text-align: center;
 }
 /* done */ @right-bottom {
@@ -1032,7 +991,7 @@ font-size: 11pt;
     background: none;
     width: 298px;
     margin-top: -4px;
-    margin-left: -120px;
+    margin-left: -128px;
     text-align: center;
 }
 /* done */ @left-bottom {
@@ -1566,11 +1525,11 @@ p { font-family: sans-serif; }
   display: flex;
   justify-content: center;
   align-items: center; 
-width: 180px;
+width: 172px; /* this was 180px */
 height: 270px;
         margin-top: 20px;
-   margin-left: 10px;
-   margin-right: 10px;
+   margin-left: 14px;
+   margin-right: 14px;
 background: none;
 }
 .ref{
